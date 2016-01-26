@@ -1,4 +1,19 @@
-### Team Composition
+## Controls
+
+#### Player
+
+| Key Binding | Action |
+| ----------- | ------ |
+| Arrow Keys | Move player along x-axis and z-axis |
+| Left Shift | Drop item |
+| Left Control | Pick up item |
+
+#### Guard
+
+| Key Binding | Action |
+| ----------- | ------ |
+
+## Team Composition
 
 | Name | Student ID | GitHub Account |
 | ---- | ---------- | -------------- |
