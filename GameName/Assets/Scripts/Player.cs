@@ -22,26 +22,22 @@ public class Player : MonoBehaviour
     }
 
     /*  
-     *  Handle movement
+     *  Handle movement and rotation towards movement direction
      *  @return: void
      */
     private void Move()
     {
-		// Obtain input information (See "Horizontal" and "Vertical" in the Input Manager)
 		float horizontal = Input.GetAxis ("Horizontal");
 		float vertical = Input.GetAxis ("Vertical");
-		// Check if there is movement
+		
+        // Check if there is movement
 		if(!Mathf.Approximately(vertical, 0.0f) || !Mathf.Approximately(horizontal, 0.0f))
 		{
-			Vector3 direction = new Vector3(horizontal, 0.0f, vertical);
-			// Cap the magnitude of direction vector
-			direction = Vector3.ClampMagnitude(direction, 1.0f);
-			// Translate the game object in world space
-			transform.Translate (direction * speed * Time.deltaTime, Space.World);
-			// Rotate the game object
-			transform.rotation = Quaternion.RotateTowards(transform.rotation,  Quaternion.LookRotation(direction), angularSpeed*Time.deltaTime);	
-		}
+			Vector3 direction = Vector3.ClampMagnitude(new Vector3(horizontal, 0.0f, vertical), 1.0f);
 
+            this.transform.Translate (direction * this.speed * Time.deltaTime, Space.World);
+            this.transform.rotation = Quaternion.RotateTowards(this.transform.rotation,  Quaternion.LookRotation(direction), this.angularSpeed * Time.deltaTime);	
+		}
     }
 
     /*  
