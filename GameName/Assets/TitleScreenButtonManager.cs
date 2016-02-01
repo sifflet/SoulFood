@@ -7,18 +7,28 @@ public class TitleScreenButtonManager : MonoBehaviour {
 
     public static CharacterToPlayAs playingAs = CharacterToPlayAs.Death;
 
+    public void PlayAsDeath()
+    {
+        playingAs = CharacterToPlayAs.Death;
+        Application.LoadLevel("Main");
+    }
+
+    public void PlayAsAngels()
+    {
+        playingAs = CharacterToPlayAs.Angel;
+        Application.LoadLevel("Main");
+    }
+
     void Update ()
     {
         if (Input.GetKey(KeyCode.D))
         {
-            playingAs = CharacterToPlayAs.Death;
-            Application.LoadLevel(1);
+            this.PlayAsDeath();
         }
 
         if (Input.GetKey(KeyCode.A))
         {
-            playingAs = CharacterToPlayAs.Angel;
-            Application.LoadLevel(1);
+            this.PlayAsAngels();
         }
     }
 }
