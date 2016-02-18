@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class Player : MonoBehaviour
 {
+    private Vector3 movement;
     public static float maximumSpeed = 10.0f;
     public static float minimumSpeed = 3.0f;
     private float speed = maximumSpeed;
@@ -12,32 +13,59 @@ public class Player : MonoBehaviour
     private Stack<GameObject> candyContainer = new Stack<GameObject>(maximumCandyCapacity);
     private GameObject candyCollidedWith;
 
+    private Animator animator;
+
 	// Degrees per second
 	float angularSpeed = 180.0f;
 
-    void Update()
+    void Start ()
     {
-        this.HandleButtonInput();
-        this.Move();
+        animator = GetComponent<Animator>();
     }
 
+    void Update()
+    {
+        HandleButtonInput();
+        GetInputs();
+    }
+
+    void FixedUpdate()
+    {
+        Move();
+        Turn();
+    }
+
+    private void GetInputs()
+    {
+        movement.x = Input.GetAxis("Horizontal");
+        movement.z = Input.GetAxis("Vertical");
+    }
     /*  
-     *  Handle movement and rotation towards movement direction
-     *  @return: void
-     */
+    *  Handle movement and rotation towards movement direction
+    *  @return: void
+    */
     private void Move()
     {
-		float horizontal = Input.GetAxis ("Horizontal");
-		float vertical = Input.GetAxis ("Vertical");
-		
-        // Check if there is movement
-		if(!Mathf.Approximately(vertical, 0.0f) || !Mathf.Approximately(horizontal, 0.0f))
-		{
-			Vector3 direction = Vector3.ClampMagnitude(new Vector3(horizontal, 0.0f, vertical), 1.0f);
+        GetComponent<Rigidbody>().velocity = movement * speed;
 
-            this.transform.Translate (direction * this.speed * Time.deltaTime, Space.World);
-            this.transform.rotation = Quaternion.RotateTowards(this.transform.rotation,  Quaternion.LookRotation(direction), this.angularSpeed * Time.deltaTime);	
-		}
+        if (movement.sqrMagnitude > 0f)
+        {
+            animator.SetFloat("speed", 1);
+        }
+        else
+        {
+            animator.SetFloat("speed", 0);
+        }
+    }
+
+    private void Turn()
+    {
+        Vector3 direction = movement.normalized;
+        float step = speed * Time.deltaTime;
+
+        Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, step, 0.0f);
+        Debug.DrawRay(transform.position, rotation, Color.red);
+        transform.rotation = Quaternion.LookRotation(rotation);
     }
 
     /*  
