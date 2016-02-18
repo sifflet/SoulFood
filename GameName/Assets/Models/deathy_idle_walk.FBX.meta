@@ -1,0 +1,320 @@
+fileFormatVersion: 2
+guid: bdc9d099972f4ce4d8ff3d101bc5e987
+timeCreated: 1455235388
+licenseType: Pro
+ModelImporter:
+  serializedVersion: 18
+  fileIDToRecycleName:
+    100000: Bone005
+    100002: Bone007
+    100004: Bone013
+    100006: Bone014
+    100008: Bone016
+    100010: Bone019
+    100012: Bone022
+    100014: Cloak left
+    100016: Cloak middle
+    100018: Cloak right
+    100020: Deathy
+    100022: //RootNode
+    100024: IK Chain001
+    100026: IK Chain002
+    100028: Left arm 1
+    100030: Left arm 2
+    100032: Left arm 3
+    100034: Left arm 4
+    100036: Left arm 5
+    100038: Left eye
+    100040: Left foot 1
+    100042: Left foot 2
+    100044: Right arm 1
+    100046: Right arm 2
+    100048: Right arm 3
+    100050: Right arm 4
+    100052: Right arm 5
+    100054: Right eye
+    100056: Right foot 1
+    100058: Right foot 2
+    100060: Spine
+    400000: Bone005
+    400002: Bone007
+    400004: Bone013
+    400006: Bone014
+    400008: Bone016
+    400010: Bone019
+    400012: Bone022
+    400014: Cloak left
+    400016: Cloak middle
+    400018: Cloak right
+    400020: Deathy
+    400022: //RootNode
+    400024: IK Chain001
+    400026: IK Chain002
+    400028: Left arm 1
+    400030: Left arm 2
+    400032: Left arm 3
+    400034: Left arm 4
+    400036: Left arm 5
+    400038: Left eye
+    400040: Left foot 1
+    400042: Left foot 2
+    400044: Right arm 1
+    400046: Right arm 2
+    400048: Right arm 3
+    400050: Right arm 4
+    400052: Right arm 5
+    400054: Right eye
+    400056: Right foot 1
+    400058: Right foot 2
+    400060: Spine
+    2300000: Left eye
+    2300002: Right eye
+    3300000: Left eye
+    3300002: Right eye
+    4300000: Right eye
+    4300002: Left eye
+    4300004: Deathy
+    7400000: Idle
+    7400002: Walk
+    9500000: //RootNode
+    13700000: Deathy
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Idle
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 120
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cloak left
+        weight: 1
+      - path: Cloak left/Bone005
+        weight: 1
+      - path: Cloak middle
+        weight: 1
+      - path: Cloak right
+        weight: 1
+      - path: Cloak right/Bone007
+        weight: 1
+      - path: Deathy
+        weight: 1
+      - path: IK Chain001
+        weight: 1
+      - path: IK Chain002
+        weight: 1
+      - path: Left arm 1
+        weight: 1
+      - path: Left arm 1/Left arm 2
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3/Left arm 4
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3/Left arm 4/Left arm 5
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3/Left arm 4/Left arm 5/Bone014
+        weight: 1
+      - path: Left eye
+        weight: 1
+      - path: Left foot 1
+        weight: 1
+      - path: Left foot 1/Left foot 2
+        weight: 1
+      - path: Left foot 1/Left foot 2/Bone022
+        weight: 1
+      - path: Right arm 1
+        weight: 1
+      - path: Right arm 1/Right arm 2
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3/Right arm 4
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3/Right arm 4/Right arm 5
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3/Right arm 4/Right arm 5/Bone013
+        weight: 1
+      - path: Right eye
+        weight: 1
+      - path: Right foot 1
+        weight: 1
+      - path: Right foot 1/Right foot 2
+        weight: 1
+      - path: Right foot 1/Right foot 2/Bone019
+        weight: 1
+      - path: Spine
+        weight: 1
+      - path: Spine/Bone016
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    - serializedVersion: 16
+      name: Walk
+      takeName: Take 001
+      firstFrame: 120
+      lastFrame: 220
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Cloak left
+        weight: 1
+      - path: Cloak left/Bone005
+        weight: 1
+      - path: Cloak middle
+        weight: 1
+      - path: Cloak right
+        weight: 1
+      - path: Cloak right/Bone007
+        weight: 1
+      - path: Deathy
+        weight: 1
+      - path: IK Chain001
+        weight: 1
+      - path: IK Chain002
+        weight: 1
+      - path: Left arm 1
+        weight: 1
+      - path: Left arm 1/Left arm 2
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3/Left arm 4
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3/Left arm 4/Left arm 5
+        weight: 1
+      - path: Left arm 1/Left arm 2/Left arm 3/Left arm 4/Left arm 5/Bone014
+        weight: 1
+      - path: Left eye
+        weight: 1
+      - path: Left foot 1
+        weight: 1
+      - path: Left foot 1/Left foot 2
+        weight: 1
+      - path: Left foot 1/Left foot 2/Bone022
+        weight: 1
+      - path: Right arm 1
+        weight: 1
+      - path: Right arm 1/Right arm 2
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3/Right arm 4
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3/Right arm 4/Right arm 5
+        weight: 1
+      - path: Right arm 1/Right arm 2/Right arm 3/Right arm 4/Right arm 5/Bone013
+        weight: 1
+      - path: Right eye
+        weight: 1
+      - path: Right foot 1
+        weight: 1
+      - path: Right foot 1/Right foot 2
+        weight: 1
+      - path: Right foot 1/Right foot 2/Bone019
+        weight: 1
+      - path: Spine
+        weight: 1
+      - path: Spine/Bone016
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
