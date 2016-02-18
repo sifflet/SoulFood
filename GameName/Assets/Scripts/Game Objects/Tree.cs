@@ -3,7 +3,8 @@ using System.Collections;
 
 public class Tree : MonoBehaviour {
 	int triggeredCount;
-	public GameObject souls; //Attach soul prefab here
+	public GameObject souls;
+	bool isFull = true;
 
 
 	void Update () {
@@ -18,6 +19,9 @@ public class Tree : MonoBehaviour {
 	}
 
 	void dropItems(){
-		//Dump whatever items you need
+		if (isFull) {
+			Instantiate(souls, transform.position, Quaternion.identity);
+			isFull = false;
+		}
 	}
 }
