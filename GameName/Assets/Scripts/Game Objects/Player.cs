@@ -154,13 +154,13 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Guard")
         {
             print("Player hit!");
             this.HitByEnemy();
         }
 
-        if (collision.gameObject.tag == "Candy")
+        if (collision.gameObject.tag == "Soul")
         {
             this.candyCollidedWith = collision.gameObject;
         }
@@ -168,7 +168,7 @@ public class Player : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "Candy")
+        if (collision.gameObject.tag == "Soul")
         {
             this.candyCollidedWith = null;
         }

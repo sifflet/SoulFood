@@ -1,6 +1,6 @@
 ## Controls
 
-#### Player
+#### Collector
 
 | Key Binding | Action |
 | ----------- | ------ |
@@ -12,6 +12,8 @@
 
 | Key Binding | Action |
 | ----------- | ------ |
+| W, A, S, D | Move Guard #1 along x-axis and z-axis |
+| Arrow Keys | Move Guard #2 along x-axis and z-axis |
 
 ## Team Composition
 
