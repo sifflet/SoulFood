@@ -21,8 +21,6 @@ public class GameManager : MonoBehaviour
         targetPosition = Vector3.zero;
         passables = new List<string>() { "Floor" };
         selectionHighlight.gameObject.SetActive(false);
-
-        SpawnUnits();
     }
 
     private void SpawnUnits()
