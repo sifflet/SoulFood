@@ -4,9 +4,9 @@
 
 | Key Binding | Action |
 | ----------- | ------ |
-| Arrow Keys | Move player along x-axis and z-axis |
-| Left Shift | Drop item |
-| Left Control | Pick up item |
+| Arrow Keys | Move Collector along x-axis and z-axis |
+| Left Shift | Drop soul |
+| Left Control | Pick up soul |
 
 #### Guard
 
