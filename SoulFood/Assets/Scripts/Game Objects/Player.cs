@@ -5,8 +5,9 @@ using System.Collections.Generic;
 public class Player : MonoBehaviour
 {
     private Vector3 movement;
-    public static float maximumSpeed = 10.0f;
+    public static float maximumSpeed = 5f;
     public static float minimumSpeed = 3.0f;
+    private float rotationSpeed = 3.0f;
     private float speed = maximumSpeed;
 
     public static int maximumCandyCapacity = 20;
@@ -20,26 +21,40 @@ public class Player : MonoBehaviour
 
     void Start ()
     {
+        movement = Vector3.zero;
         animator = GetComponent<Animator>();
     }
 
     void Update()
     {
-        HandleButtonInput();
-        GetInputs();
+        HandleInputs();
     }
 
     void FixedUpdate()
     {
         Move();
         Turn();
+        movement = Vector3.zero;
     }
 
-    private void GetInputs()
+    private void HandleInputs()
     {
-        movement.x = Input.GetAxis("Horizontal");
-        movement.z = Input.GetAxis("Vertical");
+        HandleMovementInputs();
+        HandleActionInputs();
     }
+
+    private void HandleMovementInputs()
+    {
+        movement = Vector3.zero;
+
+        if (Input.GetKey(KeyCode.W)) movement += transform.forward;
+        if (Input.GetKey(KeyCode.A)) movement += -transform.right;
+        if (Input.GetKey(KeyCode.S)) movement += -transform.forward;
+        if (Input.GetKey(KeyCode.D)) movement += transform.right;
+
+        movement = movement.normalized;
+    }
+
     /*  
     *  Handle movement and rotation towards movement direction
     *  @return: void
@@ -47,7 +62,7 @@ public class Player : MonoBehaviour
     private void Move()
     {
         GetComponent<Rigidbody>().velocity = movement * speed;
-
+        /*
         if (movement.sqrMagnitude > 0f)
         {
             animator.SetFloat("speed", 1);
@@ -56,12 +71,13 @@ public class Player : MonoBehaviour
         {
             animator.SetFloat("speed", 0);
         }
+         * */
     }
 
     private void Turn()
     {
         Vector3 direction = movement.normalized;
-        float step = speed * Time.deltaTime;
+        float step = rotationSpeed * Time.deltaTime;
 
         Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, step, 0.0f);
         Debug.DrawRay(transform.position, rotation, Color.red);
@@ -72,7 +88,7 @@ public class Player : MonoBehaviour
      *  Handle button input events
      *  @return: void
      */
-    private void HandleButtonInput()
+    private void HandleActionInputs()
     {
         //TODO: holding button loses candies at fixed rate
         if (Input.GetButtonDown("DropCandy") && this.candyContainer.Count > 0)

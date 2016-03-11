@@ -50,7 +50,7 @@ public class GameManager : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = deathyPrefab.transform.position.y;
 
-            deathies.Add(new NPCDriver(Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject, spawnPoint));
+            deathies.Add(new NPCDriver(Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject, spawnPoint, true));
         }
 
         for (int i = 0; i < GUARDS_NUM; i++)
@@ -59,7 +59,7 @@ public class GameManager : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = guardPrefab.transform.position.y;
 
-            guards.Add(new NPCDriver(Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject, spawnPoint));
+            guards.Add(new NPCDriver(Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject, spawnPoint, true));
         }
     }
 }

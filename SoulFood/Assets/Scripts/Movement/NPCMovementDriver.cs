@@ -84,7 +84,6 @@ public class NPCMovementDriver
 				pathCounter++;
 			}
 		}
-
 	}
 
 	/**
