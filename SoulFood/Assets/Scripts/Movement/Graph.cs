@@ -163,7 +163,7 @@ class Graph
             currentNode.SetMaterialColor(Color.red);
         }
 
-        path.Push(currentNode);
+        //path.Push(currentNode);
 
         return path;
     }

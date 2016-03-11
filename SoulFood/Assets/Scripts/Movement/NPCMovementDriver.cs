@@ -3,9 +3,9 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NPCMovementDriver : MonoBehaviour {
-	
-	public NPCMovement currentNPC;
+public class NPCMovementDriver
+{
+	private NPCMovement currentNPC;
 
 	// Pathfinding variables
 	private Node startNode, endNode;
@@ -13,9 +13,9 @@ public class NPCMovementDriver : MonoBehaviour {
 	private Graph graph;
 	private List<Node> nodes;
 	
-
-	// Use this for initialization
-	void Start () {
+	public NPCMovementDriver (NPCMovement movement)
+    {
+        this.currentNPC = movement;
 		/**
 		 * Setup pathfinding graph
 		 */
@@ -46,31 +46,34 @@ public class NPCMovementDriver : MonoBehaviour {
 	
 	private int pathCounter = 0;		// Used for keeping track where NPC is along a path
 	// Update is called once per frame
-	void Update () {
+	public void Update () {
 		/**
 		 * Move NPC along a path
 		 */
 		if (pathList.Count > pathCounter && endNode == pathList[pathList.Count - 1])
 		{
-			
+            Vector3 target = pathList[pathCounter].transform.position;
+            target.y = currentNPC.transform.position.y;
+
 			//endNodeIndicator.transform.position = endNode.transform.position;
-			if (Vector3.Angle (currentNPC.transform.forward, (pathList[pathCounter].transform.position - currentNPC.transform.position)) > 35)
+			if (Vector3.Angle (currentNPC.transform.forward, (target - currentNPC.transform.position)) > 35)
 			{
 				currentNPC.Steering_Stop ();
-				currentNPC.rotateTowards (pathList[pathCounter].transform.position);
+				currentNPC.rotateTowards (target);
 			}
 			else {
 				if (pathCounter == pathList.Count - 1) 
 				{
-					currentNPC.Steering_Arrive (pathList[pathCounter].transform.position, true);
+                    currentNPC.Steering_Arrive(target, true);
 				}
 				else 
 				{
-					currentNPC.Steering_Arrive (pathList[pathCounter].transform.position, false);
+                    currentNPC.Steering_Arrive(target, false);
 				}
 			}
+
 			bool nodeAttained = false;
-			Collider[] collisionArray = Physics.OverlapSphere (currentNPC.transform.position, 0.2f);
+			Collider[] collisionArray = Physics.OverlapSphere (currentNPC.transform.position, 2.0f);
 			for (int i = 0; i < collisionArray.Length; i++) {
 				if (collisionArray[i].GetComponent (typeof(Node)) == pathList[pathCounter]) {
 					nodeAttained = true;
@@ -121,10 +124,9 @@ public class NPCMovementDriver : MonoBehaviour {
 			if (i == 0) {
 				startNode = nodes[i];
 			}
-			if ((currentNPC.transform.position - nodes[i].transform.position).magnitude < (currentNPC.transform.position - startNode.transform.position).magnitude) {
+			if (Vector3.Distance(currentNPC.transform.position, nodes[i].transform.position) < Vector3.Distance(currentNPC.transform.position, startNode.transform.position)) {
 				startNode = nodes[i];
 			}
 		}
 	}
-
 }
