@@ -8,7 +8,7 @@ public class CollectorDriver : NPCDriver
     {
         this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
         this.keyboardMovement = instance.GetComponent<Player>();
-        this.cameraDriver = new CameraDriver(cameraInstance, instance);
+        this.cameraDriver = new CollectorsCameraDriver(cameraInstance, instance);
 
         this.keyboardMovement.enabled = false;
         this.cameraDriver.SetEnabled(false);

@@ -1,18 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class CameraDriver
+public abstract class CameraDriver
 {
-    private GameObject instance;
-    private GameObject target;
+    protected GameObject instance;
 
     private const float yOffset = 5.0f;
     private const float zOffset = -5.0f;
 
-    public CameraDriver(GameObject cameraInstance, GameObject target)
+    public CameraDriver(GameObject cameraInstance)
     {
         this.instance = cameraInstance;
-        this.target = target;
     }
 
     public void SetEnabled(bool enabled)
@@ -20,12 +18,5 @@ public class CameraDriver
         this.instance.GetComponent<Camera>().enabled = enabled;
     }
 
-    public void Update()
-    {
-        Vector3 newPosition = target.transform.position;
-        newPosition.z += zOffset;
-        newPosition.y += yOffset;
-
-        instance.transform.position = newPosition;
-    }
+    public abstract void Update();
 }

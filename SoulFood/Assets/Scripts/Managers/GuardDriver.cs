@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GuardDriver : NPCDriver
 {
@@ -8,7 +9,15 @@ public class GuardDriver : NPCDriver
     {
         this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
         this.keyboardMovement = instance.GetComponent<Player>();
-        this.cameraDriver = new CameraDriver(cameraInstance, instance);
+
+        List<GameObject> guards = new List<GameObject>();
+
+        foreach (NPCDriver guard in GameManager.Guards)
+        {
+            guards.Add(guard.Instance);
+        }
+
+        this.cameraDriver = new GuardsCameraDriver(cameraInstance, guards);
 
         this.keyboardMovement.enabled = false;
         this.cameraDriver.SetEnabled(false);

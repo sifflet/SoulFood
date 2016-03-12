@@ -13,6 +13,8 @@ public abstract class NPCDriver
     protected Player keyboardMovement;
     protected CameraDriver cameraDriver;
 
+    public GameObject Instance { get { return this.instance; } }
+
     protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         this.instance = instance;
