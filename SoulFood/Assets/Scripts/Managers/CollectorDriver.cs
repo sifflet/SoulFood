@@ -7,10 +7,13 @@ public class CollectorDriver : NPCDriver
         : base(instance, cameraInstance, spawnPoint)
     {
         this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
-        this.keyboardMovement = instance.GetComponent<Player>();
+
+        this.instance.AddComponent<CollectorKeyboardInputs>();
+        this.keyboardInputs = this.instance.GetComponent<CollectorKeyboardInputs>();
+
         this.cameraDriver = new CollectorsCameraDriver(cameraInstance, instance);
 
-        this.keyboardMovement.enabled = false;
+        this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
     }
 

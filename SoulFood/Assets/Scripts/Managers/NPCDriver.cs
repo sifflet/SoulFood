@@ -10,7 +10,7 @@ public abstract class NPCDriver
     protected Transform spawnPoint;
 
     protected NPCMovementDriver movementDriver;
-    protected Player keyboardMovement;
+    protected KeyboardInputs keyboardInputs;
     protected CameraDriver cameraDriver;
 
     public GameObject Instance { get { return this.instance; } }
@@ -25,7 +25,7 @@ public abstract class NPCDriver
     public void SetControlledByAI(bool controlledByAI)
     {
         this.controlledByAI = controlledByAI;
-        this.keyboardMovement.enabled = !controlledByAI;
+        this.keyboardInputs.enabled = !controlledByAI;
         this.cameraDriver.SetEnabled(!controlledByAI);
     }
 

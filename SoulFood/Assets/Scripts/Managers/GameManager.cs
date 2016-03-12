@@ -20,6 +20,11 @@ public class GameManager : MonoBehaviour
         guards = new List<NPCDriver>();
 
         SpawnAllNpcs();
+
+        (guards[0] as GuardDriver).IsLeader = true;
+        deathies[0].SetControlledByAI(false); // human controlled
+        //guards[0].SetControlledByAI(false);
+        //guards[1].SetControlledByAI(false);
 	}
 	
 	void Update ()
@@ -66,7 +71,5 @@ public class GameManager : MonoBehaviour
 
             guards.Add(new GuardDriver(npcInstance, cameraInstance, spawnPoint));
         }
-
-        deathies[0].SetControlledByAI(false); // human controlled
     }
 }

@@ -4,22 +4,25 @@ using System.Collections.Generic;
 
 public class GuardDriver : NPCDriver
 {
+    private bool isLeader;
+
+    public bool IsLeader {
+        get { return this.isLeader; } 
+        set { this.isLeader = value; (this.keyboardInputs as GuardKeyboardInputs).IsLeader = true; }
+    }
+
     public GuardDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
         : base(instance, cameraInstance, spawnPoint)
     {
+        this.isLeader = false;
         this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
-        this.keyboardMovement = instance.GetComponent<Player>();
 
-        List<GameObject> guards = new List<GameObject>();
+        this.instance.AddComponent<GuardKeyboardInputs>();
+        this.keyboardInputs = this.instance.GetComponent<GuardKeyboardInputs>();
 
-        foreach (NPCDriver guard in GameManager.Guards)
-        {
-            guards.Add(guard.Instance);
-        }
+        this.cameraDriver = new GuardsCameraDriver(cameraInstance);
 
-        this.cameraDriver = new GuardsCameraDriver(cameraInstance, guards);
-
-        this.keyboardMovement.enabled = false;
+        this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
     }
 }

@@ -2,75 +2,19 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class Player : MonoBehaviour
+public class CollectorKeyboardInputs : KeyboardInputs
 {
-    private Vector3 movement;
-    public static float maximumSpeed = 5f;
-    public static float minimumSpeed = 3.0f;
-    private float rotationSpeed = 3.0f;
-    private float speed = maximumSpeed;
-
     public static int maximumCandyCapacity = 20;
     private Stack<GameObject> candyContainer = new Stack<GameObject>(maximumCandyCapacity);
     private GameObject candyCollidedWith;
 
-    private Animator animator;
+    // Degrees per second
+    float angularSpeed = 180.0f;
 
-	// Degrees per second
-	float angularSpeed = 180.0f;
-
-    void Start ()
-    {
-        movement = Vector3.zero;
-        animator = GetComponent<Animator>();
-    }
-
-    void Update()
-    {
-        HandleInputs();
-    }
-
-    void FixedUpdate()
-    {
-        Move();
-        Turn();
-    }
-
-    private void HandleInputs()
-    {
-        HandleMovementInputs();
-        HandleActionInputs();
-    }
-
-    private void HandleMovementInputs()
+    protected override void HandleMovementInputs()
     {
         movement.x = Input.GetAxis("Horizontal2");
         movement.z = Input.GetAxis("Vertical2");
-    }
-
-    private void Move()
-    {
-        GetComponent<Rigidbody>().velocity = movement * speed;
-        /*
-        if (movement.sqrMagnitude > 0f)
-        {
-            animator.SetFloat("speed", 1);
-        }
-        else
-        {
-            animator.SetFloat("speed", 0);
-        }
-         * */
-    }
-
-    private void Turn()
-    {
-        Vector3 direction = movement.normalized;
-        float step = rotationSpeed * Time.deltaTime;
-
-        Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, step, 0.0f);
-        Debug.DrawRay(transform.position, rotation, Color.red);
-        transform.rotation = Quaternion.LookRotation(rotation);
     }
 
     /*  
@@ -85,7 +29,7 @@ public class Player : MonoBehaviour
             this.DropCandy();
         }
 
-        if(Input.GetButtonDown("PickUpCandy") && this.candyCollidedWith != null && this.candyContainer.Count < maximumCandyCapacity)
+        if (Input.GetButtonDown("PickUpCandy") && this.candyCollidedWith != null && this.candyContainer.Count < maximumCandyCapacity)
         {
             this.PickUpCandy(this.candyCollidedWith);
         }
