@@ -20,7 +20,7 @@ public class Tree : MonoBehaviour {
 
 	void dropItems(){
 		if (isFull) {
-			Instantiate(souls, transform.position, Quaternion.identity);
+			Instantiate(souls,new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), Quaternion.identity);
 			isFull = false;
 		}
 	}
