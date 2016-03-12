@@ -34,7 +34,6 @@ public class Player : MonoBehaviour
     {
         Move();
         Turn();
-        movement = Vector3.zero;
     }
 
     private void HandleInputs()
@@ -45,20 +44,10 @@ public class Player : MonoBehaviour
 
     private void HandleMovementInputs()
     {
-        movement = Vector3.zero;
-
-        if (Input.GetKey(KeyCode.W)) movement += transform.forward;
-        if (Input.GetKey(KeyCode.A)) movement += -transform.right;
-        if (Input.GetKey(KeyCode.S)) movement += -transform.forward;
-        if (Input.GetKey(KeyCode.D)) movement += transform.right;
-
-        movement = movement.normalized;
+        movement.x = Input.GetAxis("Horizontal2");
+        movement.z = Input.GetAxis("Vertical2");
     }
 
-    /*  
-    *  Handle movement and rotation towards movement direction
-    *  @return: void
-    */
     private void Move()
     {
         GetComponent<Rigidbody>().velocity = movement * speed;

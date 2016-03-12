@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public GameObject deathyPrefab;
     public GameObject guardPrefab;
+    public GameObject cameraRigPrefab;
 
     private static List<NPCDriver> deathies;
     private static List<NPCDriver> guards;
@@ -31,14 +32,12 @@ public class GameManager : MonoBehaviour
 
     private void UpdateNPCs()
     {
-        foreach (NPCDriver deathy in deathies)
-        {
-            deathy.Update();
-        }
+        List<NPCDriver> allNpcs = deathies;
+        allNpcs.AddRange(guards);
 
-        foreach (NPCDriver guard in guards)
+        foreach (NPCDriver npc in allNpcs)
         {
-            guard.Update();
+            npc.Update();
         }
     }
 
@@ -49,8 +48,10 @@ public class GameManager : MonoBehaviour
             Transform spawnPoint = GameObject.Find("DeathySpawn" + (i + 1)).transform;
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = deathyPrefab.transform.position.y;
+            GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
+            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
-            deathies.Add(new NPCDriver(Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject, spawnPoint, true));
+            deathies.Add(new CollectorDriver(npcInstance, cameraInstance, spawnPoint));
         }
 
         for (int i = 0; i < GUARDS_NUM; i++)
@@ -58,8 +59,12 @@ public class GameManager : MonoBehaviour
             Transform spawnPoint = GameObject.Find("GuardSpawn" + (i + 1)).transform;
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = guardPrefab.transform.position.y;
+            GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
+            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
-            guards.Add(new NPCDriver(Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject, spawnPoint, true));
+            guards.Add(new GuardDriver(npcInstance, cameraInstance, spawnPoint));
         }
+
+        deathies[0].SetControlledByAI(false); // human controlled
     }
 }

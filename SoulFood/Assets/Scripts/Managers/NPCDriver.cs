@@ -3,29 +3,39 @@ using System.Collections;
 using System;
 
 [Serializable]
-public class NPCDriver
+public abstract class NPCDriver
 {
-    private GameObject instance;
-    private bool controlledByAI;
-    private Transform spawnPoint;
+    protected GameObject instance;
+    protected bool controlledByAI;
+    protected Transform spawnPoint;
 
-    private NPCMovementDriver movementDriver;
-    private Player keyboardMovement;
+    protected NPCMovementDriver movementDriver;
+    protected Player keyboardMovement;
+    protected CameraDriver cameraDriver;
 
-    public NPCDriver(GameObject instance, Transform spawnPoint, bool controlledByAI)
+    protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         this.instance = instance;
-        this.controlledByAI = controlledByAI;
+        this.controlledByAI = true;
         this.spawnPoint = spawnPoint;
+    }
 
-        this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
-        this.keyboardMovement = instance.GetComponent<Player>();
-
-        if (controlledByAI) this.keyboardMovement.enabled = false;
+    public void SetControlledByAI(bool controlledByAI)
+    {
+        this.controlledByAI = controlledByAI;
+        this.keyboardMovement.enabled = !controlledByAI;
+        this.cameraDriver.SetEnabled(!controlledByAI);
     }
 
     public void Update()
     {
-        if(controlledByAI) movementDriver.Update();
+        if (controlledByAI)
+        {
+            movementDriver.Update();
+        }
+        else
+        {
+            cameraDriver.Update();
+        }
     }
 }
