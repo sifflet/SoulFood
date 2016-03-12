@@ -32,10 +32,12 @@ public class GameManager : MonoBehaviour
 
     private void UpdateNPCs()
     {
-        List<NPCDriver> allNpcs = deathies;
-        allNpcs.AddRange(guards);
+        foreach (NPCDriver npc in deathies)
+        {
+            npc.Update();
+        }
 
-        foreach (NPCDriver npc in allNpcs)
+        foreach (NPCDriver npc in guards)
         {
             npc.Update();
         }
