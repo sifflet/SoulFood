@@ -4,145 +4,72 @@ using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject unitPrefab;
-    public int numUnits = 1;
-    public RectTransform selectionHighlight;
-    public static Rect selection = new Rect(0, 0, 0, 0);
+    public GameObject deathyPrefab;
+    public GameObject guardPrefab;
+    public GameObject cameraRigPrefab;
 
-    private Vector3 startClick;
-    private List<UnitManager> units;
-    private static Vector3 targetPosition;
-    private static List<string> passables;
+    private static List<NPCDriver> deathies;
+    private static List<NPCDriver> guards;
 
-    private void Start()
+    private const int DEATHY_NUM = 3;
+    private const int GUARDS_NUM = 2;
+
+	void Start ()
     {
-        startClick = -Vector3.one;
-        units = new List<UnitManager>();
-        targetPosition = Vector3.zero;
-        passables = new List<string>() { "Floor" };
-        selectionHighlight.gameObject.SetActive(false);
-    }
+        deathies = new List<NPCDriver>();
+        guards = new List<NPCDriver>();
 
-    private void SpawnUnits()
+        SpawnAllNpcs();
+
+        (guards[0] as GuardDriver).IsLeader = true;
+        deathies[0].SetControlledByAI(false); // human controlled
+        //guards[0].SetControlledByAI(false);
+        //guards[1].SetControlledByAI(false);
+	}
+	
+	void Update ()
     {
-        for (int i = 0; i < numUnits; ++i)
+        UpdateNPCs();
+	}
+
+    public static List<NPCDriver> Deathies { get { return deathies; } }
+    public static List<NPCDriver> Guards { get { return guards; } }
+
+    private void UpdateNPCs()
+    {
+        foreach (NPCDriver npc in deathies)
         {
-            units.Add(new UnitManager());
-            units[i].instance = Instantiate(unitPrefab, new Vector3(i, 0, i), new Quaternion()) as GameObject;
-            units[i].Setup();
+            npc.Update();
+        }
+
+        foreach (NPCDriver npc in guards)
+        {
+            npc.Update();
         }
     }
 
-    private void Update()
+    private void SpawnAllNpcs()
     {
-        CheckSelection();
-        CheckMovement();
-        Cleanup();
-    }
-
-    private void FixedUpdate()
-    {
-        UpdateUnits();
-    }
-
-    private void CheckSelection()
-    {
-        if (Input.GetMouseButtonDown(0))
+        for (int i = 0; i < DEATHY_NUM; i++)
         {
-            selectionHighlight.gameObject.SetActive(true);
-            startClick = Input.mousePosition;
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            selectionHighlight.gameObject.SetActive(false);
-            startClick = -Vector3.one;
-            selectionHighlight.sizeDelta = new Vector2(0, 0);
-            selectionHighlight.position = new Vector2(0, 0);
+            Transform spawnPoint = GameObject.Find("DeathySpawn" + (i + 1)).transform;
+            Vector3 spawnPosition = spawnPoint.position;
+            spawnPosition.y = deathyPrefab.transform.position.y;
+            GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
+            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
+
+            deathies.Add(new CollectorDriver(npcInstance, cameraInstance, spawnPoint));
         }
 
-        if (Input.GetMouseButton(0))
+        for (int i = 0; i < GUARDS_NUM; i++)
         {
-            selection = new Rect(startClick.x, InvertMouseY(startClick.y), Input.mousePosition.x - startClick.x, InvertMouseY(Input.mousePosition.y) - InvertMouseY(startClick.y));
+            Transform spawnPoint = GameObject.Find("GuardSpawn" + (i + 1)).transform;
+            Vector3 spawnPosition = spawnPoint.position;
+            spawnPosition.y = guardPrefab.transform.position.y;
+            GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
+            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
-            if (selection.width < 0)
-            {
-                selection.x = Input.mousePosition.x;
-                selection.width = -selection.width;
-            }
-            if (selection.height < 0)
-            {
-                selection.y = InvertMouseY(Input.mousePosition.y);
-                selection.height = -selection.height;
-            }
-
-            float selectWidth = Input.mousePosition.x - startClick.x;
-            float selectHeight = startClick.y - Input.mousePosition.y;
-            selectionHighlight.position = new Vector2(startClick.x + selectWidth / 2, Input.mousePosition.y + selectHeight / 2);
-            selectionHighlight.sizeDelta = new Vector2(selection.width, selection.height);
+            guards.Add(new GuardDriver(npcInstance, cameraInstance, spawnPoint));
         }
-    }
-
-    private void UpdateUnits()
-    {
-        foreach (UnitManager unit in units)
-        {
-            unit.Update();
-        }
-    }
-
-    private void CheckMovement()
-    {
-        if (Input.GetMouseButtonUp(1))
-        {
-            Vector3 destination = GetDestination();
-
-            foreach (UnitManager unit in units)
-            {
-                if (unit.IsSelected())
-                {
-                    unit.Move(destination);
-                }
-            }
-        }
-    }
-
-    public static float InvertMouseY(float y)
-    {
-        return Screen.height - y;
-    }
-
-    private void Cleanup()
-    {
-        if (!Input.GetMouseButtonUp(1))
-        {
-            targetPosition = Vector3.zero;
-        }
-    }
-
-    private Vector3 GetDestination()
-    {
-        if (targetPosition == Vector3.zero)
-        {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                while (!passables.Contains(hit.transform.gameObject.name))
-                {
-                    if (!Physics.Raycast(hit.point + ray.direction * 0.1f, ray.direction, out hit))
-                    {
-                        break;
-                    }
-                }
-            }
-
-            if (hit.transform != null)
-            {
-                targetPosition = hit.point;
-            }
-        }
-
-        return targetPosition;
     }
 }
