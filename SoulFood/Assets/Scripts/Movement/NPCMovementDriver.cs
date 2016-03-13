@@ -12,6 +12,8 @@ public class NPCMovementDriver
 	private List<Node> pathList;
 	private Graph graph;
 	private List<Node> nodes;
+
+    public Node CurrentTargetNode { get { return this.pathList[pathCounter]; } }
 	
 	public NPCMovementDriver (NPCMovement movement)
     {
@@ -25,7 +27,8 @@ public class NPCMovementDriver
 		// Get all Node objects from node GameObjects
 		nodes = new List<Node>();
 		
-		foreach (var nodeGameObject in nodeGameObjects) {			
+		foreach (var nodeGameObject in nodeGameObjects)
+        {
 			nodes.Add(nodeGameObject.GetComponent<Node>());
 		}
 		
@@ -33,7 +36,8 @@ public class NPCMovementDriver
 		graph = new Graph(); 
 		
 		// Add all nodes to the graph
-		foreach (var node in nodes) {
+		foreach (var node in nodes)
+        {
 			graph.AddVertex(node, node.neighboringNodeDistances);
 		}
 
@@ -61,7 +65,8 @@ public class NPCMovementDriver
 				currentNPC.Steering_Stop ();
 				currentNPC.rotateTowards (target);
 			}
-			else {
+			else
+            {
 				if (pathCounter == pathList.Count - 1) 
 				{
                     currentNPC.Steering_Arrive(target, true);
@@ -74,17 +79,27 @@ public class NPCMovementDriver
 
 			bool nodeAttained = false;
 			Collider[] collisionArray = Physics.OverlapSphere (currentNPC.transform.position, 2.0f);
-			for (int i = 0; i < collisionArray.Length; i++) {
-				if (collisionArray[i].GetComponent (typeof(Node)) == pathList[pathCounter]) {
+			for (int i = 0; i < collisionArray.Length; i++)
+            {
+				if (collisionArray[i].GetComponent (typeof(Node)) == pathList[pathCounter])
+                {
 					nodeAttained = true;
 				}
 			}
 			
-			if (nodeAttained) {
+			if (nodeAttained)
+            {
 				pathCounter++;
 			}
 		}
 	}
+
+    public void ChangePath(Node endNode)
+    {
+        FindStartNode();
+        this.endNode = endNode; // End node is hardcoded here for testing purposes
+        this.pathList = graph.ShortestPathEuclideanHeuristic(startNode, endNode);
+    }
 
 	/**
 	 * Methods for pathfinding graph
