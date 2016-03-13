@@ -2,8 +2,10 @@
 using System.Collections;
 
 public class GuardsCommonController : MonoBehaviour {
-	
-	private float speed = 5.0f;
+
+	private Vector3 movement;
+	private float speed = 10.0f;
+	private float angularSpeed = 180.0f;	// degrees per second
 	
 	// Use this for initialization
 	void Start () {
@@ -16,14 +18,19 @@ public class GuardsCommonController : MonoBehaviour {
 	
 	public virtual void MoveGuard(float h, float v) {
 		Debug.Log ("MoveGuard() from GuardsController");
-		Vector3 direction = new Vector3(h, 0, v);
-		
-		if(v != 0)
-			this.transform.Translate(Vector3.forward * v * speed * Time.deltaTime);
-		
-		// Rotate the Vehicle
-		if(h != 0)
-			transform.rotation = Quaternion.Lerp(transform.rotation,  Quaternion.LookRotation(direction)*transform.rotation, Time.deltaTime);
+		movement.x = h;
+		movement.z = v;
+
+		// move
+		this.GetComponent<Rigidbody>().velocity = movement * speed;
+
+		// rotate
+		float step = speed * Time.deltaTime;
+		Vector3 direction = movement.normalized;
+		Vector3 rotation = Vector3.RotateTowards(transform.forward, direction, step, 0.0f);
+		Debug.DrawRay(transform.position, rotation, Color.red);
+		transform.rotation = Quaternion.LookRotation(rotation);
+	
 	}
 	
 }

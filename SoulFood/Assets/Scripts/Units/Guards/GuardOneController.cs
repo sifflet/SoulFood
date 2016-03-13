@@ -16,8 +16,8 @@ public class GuardOneController : GuardsCommonController {
 	public override void MoveGuard(float h, float v) {
 		
 		base.MoveGuard(h, v);
-		
-		Debug.Log("Guard #1: " + h + " - " + v);
+
+		// custom behaviour for Guard One here
 		
 	}
 	
