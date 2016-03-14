@@ -12,7 +12,6 @@ public class GuardsCameraDriver : CameraDriver
     private const float SCREEN_EDGE_BUFFER = 4f;
     private const float MIN_SIZE = 6.5f;
 
-    private Camera camera;
     private float zoomSpeed;
     private Vector3 moveVelocity; 
     private Vector3 desiredPosition;
@@ -20,7 +19,6 @@ public class GuardsCameraDriver : CameraDriver
     public GuardsCameraDriver(GameObject cameraInstance)
         : base(cameraInstance)
     {
-        this.camera = cameraInstance.GetComponent<Camera>();
     }
 
     public override void Update()

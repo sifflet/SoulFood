@@ -22,9 +22,9 @@ public class GameManager : MonoBehaviour
         SpawnAllNpcs();
 
         (guards[0] as GuardDriver).IsLeader = true;
-        deathies[0].SetControlledByAI(false); // human controlled
-        //guards[0].SetControlledByAI(false);
-        //guards[1].SetControlledByAI(false);
+        //deathies[0].SetControlledByAI(false); // human controlled
+        guards[0].SetControlledByAI(false);
+        guards[1].SetControlledByAI(false);
 	}
 	
 	void Update ()

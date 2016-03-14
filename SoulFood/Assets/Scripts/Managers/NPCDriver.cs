@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public abstract class NPCDriver
@@ -13,13 +14,18 @@ public abstract class NPCDriver
     protected KeyboardInputs keyboardInputs;
     protected CameraDriver cameraDriver;
 
+    protected List<NPCDriver> visibleNPCs;
+
     public GameObject Instance { get { return this.instance; } }
+    public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
 
     protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         this.instance = instance;
         this.controlledByAI = true;
         this.spawnPoint = spawnPoint;
+
+        this.visibleNPCs = new List<NPCDriver>();
     }
 
     public virtual void SetControlledByAI(bool controlledByAI)
@@ -31,13 +37,30 @@ public abstract class NPCDriver
 
     public void Update()
     {
-        if (controlledByAI)
+        if(controlledByAI) movementDriver.Update();
+        cameraDriver.Update();
+        FindVisibleNPCs();
+    }
+
+    private void FindVisibleNPCs()
+    {
+        this.visibleNPCs.Clear();
+
+        List<NPCDriver> allNPCs = new List<NPCDriver>(GameManager.Deathies);
+        allNPCs.AddRange(GameManager.Guards);
+
+        foreach (NPCDriver npc in allNPCs)
         {
-            movementDriver.Update();
-        }
-        else
-        {
-            cameraDriver.Update();
+            if (npc == this) continue;
+
+            Vector3 viewPortPosition = this.cameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
+
+            if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
+                viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
+                viewPortPosition.z >= 0.0f)
+            {
+                this.visibleNPCs.Add(npc);
+            }
         }
     }
 }

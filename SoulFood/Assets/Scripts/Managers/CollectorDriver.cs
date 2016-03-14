@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CollectorDriver : NPCDriver
 {
@@ -16,5 +17,4 @@ public class CollectorDriver : NPCDriver
         this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
     }
-
 }
