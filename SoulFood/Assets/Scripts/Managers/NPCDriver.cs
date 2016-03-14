@@ -22,7 +22,7 @@ public abstract class NPCDriver
         this.spawnPoint = spawnPoint;
     }
 
-    public void SetControlledByAI(bool controlledByAI)
+    public virtual void SetControlledByAI(bool controlledByAI)
     {
         this.controlledByAI = controlledByAI;
         this.keyboardInputs.enabled = !controlledByAI;

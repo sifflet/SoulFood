@@ -11,6 +11,13 @@ public class GuardDriver : NPCDriver
         set { this.isLeader = value; (this.keyboardInputs as GuardKeyboardInputs).IsLeader = true; }
     }
 
+    public override void SetControlledByAI(bool controlledByAI)
+    {
+        this.controlledByAI = controlledByAI;
+        this.keyboardInputs.enabled = !controlledByAI;
+        if(IsLeader) this.cameraDriver.SetEnabled(!controlledByAI);
+    }
+
     public GuardDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
         : base(instance, cameraInstance, spawnPoint)
     {
