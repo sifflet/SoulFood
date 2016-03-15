@@ -12,12 +12,15 @@ public abstract class NPCDriver
 
     protected NPCMovementDriver movementDriver;
     protected KeyboardInputs keyboardInputs;
-    protected CameraDriver cameraDriver;
 
+    protected CameraDriver cameraDriver;
     protected List<NPCDriver> visibleNPCs;
+
+    protected NPCStateMachine stateMachine;
 
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
+    public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 
     protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
@@ -37,10 +40,20 @@ public abstract class NPCDriver
 
     public void Update()
     {
-        if(controlledByAI) movementDriver.Update();
+        if (controlledByAI)
+        {
+            movementDriver.Update();
+            stateMachine.Update();
+        }
+
         cameraDriver.Update();
         FindVisibleNPCs();
     }
 
-    protected virtual void FindVisibleNPCs() { }
+    public void SetupStateMachine()
+    {
+        this.stateMachine.Setup();
+    }
+
+    protected abstract void FindVisibleNPCs();
 }

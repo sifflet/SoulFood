@@ -11,7 +11,7 @@ public abstract class CameraDriver
 
     public Camera Camera { get { return this.camera; } }
 
-    public CameraDriver(GameObject cameraInstance)
+    protected CameraDriver(GameObject cameraInstance)
     {
         this.instance = cameraInstance;
         this.camera = instance.GetComponent<Camera>();

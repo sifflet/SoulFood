@@ -16,6 +16,8 @@ public class CollectorDriver : NPCDriver
 
         this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
+
+        this.stateMachine = new CollectorStateMachine(this);
     }
 
     protected override void FindVisibleNPCs()

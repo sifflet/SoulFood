@@ -24,6 +24,7 @@ public class GuardDriver : NPCDriver
 
         this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
+        this.stateMachine = new GuardStateMachine(this);
     }
 
     public override void SetControlledByAI(bool controlledByAI)

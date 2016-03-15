@@ -13,11 +13,21 @@ public class NPCMovementDriver
 	private Graph graph;
 	private List<Node> nodes;
 
-    public Node CurrentTargetNode { get { return this.pathList[pathCounter]; } }
+    public Node CurrentTargetNode
+    { 
+        get
+        {
+            if (this.pathList.Count == 0) return null;
+            return this.pathList[pathCounter];
+        }
+    }
+    public bool AttainedFinalNode { get; set; }
+    public List<Node> AllNodes { get { return this.nodes; } }
 	
 	public NPCMovementDriver (NPCMovement movement)
     {
         this.currentNPC = movement;
+        this.pathList = new List<Node>();
 		/**
 		 * Setup pathfinding graph
 		 */
@@ -41,10 +51,14 @@ public class NPCMovementDriver
 			graph.AddVertex(node, node.neighboringNodeDistances);
 		}
 
+        this.AttainedFinalNode = false;
+
 		//Set up for NPC movement for testing purposes
+        /*
 		FindStartNode();
 		endNode	= nodes[56]; // End node is hardcoded here for testing purposes
 		pathList = graph.ShortestPathEuclideanHeuristic(startNode, endNode);
+         * */
 
 	}
 	
@@ -89,6 +103,7 @@ public class NPCMovementDriver
 			
 			if (nodeAttained)
             {
+                if (this.CurrentTargetNode == this.endNode) this.AttainedFinalNode = true;
 				pathCounter++;
 			}
 		}
@@ -96,9 +111,30 @@ public class NPCMovementDriver
 
     public void ChangePath(Node endNode)
     {
-        FindStartNode();
-        this.endNode = endNode; // End node is hardcoded here for testing purposes
+        this.startNode = FindClosestNode();
+        this.endNode = endNode;
         this.pathList = graph.ShortestPathEuclideanHeuristic(startNode, endNode);
+        this.AttainedFinalNode = false;
+        this.pathCounter = 0;
+    }
+
+    public Node FindClosestNode()
+    {
+        Node result = null;
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            if (i == 0)
+            {
+                result = nodes[i];
+            }
+            if (Vector3.Distance(currentNPC.transform.position, nodes[i].transform.position) < Vector3.Distance(currentNPC.transform.position, result.transform.position))
+            {
+                result = nodes[i];
+            }
+        }
+
+        return result;
     }
 
 	/**
@@ -127,20 +163,5 @@ public class NPCMovementDriver
 			}
 		}
 		return distance;
-	}
-
-	/**
-	 * Methods for NPC movement along path
-	 */
-	//Find the start node according to the position of the NPC
-	private void FindStartNode() {
-		for (int i = 0; i < nodes.Count; i++) {
-			if (i == 0) {
-				startNode = nodes[i];
-			}
-			if (Vector3.Distance(currentNPC.transform.position, nodes[i].transform.position) < Vector3.Distance(currentNPC.transform.position, startNode.transform.position)) {
-				startNode = nodes[i];
-			}
-		}
 	}
 }

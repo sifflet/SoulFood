@@ -3,12 +3,17 @@ using System.Collections;
 
 public class GuardFlankPursueState : GuardPursueState
 {
+    public GuardFlankPursueState(NPCStateMachine stateMachine)
+        : base(stateMachine)
+    {
+    }
+
     public override void Entry()
     {
         base.Entry();
     }
 
-    public override void Update()
+    public override NPCState Update()
     {
         if (false)
         {
@@ -18,5 +23,7 @@ public class GuardFlankPursueState : GuardPursueState
         {
             base.Update();
         }
+
+        return this;
     }
 }
