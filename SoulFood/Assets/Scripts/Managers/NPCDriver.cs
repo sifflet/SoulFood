@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 [Serializable]
 public abstract class NPCDriver
@@ -11,18 +12,26 @@ public abstract class NPCDriver
 
     protected NPCMovementDriver movementDriver;
     protected KeyboardInputs keyboardInputs;
+
     protected CameraDriver cameraDriver;
+    protected List<NPCDriver> visibleNPCs;
+
+    protected NPCStateMachine stateMachine;
 
     public GameObject Instance { get { return this.instance; } }
+    public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
+    public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 
     protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         this.instance = instance;
         this.controlledByAI = true;
         this.spawnPoint = spawnPoint;
+
+        this.visibleNPCs = new List<NPCDriver>();
     }
 
-    public void SetControlledByAI(bool controlledByAI)
+    public virtual void SetControlledByAI(bool controlledByAI)
     {
         this.controlledByAI = controlledByAI;
         this.keyboardInputs.enabled = !controlledByAI;
@@ -34,10 +43,17 @@ public abstract class NPCDriver
         if (controlledByAI)
         {
             movementDriver.Update();
+            stateMachine.Update();
         }
-        else
-        {
-            cameraDriver.Update();
-        }
+
+        cameraDriver.Update();
+        FindVisibleNPCs();
     }
+
+    public void SetupStateMachine()
+    {
+        this.stateMachine.Setup();
+    }
+
+    protected abstract void FindVisibleNPCs();
 }

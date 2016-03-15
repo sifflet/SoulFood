@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
         guards = new List<NPCDriver>();
 
         SpawnAllNpcs();
+        SetupNPCStateMachines();
 
         (guards[0] as GuardDriver).IsLeader = true;
         deathies[0].SetControlledByAI(false); // human controlled
@@ -70,6 +71,17 @@ public class GameManager : MonoBehaviour
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
             guards.Add(new GuardDriver(npcInstance, cameraInstance, spawnPoint));
+        }
+    }
+
+    private void SetupNPCStateMachines()
+    {
+        List<NPCDriver> allNPCs = new List<NPCDriver>(deathies);
+        allNPCs.AddRange(guards);
+
+        foreach (NPCDriver npc in allNPCs)
+        {
+            npc.SetupStateMachine();
         }
     }
 }
