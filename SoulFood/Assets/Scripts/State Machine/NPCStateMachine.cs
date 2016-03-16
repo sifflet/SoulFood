@@ -25,6 +25,13 @@ public abstract class NPCStateMachine
     public void Update()
     {
         if (this.currentState == null) return;
-        currentState = currentState.Update();
+
+        NPCState transitionState = currentState.Update();
+
+        if (currentState != transitionState)
+        {
+            transitionState.Entry();
+            currentState = transitionState;
+        }
     }
 }

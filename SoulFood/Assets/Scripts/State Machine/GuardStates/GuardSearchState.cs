@@ -19,9 +19,7 @@ public class GuardSearchState : NPCState
     {
         if (this.stateMachine.NPC.VisibleNPCs.Count > 0)
         {
-            NPCState transitionState = new GuardPursueState(this.stateMachine);
-            transitionState.Entry();
-            return transitionState;
+            return new GuardPursueState(this.stateMachine);
         }
 
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
