@@ -35,15 +35,19 @@ public class GameManager : MonoBehaviour
 
     public static List<NPCDriver> Deathies { get { return deathies; } }
     public static List<NPCDriver> Guards { get { return guards; } }
+    public static List<NPCDriver> AllNPCs
+    {
+        get
+        {
+            List<NPCDriver> allNPCs = new List<NPCDriver>(deathies);
+            allNPCs.AddRange(guards);
+            return allNPCs;
+        }
+    }
 
     private void UpdateNPCs()
     {
-        foreach (NPCDriver npc in deathies)
-        {
-            npc.Update();
-        }
-
-        foreach (NPCDriver npc in guards)
+        foreach (NPCDriver npc in AllNPCs)
         {
             npc.Update();
         }
@@ -76,10 +80,7 @@ public class GameManager : MonoBehaviour
 
     private void SetupNPCStateMachines()
     {
-        List<NPCDriver> allNPCs = new List<NPCDriver>(deathies);
-        allNPCs.AddRange(guards);
-
-        foreach (NPCDriver npc in allNPCs)
+        foreach (NPCDriver npc in AllNPCs)
         {
             npc.SetupStateMachine();
         }
