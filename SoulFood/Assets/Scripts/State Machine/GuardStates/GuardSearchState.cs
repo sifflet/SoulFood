@@ -17,10 +17,7 @@ public class GuardSearchState : NPCState
 
     public override NPCState Update()
     {
-        if (this.stateMachine.NPC.VisibleNPCs.Count > 0)
-        {
-            return new GuardPursueState(this.stateMachine);
-        }
+        if (this.stateMachine.NPC.VisibleNPCs.Count > 0) return new GuardPursueState(this.stateMachine);
 
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
 

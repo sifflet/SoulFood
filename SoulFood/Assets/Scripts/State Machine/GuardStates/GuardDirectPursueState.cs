@@ -21,6 +21,7 @@ public class GuardDirectPursueState : GuardPursueState
         }
         else
         {
+            base.Update();
         }
 
         return this;
