@@ -1,19 +1,24 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
     public GameObject deathyPrefab;
     public GameObject guardPrefab;
     public GameObject cameraRigPrefab;
-
+    public GameObject treeOneButton;
+    public GameObject treeTwoButton;
+    public GameObject treeThreeButton;
+    private Vector3[] treeLocations = { new Vector3(-25f, 2f, -23.35f), new Vector3(-32f, 2f, -0.18f),  new Vector3(20f, 2f, -28.2f),   new Vector3(7f, 2f, -12.1f),
+                                        new Vector3(29f, 2f, 12.3f),    new Vector3(-19.5f, 2f, 21.8f), new Vector3(-13f, 2f, 37.4f),   new Vector3(30f, 2f, 37.4f)};
     private static List<Node> nodes;
 
     private static List<NPCDriver> deathies;
     private static List<NPCDriver> guards;
 
-    private const int DEATHY_NUM = 1;
+    private const int DEATHY_NUM = 3;
     private const int GUARDS_NUM = 2;
 
     public static List<Node> AllNodes { get { return nodes; } }
@@ -33,7 +38,7 @@ public class GameManager : MonoBehaviour
     {
         InitializeNodes();
         InitializeGraph();
-
+        SpawnTrees();
         deathies = new List<NPCDriver>();
         guards = new List<NPCDriver>();
 
@@ -107,6 +112,54 @@ public class GameManager : MonoBehaviour
         foreach (Node node in nodes)
         {
             Graph.AddVertex(node, node.neighboringNodeDistances);
+        }
+    }
+
+    private void SpawnTrees()
+    {
+        int[] treeSizes;
+        switch (DEATHY_NUM)
+        {
+            case 4:
+                treeSizes = new int[] { 1, 1, 2, 2, 2, 3, 3, 3 };
+                break;
+            case 3:
+                treeSizes = new int[] { 1, 1, 1, 2, 2, 2, 3, 3 };
+                break;
+            case 2:
+                treeSizes = new int[] { 1, 1, 1, 1, 2, 2, 2, 2 };
+                break;
+            default:
+                treeSizes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1 };
+                break;
+        }
+        MixArray(treeSizes);
+        for(int i = 0; i < treeLocations.Count(); i++)
+        {
+            switch (treeSizes[i])
+            {
+                case 1:
+                    Instantiate(treeOneButton, treeLocations[i], Quaternion.identity);
+                    break;
+                case 2:
+                    Instantiate(treeTwoButton, treeLocations[i], Quaternion.identity);
+                    break;
+                default:
+                    Instantiate(treeThreeButton, treeLocations[i], Quaternion.identity);
+                    break;
+            }
+        }
+    }
+
+    private void MixArray(int[] array)
+    {
+        Random r = new Random();
+        for (int n = array.Length - 1; n > 0; --n)
+        {
+            int k = Random.Range(0, n + 1);
+            int temp = array[n];
+            array[n] = array[k];
+            array[k] = temp;
         }
     }
 }
