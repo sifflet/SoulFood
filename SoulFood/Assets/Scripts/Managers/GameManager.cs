@@ -153,7 +153,6 @@ public class GameManager : MonoBehaviour
 
     private void MixArray(int[] array)
     {
-        Random r = new Random();
         for (int n = array.Length - 1; n > 0; --n)
         {
             int k = Random.Range(0, n + 1);
