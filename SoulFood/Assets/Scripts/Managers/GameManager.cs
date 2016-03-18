@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     private static List<NPCDriver> deathies;
     private static List<NPCDriver> guards;
 
-    private const int DEATHY_NUM = 3;
+    private const int DEATHY_NUM = 1;
     private const int GUARDS_NUM = 2;
 
     public static List<Node> AllNodes { get { return nodes; } }
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         SetupNPCStateMachines();
 
         (guards[0] as GuardDriver).IsLeader = true;
-        deathies[0].SetControlledByAI(false); // human controlled
+        //deathies[0].SetControlledByAI(false); // human controlled
         //guards[0].SetControlledByAI(false);
         //guards[1].SetControlledByAI(false);
 	}

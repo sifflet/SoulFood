@@ -86,6 +86,20 @@ public class NPCMovementDriver
         this.pathCounter = 0;
     }
 
+    public void ChangePathToFlee(float terminateDistance, List<NPCDriver> threats)
+    {
+        this.startNode = FindClosestNode();
+        this.endNode = null;
+        this.pathList = Graph.InverseAStar(startNode, terminateDistance, threats);
+        this.AttainedFinalNode = false;
+        this.pathCounter = 0;
+
+        foreach (Node node in pathList)
+        {
+            Debug.Log(node);
+        }
+    }
+
     public Node FindClosestNode()
     {
         Node result = null;

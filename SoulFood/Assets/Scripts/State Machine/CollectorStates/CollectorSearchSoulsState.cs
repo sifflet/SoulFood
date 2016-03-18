@@ -20,8 +20,8 @@ public class CollectorSearchSoulsState : CollectorCollectingState
     {
         this.guardsInSight = FindGuardsInSight();
 
-        if (GuardInEmergencyFleeRange()) ; // return emergencyFlee state
-        if (GuardInFleeRange()) ; // return flee state
+        if (GuardsInEmergencyFleeRange()) ; // return emergencyFlee state
+        if (GuardsInFleeRange()) return new CollectorFleeState(this.stateMachine); // return flee state
 
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
 

@@ -2,22 +2,32 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CollectorCollectingState : NPCState
+public class CollectorFleeState : NPCState
 {
     protected List<NPCDriver> guardsInSight;
 
-    public CollectorCollectingState(NPCStateMachine stateMachine)
+    public CollectorFleeState(NPCStateMachine stateMachine)
         : base(stateMachine)
     {
-        this.guardsInSight = new List<NPCDriver>();
     }
 
     public override void Entry()
     {
+        Debug.Log("Flee State Entry");
+        this.guardsInSight = FindGuardsInSight();
+        List<NPCDriver> guardsInFleeRange = FindGuardsInFleeRange();
+        this.stateMachine.NPC.MovementDriver.ChangePathToFlee((this.stateMachine as CollectorStateMachine).FleeRange, guardsInFleeRange);
     }
 
     public override NPCState Update()
     {
+        this.guardsInSight = FindGuardsInSight();
+        List<NPCDriver> guardsInFleeRange = FindGuardsInFleeRange();
+
+        if (guardsInSight.Count == 0) return new CollectorSearchSoulsState(this.stateMachine);
+        if (guardsInFleeRange.Count == 0) return new CollectorSearchSoulsState(this.stateMachine);
+        if (GuardsInEmergencyFleeRange()) ; // return emergency flee state
+
         return this;
     }
 
@@ -36,19 +46,20 @@ public class CollectorCollectingState : NPCState
         return result;
     }
 
-    protected bool GuardsInFleeRange()
+    protected List<NPCDriver> FindGuardsInFleeRange()
     {
+        List<NPCDriver> result = new List<NPCDriver>();
         Vector3 thisNPCPosition = this.stateMachine.NPC.Instance.transform.position;
 
         foreach (NPCDriver guard in guardsInSight)
         {
             if (Vector3.Distance(thisNPCPosition, guard.Instance.transform.position) <= (this.stateMachine as CollectorStateMachine).FleeRange)
             {
-                return true;
+                result.Add(guard);
             }
         }
 
-        return false;
+        return result;
     }
 
     protected bool GuardsInEmergencyFleeRange()
