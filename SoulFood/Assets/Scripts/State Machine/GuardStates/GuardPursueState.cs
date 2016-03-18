@@ -15,7 +15,6 @@ public class GuardPursueState : NPCState
     {
         Debug.Log("Pursue State Entry");
         NPCMovementDriver thisNPCMovementDriver = this.stateMachine.NPC.MovementDriver;
-        Node newEndNode = null;
 
         this.targetNPC = GetClosestVisibleCollector();
         this.targetNPCCurrentTargetNode = targetNPC.MovementDriver.CurrentTargetNode;
@@ -26,7 +25,7 @@ public class GuardPursueState : NPCState
         }
         else
         {
-            thisNPCMovementDriver.ChangePath(newEndNode);
+            thisNPCMovementDriver.ChangePath(this.targetNPCCurrentTargetNode);
         }
     }
 
