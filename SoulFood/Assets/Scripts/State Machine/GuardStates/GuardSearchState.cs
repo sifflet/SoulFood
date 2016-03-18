@@ -11,7 +11,7 @@ public class GuardSearchState : NPCState
     public override void Entry()
     {
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
-        Node newEndNode = movementDriver.AllNodes[UnityEngine.Random.Range(0, movementDriver.AllNodes.Count - 1)];
+        Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
         movementDriver.ChangePath(newEndNode);
     }
 
@@ -23,7 +23,7 @@ public class GuardSearchState : NPCState
 
         if (movementDriver.AttainedFinalNode)
         {
-            Node newEndNode = movementDriver.AllNodes[UnityEngine.Random.Range(0, movementDriver.AllNodes.Count - 1)];
+            Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
             movementDriver.ChangePath(newEndNode);
         }
 

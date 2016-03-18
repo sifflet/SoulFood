@@ -8,14 +8,32 @@ public class GameManager : MonoBehaviour
     public GameObject guardPrefab;
     public GameObject cameraRigPrefab;
 
+    private static List<Node> nodes;
+
     private static List<NPCDriver> deathies;
     private static List<NPCDriver> guards;
 
     private const int DEATHY_NUM = 3;
     private const int GUARDS_NUM = 2;
 
+    public static List<Node> AllNodes { get { return nodes; } }
+    public static List<NPCDriver> Deathies { get { return deathies; } }
+    public static List<NPCDriver> Guards { get { return guards; } }
+    public static List<NPCDriver> AllNPCs
+    {
+        get
+        {
+            List<NPCDriver> allNPCs = new List<NPCDriver>(deathies);
+            allNPCs.AddRange(guards);
+            return allNPCs;
+        }
+    }
+
 	void Start ()
     {
+        InitializeNodes();
+        InitializeGraph();
+
         deathies = new List<NPCDriver>();
         guards = new List<NPCDriver>();
 
@@ -32,18 +50,6 @@ public class GameManager : MonoBehaviour
     {
         UpdateNPCs();
 	}
-
-    public static List<NPCDriver> Deathies { get { return deathies; } }
-    public static List<NPCDriver> Guards { get { return guards; } }
-    public static List<NPCDriver> AllNPCs
-    {
-        get
-        {
-            List<NPCDriver> allNPCs = new List<NPCDriver>(deathies);
-            allNPCs.AddRange(guards);
-            return allNPCs;
-        }
-    }
 
     private void UpdateNPCs()
     {
@@ -83,6 +89,24 @@ public class GameManager : MonoBehaviour
         foreach (NPCDriver npc in AllNPCs)
         {
             npc.SetupStateMachine();
+        }
+    }
+
+    private void InitializeNodes()
+    {
+        nodes = new List<Node>();
+
+        foreach (GameObject node in GameObject.FindGameObjectsWithTag("Node"))
+        {
+            nodes.Add(node.GetComponent<Node>());
+        }
+    }
+
+    private void InitializeGraph()
+    {
+        foreach (Node node in nodes)
+        {
+            Graph.AddVertex(node, node.neighboringNodeDistances);
         }
     }
 }
