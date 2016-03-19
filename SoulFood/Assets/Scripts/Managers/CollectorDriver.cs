@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 public class CollectorDriver : NPCDriver
 {
+    private const float MAX_SPEED = 15f;
+
     public CollectorDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
         : base(instance, cameraInstance, spawnPoint)
     {
-        this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
-
+        this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
         this.instance.AddComponent<CollectorKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<CollectorKeyboardInputs>();
 

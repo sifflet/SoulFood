@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class GuardDriver : NPCDriver
 {
     private bool isLeader;
+    private const float MAX_SPEED = 12f;
 
     public bool IsLeader {
         get { return this.isLeader; } 
@@ -15,8 +16,8 @@ public class GuardDriver : NPCDriver
         : base(instance, cameraInstance, spawnPoint)
     {
         this.isLeader = false;
-        this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
 
+        this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
         this.instance.AddComponent<GuardKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<GuardKeyboardInputs>();
 

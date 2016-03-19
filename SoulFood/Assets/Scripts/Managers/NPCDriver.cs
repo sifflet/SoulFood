@@ -29,6 +29,8 @@ public abstract class NPCDriver
         this.spawnPoint = spawnPoint;
 
         this.visibleNPCs = new List<NPCDriver>();
+
+        this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
     }
 
     public virtual void SetControlledByAI(bool controlledByAI)
