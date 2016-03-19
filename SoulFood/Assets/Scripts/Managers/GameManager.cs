@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     private static List<NPCDriver> deathies;
     private static List<NPCDriver> guards;
 
-    private const int DEATHY_NUM = 3;
+    private int deathyNum = 3;
     private const int GUARDS_NUM = 2;
 
     public static List<Node> AllNodes { get { return nodes; } }
@@ -66,7 +66,7 @@ public class GameManager : MonoBehaviour
 
     private void SpawnAllNpcs()
     {
-        for (int i = 0; i < DEATHY_NUM; i++)
+        for (int i = 0; i < deathyNum; i++)
         {
             Transform spawnPoint = GameObject.Find("DeathySpawn" + (i + 1)).transform;
             Vector3 spawnPosition = spawnPoint.position;
@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour
     private void SpawnTrees()
     {
         int[] treeSizes;
-        switch (DEATHY_NUM)
+        switch (deathyNum)
         {
             case 4:
                 treeSizes = new int[] { 1, 1, 2, 2, 2, 3, 3, 3 };

@@ -17,7 +17,10 @@ public class NPCMovementDriver
         get
         {
             if (this.pathList.Count == 0) return null;
-            return this.pathList[pathCounter];
+
+            int index = pathCounter;
+            if (pathCounter > pathList.Count - 1) index = pathList.Count - 1;
+            return this.pathList[index];
         }
     }
     public bool AttainedFinalNode { get; set; }
@@ -89,15 +92,10 @@ public class NPCMovementDriver
     public void ChangePathToFlee(float terminateDistance, List<NPCDriver> threats)
     {
         this.startNode = FindClosestNode();
-        this.endNode = null;
         this.pathList = Graph.InverseAStar(startNode, terminateDistance, threats);
+        this.endNode = pathList[pathList.Count - 1];
         this.AttainedFinalNode = false;
         this.pathCounter = 0;
-
-        foreach (Node node in pathList)
-        {
-            Debug.Log(node);
-        }
     }
 
     public Node FindClosestNode()

@@ -28,6 +28,11 @@ public class CollectorFleeState : NPCState
         if (guardsInFleeRange.Count == 0) return new CollectorSearchSoulsState(this.stateMachine);
         if (GuardsInEmergencyFleeRange()) ; // return emergency flee state
 
+        if (this.stateMachine.NPC.MovementDriver.AttainedFinalNode)
+        {
+            this.stateMachine.NPC.MovementDriver.ChangePathToFlee((this.stateMachine as CollectorStateMachine).FleeRange, guardsInFleeRange);
+        }
+
         return this;
     }
 
