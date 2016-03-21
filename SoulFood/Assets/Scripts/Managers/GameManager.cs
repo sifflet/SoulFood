@@ -8,11 +8,15 @@ public class GameManager : MonoBehaviour
     public GameObject deathyPrefab;
     public GameObject guardPrefab;
     public GameObject cameraRigPrefab;
+
     public GameObject treeOneButton;
     public GameObject treeTwoButton;
     public GameObject treeThreeButton;
-    private Vector3[] treeLocations = { new Vector3(-25f, 2f, -23.35f), new Vector3(-32f, 2f, -0.18f),  new Vector3(20f, 2f, -28.2f),   new Vector3(7f, 2f, -12.1f),
-                                        new Vector3(29f, 2f, 12.3f),    new Vector3(-19.5f, 2f, 21.8f), new Vector3(-13f, 2f, 37.4f),   new Vector3(30f, 2f, 37.4f)};
+
+    private int livesRemaining;
+    private int soulsConsumed;
+    private int soulLimit;
+
     private static List<Node> nodes;
 
     private static List<NPCDriver> deathies;
@@ -39,6 +43,7 @@ public class GameManager : MonoBehaviour
         InitializeNodes();
         InitializeGraph();
         SpawnTrees();
+        SetGameLimits();
         deathies = new List<NPCDriver>();
         guards = new List<NPCDriver>();
 
@@ -53,7 +58,10 @@ public class GameManager : MonoBehaviour
 	
 	void Update ()
     {
-        UpdateNPCs();
+        if (GameState())
+            UpdateNPCs();
+        else
+            HandleGameConclusion();
 	}
 
     private void UpdateNPCs()
@@ -117,6 +125,8 @@ public class GameManager : MonoBehaviour
 
     private void SpawnTrees()
     {
+        Vector3[] treeLocations = { new Vector3(-25f, 2f, -23.35f), new Vector3(-32f, 2f, -0.18f),  new Vector3(20f, 2f, -28.2f),   new Vector3(7f, 2f, -12.1f),
+                                    new Vector3(29f, 2f, 12.3f),    new Vector3(-19.5f, 2f, 21.8f), new Vector3(-13f, 2f, 37.4f),   new Vector3(30f, 2f, 37.4f)};
         int[] treeSizes;
         switch (deathyNum)
         {
@@ -160,5 +170,51 @@ public class GameManager : MonoBehaviour
             array[n] = array[k];
             array[k] = temp;
         }
+    }
+
+    private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I beleive the souls ammount should adjust
+    {
+        switch (DEATHY_NUM)
+        {
+            case 4:
+                livesRemaining = 3;
+                soulLimit = 30;
+                break;
+            case 3:
+                livesRemaining = 3;
+                soulLimit = 25;
+                break;
+            case 2:
+                livesRemaining = 4;
+                soulLimit = 20;
+                break;
+            default:
+                livesRemaining = 5;
+                soulLimit = 15;
+                break;
+        }
+    }
+
+    private bool GameState()
+    {
+        if (soulsConsumed >= soulLimit || livesRemaining <= 0)
+            return false;
+        else
+            return true;
+    }
+
+    private void HandleGameConclusion()
+    {
+        //Fancy display here
+    }
+
+    public void SoulConsumed()
+    {
+        soulsConsumed++;
+    }
+
+    public void SoulEjected(int soulsEjected)//When players are hit, can remove more then 1
+    {
+        soulsConsumed -= soulsEjected;
     }
 }

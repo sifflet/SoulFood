@@ -8,9 +8,18 @@ public class Soul : MonoBehaviour {
 	
 	}
 	
-	void OnTriggerEnter(Collider col)
-	{
-		if (col.gameObject.tag == "Player")//Change to whatever we name their tag
-			col.SendMessage ("CanEat"); //need player to intergrate this
-	}
+    public void getConsumed(Vector3 playerPosition)//to be used for the animation of the soul getting consumed
+    {
+        Invoke("disableSoul", 0.5f);
+    }
+
+    public void getEjected(Vector3 playerPosition)//to be used for the animation of the soul getting spit out
+    {
+        gameObject.SetActive(true);
+    }
+
+    void disableSoul()
+    {
+        gameObject.SetActive(false);
+    }
 }
