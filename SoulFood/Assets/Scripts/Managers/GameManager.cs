@@ -174,7 +174,7 @@ public class GameManager : MonoBehaviour
 
     private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I beleive the souls ammount should adjust
     {
-        switch (DEATHY_NUM)
+        switch (deathyNum)
         {
             case 4:
                 livesRemaining = 3;
@@ -216,5 +216,10 @@ public class GameManager : MonoBehaviour
     public void SoulEjected(int soulsEjected)//When players are hit, can remove more then 1
     {
         soulsConsumed -= soulsEjected;
+    }
+
+    public void loseLife()
+    {
+        livesRemaining--;
     }
 }
