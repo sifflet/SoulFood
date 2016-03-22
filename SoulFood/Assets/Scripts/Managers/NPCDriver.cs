@@ -22,6 +22,19 @@ public abstract class NPCDriver
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 
+    public void Update()
+    {
+        if (controlledByAI)
+        {
+            movementDriver.Update();
+            stateMachine.Update();
+        }
+
+        cameraDriver.Update();
+        FindVisibleNPCs();
+        HandleCollisions();
+    }
+
     protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         this.instance = instance;
@@ -40,22 +53,11 @@ public abstract class NPCDriver
         this.cameraDriver.SetEnabled(!controlledByAI);
     }
 
-    public void Update()
-    {
-        if (controlledByAI)
-        {
-            movementDriver.Update();
-            stateMachine.Update();
-        }
-
-        cameraDriver.Update();
-        FindVisibleNPCs();
-    }
-
     public void SetupStateMachine()
     {
         this.stateMachine.Setup();
     }
 
     protected abstract void FindVisibleNPCs();
+    protected abstract void HandleCollisions();
 }

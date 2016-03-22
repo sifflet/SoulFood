@@ -4,7 +4,9 @@ using System.Collections.Generic;
 
 public class CollectorDriver : NPCDriver
 {
+    private float eatingDelay = 0.5f;
     private const float MAX_SPEED = 15f;
+    private int soulsStored = 0;
 
     public CollectorDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
         : base(instance, cameraInstance, spawnPoint)
@@ -41,5 +43,46 @@ public class CollectorDriver : NPCDriver
                 this.visibleNPCs.Add(npc);
             }
         }
+    }
+
+    protected override void HandleCollisions() {
+        eatingDelay -= Time.deltaTime;
+        Vector3 location = this.instance.GetComponent<NPCMovement>().transform.position;
+        Soul closestSoul = null;
+        float closestDistance = 2f; //adjust size upon implementation
+        Collider[] collisionArray = Physics.OverlapSphere(location, 2.0f);
+        for (int i = 0; i < collisionArray.Length; i++)
+        {
+            if (collisionArray[i].tag == "Soul" && Mathf.Abs((location - collisionArray[i].transform.position).magnitude) <= closestDistance)
+            {
+                closestSoul = collisionArray[i].GetComponent<Soul>();
+            }
+
+            if (collisionArray[i].tag == "Guard")
+            {
+                HandleGuardCollision();
+            }
+        }
+        if(closestSoul != null && eatingDelay <= 0f && Input.GetKeyDown("space"))
+        {
+            eatSoul(closestSoul);
+        };
+    }
+
+    private void HandleGuardCollision()
+    {
+        GameManager.SoulEjected(soulsStored);
+        soulsStored = 0;
+        //Guard collision logic here
+        //~~Immunity, speed, creation of souls to drop
+    }
+
+    private void eatSoul(Soul targetSoul)
+    {
+        eatingDelay = 0.5f;
+        soulsStored++;
+        targetSoul.SendMessage("getConsumed");
+        GameManager.SoulConsumed();
+        //Add slowing of speed
     }
 }

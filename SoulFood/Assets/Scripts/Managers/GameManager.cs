@@ -13,9 +13,9 @@ public class GameManager : MonoBehaviour
     public GameObject treeTwoButton;
     public GameObject treeThreeButton;
 
-    private int livesRemaining;
-    private int soulsConsumed;
-    private int soulLimit;
+    private static int livesRemaining;
+    private static int soulsConsumed;
+    private static int soulLimit;
 
     private static List<Node> nodes;
 
@@ -203,22 +203,22 @@ public class GameManager : MonoBehaviour
             return true;
     }
 
-    private void HandleGameConclusion()
+    private static void HandleGameConclusion()
     {
         //Fancy display here
     }
 
-    public void SoulConsumed()
+    public static void SoulConsumed()
     {
         soulsConsumed++;
     }
 
-    public void SoulEjected(int soulsEjected)//When players are hit, can remove more then 1
+    public static void SoulEjected(int soulsEjected)//When players are hit, can remove more then 1
     {
         soulsConsumed -= soulsEjected;
     }
 
-    public void loseLife()
+    public static void loseLife()
     {
         livesRemaining--;
     }

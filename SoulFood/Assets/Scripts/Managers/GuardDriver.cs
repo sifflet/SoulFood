@@ -57,4 +57,9 @@ public class GuardDriver : NPCDriver
             }
         }
     }
+
+    protected override void HandleCollisions()
+    {
+        //currently empty, can move collision handling with collectors here (this logic is currently in CollectorDriver)
+    }
 }
