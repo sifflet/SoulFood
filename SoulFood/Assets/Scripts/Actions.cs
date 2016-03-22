@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class Actions{
-
-    public static void ConsumeSoul(Collider[] collisions, Vector3 position)
+public static class Actions
+{
+    public static void ConsumeSoul(CollectorDriver collector)
     {
         //eatingDelay -= Time.deltaTime;
         Soul closestSoul = null;
         float closestDistance = 2f; //adjust size upon implementation
-        for (int i = 0; i < collisions.Length; i++)
+        Vector3 collectorPos = collector.Instance.transform.position;
+        Collider[] collisions = collector.CollisionArray;
+
+        for (int i = 0; i < collector.CollisionArray.Length; i++)
         {
-            if (collisions[i].tag == "Soul" && Mathf.Abs((position - collisions[i].transform.position).magnitude) <= closestDistance)
+            if (collisions[i].tag == "Soul" && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
             {
                 closestSoul = collisions[i].GetComponent<Soul>();
             }
@@ -18,6 +21,7 @@ public static class Actions{
         if (closestSoul != null)
         {
             //eatSoul stuff here
+            Debug.Log("test");
         };
     }
 

@@ -10,6 +10,8 @@ public class KeyboardInputs : MonoBehaviour
     protected float rotationSpeed = 3.0f;
     protected float speed = maximumSpeed;
 
+    protected NPCDriver npc;
+
 	void Start ()
     {
         movement = Vector3.zero;
@@ -24,6 +26,11 @@ public class KeyboardInputs : MonoBehaviour
     {
         Move();
         Turn();
+    }
+
+    public void Setup(NPCDriver npc)
+    {
+        this.npc = npc;
     }
 
     protected virtual void HandleInputs()

@@ -20,6 +20,7 @@ public class GuardDriver : NPCDriver
         this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
         this.instance.AddComponent<GuardKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<GuardKeyboardInputs>();
+        this.keyboardInputs.Setup(this);
 
         this.cameraDriver = new GuardsCameraDriver(cameraInstance);
 

@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         SetupNPCStateMachines();
 
         (guards[0] as GuardDriver).IsLeader = true;
-        //deathies[0].SetControlledByAI(false); // human controlled
+        deathies[0].SetControlledByAI(false); // human controlled
         //guards[0].SetControlledByAI(false);
         //guards[1].SetControlledByAI(false);
 	}

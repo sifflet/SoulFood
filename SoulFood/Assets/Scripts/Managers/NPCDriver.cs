@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public abstract class NPCDriver : MonoBehaviour
+public abstract class NPCDriver
 {
     protected GameObject instance;
     protected bool controlledByAI;
     protected Transform spawnPoint;
-    protected Collider[] collisionArray;
     protected NPCMovementDriver movementDriver;
     protected KeyboardInputs keyboardInputs;
 
@@ -22,6 +21,15 @@ public abstract class NPCDriver : MonoBehaviour
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 
+    public Collider[] CollisionArray
+    {
+        get
+        {
+            Vector3 location = this.instance.GetComponent<NPCMovement>().transform.position;
+            return Physics.OverlapSphere(location, 2.0f);
+        }
+    }
+
     public void Update()
     {
         if (controlledByAI)
@@ -32,7 +40,6 @@ public abstract class NPCDriver : MonoBehaviour
 
         cameraDriver.Update();
         FindVisibleNPCs();
-        GetCollisions();
     }
 
     protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
@@ -56,12 +63,6 @@ public abstract class NPCDriver : MonoBehaviour
     public void SetupStateMachine()
     {
         this.stateMachine.Setup();
-    }
-
-    
-    public void GetCollisions() {
-        Vector3 location = this.instance.GetComponent<NPCMovement>().transform.position;
-        collisionArray = Physics.OverlapSphere(location, 2.0f);
     }
 
     protected abstract void FindVisibleNPCs();

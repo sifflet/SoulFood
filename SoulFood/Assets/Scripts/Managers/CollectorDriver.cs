@@ -8,12 +8,15 @@ public class CollectorDriver : NPCDriver
     private const float MAX_SPEED = 15f;
     private int soulsStored = 0;
 
+    public int SoulsStored { get { return this.soulsStored; } }
+
     public CollectorDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
         : base(instance, cameraInstance, spawnPoint)
     {
         this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
         this.instance.AddComponent<CollectorKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<CollectorKeyboardInputs>();
+        this.keyboardInputs.Setup(this);
 
         this.cameraDriver = new CollectorsCameraDriver(cameraInstance, instance);
 
@@ -21,6 +24,16 @@ public class CollectorDriver : NPCDriver
         this.cameraDriver.SetEnabled(false);
 
         this.stateMachine = new CollectorStateMachine(this);
+    }
+
+    public void AddSoul()
+    {
+        this.soulsStored++;
+    }
+
+    public void DropSoul()
+    {
+        this.soulsStored--;
     }
 
     protected override void FindVisibleNPCs()
