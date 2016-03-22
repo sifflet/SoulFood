@@ -8,7 +8,7 @@ public class CollectorKeyboardInputs : KeyboardInputs
     private Stack<GameObject> candyContainer = new Stack<GameObject>(maximumCandyCapacity);
     private GameObject candyCollidedWith;
 
-    private KeyCode pickupCandy = KeyCode.LeftControl;
+    private KeyCode pickupCandyKey = KeyCode.LeftControl;
 
     // Degrees per second
     float angularSpeed = 180.0f;
@@ -31,9 +31,8 @@ public class CollectorKeyboardInputs : KeyboardInputs
             this.DropCandy();
         }
         
-        if (Input.GetKeyDown(pickupCandy))
+        if (Input.GetKeyDown(pickupCandyKey))
         {
-            //this.PickUpCandy(this.candyCollidedWith);
             Actions.ConsumeSoul(this.npc as CollectorDriver);
         }
     }

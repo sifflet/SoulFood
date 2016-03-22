@@ -18,9 +18,11 @@ public static class Actions
                 closestSoul = collisions[i].GetComponent<Soul>();
             }
         }
+
         if (closestSoul != null)
         {
             //eatSoul stuff here
+            collector.AddSoul();
             Debug.Log("test");
         };
     }
