@@ -37,7 +37,7 @@ public abstract class NPCDriver
             movementDriver.Update();
             stateMachine.Update();
         }
-
+        PassTime();
         cameraDriver.Update();
         FindVisibleNPCs();
     }
@@ -64,6 +64,6 @@ public abstract class NPCDriver
     {
         this.stateMachine.Setup();
     }
-
+    protected abstract void PassTime();
     protected abstract void FindVisibleNPCs();
 }

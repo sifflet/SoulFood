@@ -10,16 +10,12 @@ public class Soul : MonoBehaviour {
 	
     public void getConsumed(Vector3 playerPosition)//to be used for the animation of the soul getting consumed
     {
+        //Fancy soul movement here
         Invoke("disableSoul", 0.5f);
-    }
-
-    public void getEjected(Vector3 playerPosition)//to be used for the animation of the soul getting spit out
-    {
-        gameObject.SetActive(true);
     }
 
     void disableSoul()
     {
-        gameObject.SetActive(false);
+        Destroy(this);
     }
 }

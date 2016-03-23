@@ -3,28 +3,32 @@ using System.Collections;
 
 public static class Actions
 {
-    public static void ConsumeSoul(CollectorDriver collector)
+    public static void ConsumeSoul(CollectorDriver collector, Vector3 position)
     {
-        //eatingDelay -= Time.deltaTime;
-        Soul closestSoul = null;
-        float closestDistance = 2f; //adjust size upon implementation
-        Vector3 collectorPos = collector.Instance.transform.position;
-        Collider[] collisions = collector.CollisionArray;
-
-        for (int i = 0; i < collector.CollisionArray.Length; i++)
+        if (collector.eatingDelay <= 0f)
         {
-            if (collisions[i].tag == "Soul" && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
+            Soul closestSoul = null;
+            float closestDistance = 2f; //adjust size upon implementation
+            Vector3 collectorPos = collector.Instance.transform.position;
+            Collider[] collisions = collector.CollisionArray;
+
+            for (int i = 0; i < collector.CollisionArray.Length; i++)
             {
-                closestSoul = collisions[i].GetComponent<Soul>();
+                if (collisions[i].tag == "Soul" && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
+                {
+                    closestSoul = collisions[i].GetComponent<Soul>();
+                }
             }
-        }
 
-        if (closestSoul != null)
-        {
-            //eatSoul stuff here
-            collector.AddSoul();
-            Debug.Log("test");
-        };
+            if (closestSoul != null)
+            {
+                closestSoul.getConsumed(position);
+                collector.AddSoul();
+                GameManager.SoulConsumed();
+                collector.eatingDelay = 0.5f;
+                Debug.Log("test"); //to be removed
+            };
+        }
     }
 
     public static void EjectSoul()

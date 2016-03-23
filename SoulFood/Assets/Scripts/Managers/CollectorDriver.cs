@@ -4,10 +4,10 @@ using System.Collections.Generic;
 
 public class CollectorDriver : NPCDriver
 {
-    private float eatingDelay = 0.5f;
+    public float eatingDelay = 0.5f;
     private const float MAX_SPEED = 15f;
     private int soulsStored = 0;
-
+    public GameObject soul;
     public int SoulsStored { get { return this.soulsStored; } }
 
     public CollectorDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
@@ -34,6 +34,11 @@ public class CollectorDriver : NPCDriver
     public void DropSoul()
     {
         this.soulsStored--;
+    }
+
+    protected override void PassTime()
+    {
+        eatingDelay -= Time.deltaTime;
     }
 
     protected override void FindVisibleNPCs()
