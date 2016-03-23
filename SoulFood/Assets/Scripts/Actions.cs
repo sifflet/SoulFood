@@ -3,7 +3,7 @@ using System.Collections;
 
 public static class Actions
 {
-    public static void ConsumeSoul(CollectorDriver collector, Vector3 position)
+    public static void ConsumeSoul(CollectorDriver collector)
     {
         if (collector.eatingDelay <= 0f)
         {
@@ -22,7 +22,7 @@ public static class Actions
 
             if (closestSoul != null)
             {
-                closestSoul.getConsumed(position);
+                closestSoul.getConsumed(collectorPos);
                 collector.AddSoul();
                 GameManager.SoulConsumed();
                 collector.eatingDelay = 0.5f;
