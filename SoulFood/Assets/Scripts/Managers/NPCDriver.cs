@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public abstract class NPCDriver
+public abstract class NPCDriver : MonoBehaviour
 {
     protected GameObject instance;
     protected bool controlledByAI;
@@ -34,15 +34,15 @@ public abstract class NPCDriver
     {
         if (controlledByAI)
         {
-            movementDriver.Update();
-            stateMachine.Update();
+            //movementDriver.Update();
+            //stateMachine.Update();
         }
         PassTime();
-        cameraDriver.Update();
+        //cameraDriver.Update();
         FindVisibleNPCs();
     }
 
-    protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
+    public virtual void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         this.instance = instance;
         this.controlledByAI = true;
@@ -50,7 +50,9 @@ public abstract class NPCDriver
 
         this.visibleNPCs = new List<NPCDriver>();
 
-        this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
+        this.instance.AddComponent<NPCMovementDriver>();
+        this.movementDriver = this.instance.GetComponent<NPCMovementDriver>();
+        this.movementDriver.Setup(this.GetComponent<NPCMovement>());
     }
 
     public virtual void SetControlledByAI(bool controlledByAI)
@@ -58,11 +60,13 @@ public abstract class NPCDriver
         this.controlledByAI = controlledByAI;
         this.keyboardInputs.enabled = !controlledByAI;
         this.cameraDriver.SetEnabled(!controlledByAI);
+        this.stateMachine.enabled = controlledByAI;
+        this.movementDriver.enabled = controlledByAI;
     }
 
-    public void SetupStateMachine()
+    public void StartStateMachine()
     {
-        this.stateMachine.Setup();
+        this.stateMachine.EnterFirstState();
     }
     protected abstract void PassTime();
     protected abstract void FindVisibleNPCs();

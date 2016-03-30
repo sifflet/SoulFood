@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NPCMovementDriver
+public class NPCMovementDriver : MonoBehaviour
 {
 	private NPCMovement currentNPC;
 
@@ -25,7 +25,7 @@ public class NPCMovementDriver
     }
     public bool AttainedFinalNode { get; set; }
 	
-	public NPCMovementDriver (NPCMovement movement)
+	public void Setup (NPCMovement movement)
     {
         this.currentNPC = movement;
         this.pathList = new List<Node>();

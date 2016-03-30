@@ -10,20 +10,26 @@ public class CollectorDriver : NPCDriver
     public GameObject soul;
     public int SoulsStored { get { return this.soulsStored; } }
 
-    public CollectorDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
-        : base(instance, cameraInstance, spawnPoint)
+    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
+        base.Setup(instance, cameraInstance, spawnPoint);
+
         this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
+
         this.instance.AddComponent<CollectorKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<CollectorKeyboardInputs>();
         this.keyboardInputs.Setup(this);
 
-        this.cameraDriver = new CollectorsCameraDriver(cameraInstance, instance);
+        this.instance.AddComponent<CollectorsCameraDriver>();
+        this.cameraDriver = this.instance.GetComponent<CollectorsCameraDriver>();
+        this.cameraDriver.Setup(cameraInstance, this.instance);
 
         this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
 
-        this.stateMachine = new CollectorStateMachine(this);
+        this.instance.AddComponent<CollectorStateMachine>();
+        this.stateMachine = this.instance.GetComponent<CollectorStateMachine>();
+        this.stateMachine.Setup(this);
     }
 
     public void AddSoul()

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public abstract class NPCStateMachine
+public abstract class NPCStateMachine : MonoBehaviour
 {
     protected NPCDriver npc;
     protected NPCState currentState;
@@ -9,12 +9,12 @@ public abstract class NPCStateMachine
     public NPCDriver NPC { get { return this.npc; } }
     public NPCState CurrentState { get { return this.currentState; } }
 
-    protected NPCStateMachine(NPCDriver npc)
+    public virtual void Setup(NPCDriver npc)
     {
         this.npc = npc;
     }
 
-    public void Setup()
+    public void EnterFirstState()
     {
         if (this.currentState == null) return;
         this.currentState.Entry();

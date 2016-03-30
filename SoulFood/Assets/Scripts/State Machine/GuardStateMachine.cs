@@ -3,9 +3,9 @@ using System.Collections;
 
 public class GuardStateMachine : NPCStateMachine
 {
-    public GuardStateMachine(NPCDriver npc)
-        : base(npc)
+    public override void Setup(NPCDriver npc)
     {
+        base.Setup(npc);
         this.currentState = new GuardSearchState(this);
     }
 
