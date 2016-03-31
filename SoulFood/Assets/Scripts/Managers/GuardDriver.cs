@@ -12,9 +12,10 @@ public class GuardDriver : NPCDriver
         set { this.isLeader = value; (this.keyboardInputs as GuardKeyboardInputs).IsLeader = true; }
     }
 
-    public GuardDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
-        : base(instance, cameraInstance, spawnPoint)
+    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
+        base.Setup(instance, cameraInstance, spawnPoint);
+
         this.isLeader = false;
 
         this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
@@ -22,11 +23,16 @@ public class GuardDriver : NPCDriver
         this.keyboardInputs = this.instance.GetComponent<GuardKeyboardInputs>();
         this.keyboardInputs.Setup(this);
 
-        this.cameraDriver = new GuardsCameraDriver(cameraInstance);
+        this.instance.AddComponent<GuardsCameraDriver>();
+        this.cameraDriver = this.instance.GetComponent<GuardsCameraDriver>();
+        this.cameraDriver.Setup(cameraInstance);
 
         this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
-        this.stateMachine = new GuardStateMachine(this);
+
+        this.instance.AddComponent<GuardStateMachine>();
+        this.stateMachine = this.instance.GetComponent<GuardStateMachine>();
+        this.stateMachine.Setup(this);
     }
 
     public override void SetControlledByAI(bool controlledByAI)
@@ -34,6 +40,8 @@ public class GuardDriver : NPCDriver
         this.controlledByAI = controlledByAI;
         this.keyboardInputs.enabled = !controlledByAI;
         if (IsLeader) this.cameraDriver.SetEnabled(!controlledByAI);
+        this.stateMachine.enabled = controlledByAI;
+        this.movementDriver.enabled = controlledByAI;
     }
 
     protected override void PassTime()

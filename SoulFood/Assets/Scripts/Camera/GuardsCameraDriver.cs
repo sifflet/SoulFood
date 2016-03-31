@@ -16,11 +16,6 @@ public class GuardsCameraDriver : CameraDriver
     private Vector3 moveVelocity; 
     private Vector3 desiredPosition;
 
-    public GuardsCameraDriver(GameObject cameraInstance)
-        : base(cameraInstance)
-    {
-    }
-
     public override void Update()
     {
         Move();

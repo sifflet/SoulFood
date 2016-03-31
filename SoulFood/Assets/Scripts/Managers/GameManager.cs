@@ -66,10 +66,12 @@ public class GameManager : MonoBehaviour
 
     private void UpdateNPCs()
     {
+        /*
         foreach (NPCDriver npc in AllNPCs)
         {
             npc.Update();
         }
+         * */
     }
 
     private void SpawnAllNpcs()
@@ -82,7 +84,10 @@ public class GameManager : MonoBehaviour
             GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
-            deathies.Add(new CollectorDriver(npcInstance, cameraInstance, spawnPoint));
+            npcInstance.AddComponent<CollectorDriver>();
+            CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
+            driver.Setup(npcInstance, cameraInstance, spawnPoint);
+            deathies.Add(driver);
         }
 
         for (int i = 0; i < GUARDS_NUM; i++)
@@ -93,7 +98,10 @@ public class GameManager : MonoBehaviour
             GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
-            guards.Add(new GuardDriver(npcInstance, cameraInstance, spawnPoint));
+            npcInstance.AddComponent<GuardDriver>();
+            GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
+            driver.Setup(npcInstance, cameraInstance, spawnPoint);
+            guards.Add(driver);
         }
     }
 
@@ -101,7 +109,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (NPCDriver npc in AllNPCs)
         {
-            npc.SetupStateMachine();
+            npc.StartStateMachine();
         }
     }
 

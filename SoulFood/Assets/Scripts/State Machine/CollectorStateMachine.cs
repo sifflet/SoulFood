@@ -9,9 +9,9 @@ public class CollectorStateMachine : NPCStateMachine
     public float FleeRange { get { return this.fleeRange; } }
     public float EmergencyFleeRange { get { return this.emergencyFleeRange; } }
 
-    public CollectorStateMachine(NPCDriver npc)
-        : base(npc)
+    public override void Setup(NPCDriver npc)
     {
+        base.Setup(npc);
         this.currentState = new CollectorSearchSoulsState(this);
     }
 
