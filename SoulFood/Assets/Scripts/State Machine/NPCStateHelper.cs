@@ -11,6 +11,7 @@ public static class NPCStateHelper
         Node end = FindClosestNode(target);
 
         List<Node> path = Graph.ShortestPathEuclideanHeuristic(start, end);
+        if (path.Count <= 0) return 0.0f;
 
         result += Vector3.Distance(obj.transform.position, path[0].position);
 
@@ -21,7 +22,21 @@ public static class NPCStateHelper
 
         return result;
     }
-    
+
+    public static void MoveTo(NPCDriver npc, GameObject target, float directMoveDistance)
+    {
+        float distanceToTarget = GetShortestPathDistance(npc.Instance, target);
+
+        if (distanceToTarget > directMoveDistance)
+        {
+            npc.MovementDriver.ChangePath(FindClosestNode(target));
+        }
+        else
+        {
+            npc.MovementDriver.NPCMovement.Steering_Arrive(target.transform.position, false);
+        }
+    }
+
     public static Node FindClosestNode(GameObject obj)
     {
         Node result = null;

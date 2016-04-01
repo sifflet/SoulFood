@@ -24,6 +24,8 @@ public class NPCMovementDriver : MonoBehaviour
             return this.pathList[index];
         }
     }
+
+    public NPCMovement NPCMovement { get { return this.currentNPC; } }
 	
 	public void Setup (NPCMovement movement)
     {

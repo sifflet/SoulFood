@@ -35,17 +35,7 @@ public class GuardPursueState : NPCState
         // direct pursue
         // this class should be abstract
 
-        NPCMovementDriver thisNPCMovementDriver = this.stateMachine.NPC.MovementDriver;
-
-        if (targetNPC.MovementDriver.CurrentTargetNode == null)
-        {
-            thisNPCMovementDriver.ChangePath(targetNPC.MovementDriver.FindClosestNode());
-        }
-        else if (this.targetNPCCurrentTargetNode != targetNPC.MovementDriver.CurrentTargetNode)
-        {
-            this.targetNPCCurrentTargetNode = targetNPC.MovementDriver.CurrentTargetNode;
-            this.stateMachine.NPC.MovementDriver.ChangePath(this.targetNPCCurrentTargetNode);
-        }
+        NPCStateHelper.MoveTo(stateMachine.NPC, targetNPC.Instance, 5f);
 
         return this;
     }
