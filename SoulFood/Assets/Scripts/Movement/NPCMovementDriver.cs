@@ -12,6 +12,7 @@ public class NPCMovementDriver : MonoBehaviour
 	private List<Node> pathList;
     private List<Node> nodes;
 
+    public bool AttainedFinalNode { get; set; }
     public Node CurrentTargetNode
     { 
         get
@@ -23,7 +24,6 @@ public class NPCMovementDriver : MonoBehaviour
             return this.pathList[index];
         }
     }
-    public bool AttainedFinalNode { get; set; }
 	
 	public void Setup (NPCMovement movement)
     {
