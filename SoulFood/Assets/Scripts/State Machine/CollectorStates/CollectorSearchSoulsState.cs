@@ -18,10 +18,10 @@ public class CollectorSearchSoulsState : CollectorCollectingState
 
     public override NPCState Update()
     {
-		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this);
+		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
 
-		if (CollectorStateHelper.GuardsInEmergencyFleeRange(this)) ; // return emergencyFlee state
-		if (CollectorStateHelper.GuardsInFleeRange(this)) return new CollectorFleeState(this.stateMachine); // return flee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, "emergency")) ; // return emergencyFlee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, "default")) return new CollectorFleeState(this.stateMachine); // return flee state
 		
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
 

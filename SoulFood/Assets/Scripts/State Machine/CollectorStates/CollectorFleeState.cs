@@ -14,19 +14,19 @@ public class CollectorFleeState : NPCState
     public override void Entry()
     {
         Debug.Log("Flee State Entry");
-		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this);
-        List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this);
+		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
+		List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this.stateMachine);
         this.stateMachine.NPC.MovementDriver.ChangePathToFlee((this.stateMachine as CollectorStateMachine).FleeRange, guardsInFleeRange);
     }
 
     public override NPCState Update()
     {
-		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this);
-		List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this);
+		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
+		List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this.stateMachine);
 
         if (guardsInSight.Count == 0) return new CollectorSearchSoulsState(this.stateMachine);
         if (guardsInFleeRange.Count == 0) return new CollectorSearchSoulsState(this.stateMachine);
-		if (CollectorStateHelper.GuardsInEmergencyFleeRange(this)) ; // return emergency flee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, "emergency")) ; // return emergency flee state
 
         if (this.stateMachine.NPC.MovementDriver.AttainedFinalNode)
         {

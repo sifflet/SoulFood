@@ -18,10 +18,10 @@ public class CollectorCollectingState : NPCState
 
     public override NPCState Update()
     {
-        this.guardsInSight = FindGuardsInSight();
+		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
 
-        if (GuardsInEmergencyFleeRange()) ; // return emergencyFlee state
-        if (GuardsInFleeRange()) return new CollectorFleeState(this.stateMachine); // return flee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, "emergency")) ; // return emergencyFlee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, "default")) return new CollectorFleeState(this.stateMachine); // return flee state
 
         return this.stateMachine.CurrentState;
     }

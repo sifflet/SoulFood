@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 public static class CollectorStateHelper {
 
-	public static List<NPCDriver> FindGuardsInSight(NPCState npcState)
+	public static List<NPCDriver> FindGuardsInSight(NPCStateMachine npcStateMachine)
 	{
 		List<NPCDriver> result = new List<NPCDriver>();
 		
 		foreach (NPCDriver guard in GameManager.Guards)
 		{
-			if (npcState.stateMachine.NPC.VisibleNPCs.Contains(guard))
+			if (npcStateMachine.NPC.VisibleNPCs.Contains(guard))
 			{
 				result.Add(guard);
 			}
@@ -19,14 +20,16 @@ public static class CollectorStateHelper {
 		return result;
 	}
 	
-	public static List<NPCDriver> FindGuardsInFleeRange(NPCState npcState)
+	public static List<NPCDriver> FindGuardsInFleeRange(NPCStateMachine npcStateMachine)
 	{
 		List<NPCDriver> result = new List<NPCDriver>();
-		Vector3 thisNPCPosition = npcState.stateMachine.NPC.Instance.transform.position;
-		
+		Vector3 thisNPCPosition = npcStateMachine.NPC.Instance.transform.position;
+		List<NPCDriver> guardsInSight = FindGuardsInSight(npcStateMachine);
+
+
 		foreach (NPCDriver guard in guardsInSight)
 		{
-			if (Vector3.Distance(thisNPCPosition, guard.Instance.transform.position) <= (npcState.stateMachine as CollectorStateMachine).FleeRange)
+			if (Vector3.Distance(thisNPCPosition, guard.Instance.transform.position) <= (npcStateMachine as CollectorStateMachine).FleeRange)
 			{
 				result.Add(guard);
 			}
@@ -36,19 +39,16 @@ public static class CollectorStateHelper {
 	}
 
 
-	public static bool GuardsInFleeRange(NPCState npcState, string range) // Range should be "default" for default flee range or "emergency" for emergency flee range
+	public static bool GuardsInFleeRange(NPCStateMachine npcStateMachine, string range) // Range should be "default" for default flee range or "emergency" for emergency flee range
 	{
-		Vector3 thisNPCPosition = npcState.stateMachine.NPC.Instance.transform.position;
-		float fleeRange;
+		Vector3 thisNPCPosition = npcStateMachine.NPC.Instance.transform.position;
+		float fleeRange = (npcStateMachine as CollectorStateMachine).FleeRange; // Default flee range
+		List<NPCDriver> guardsInSight = FindGuardsInSight(npcStateMachine);
 
-		// Get range based on inputted string
-		if (range.Equals("default", StringComparison.OrdinalIgnoreCase))
+		// Get emergency range based on inputted string
+		if (range.Equals("emergency", StringComparison.OrdinalIgnoreCase))
 		{
-			fleeRange = (npcState.stateMachine as CollectorStateMachine).FleeRange;
-		}
-		else if (range.Equals("emergency", StringComparison.OrdinalIgnoreCase))
-		{
-			fleeRange = (npcState.stateMachine as CollectorStateMachine).EmergencyFleeRange;
+			fleeRange = (npcStateMachine as CollectorStateMachine).EmergencyFleeRange;
 		}
 
 
@@ -62,36 +62,5 @@ public static class CollectorStateHelper {
 		
 		return false;
 	}
-
-	/*
-
-	public static bool GuardsInFleeRange(NPCState npcState) 
-	{
-		Vector3 thisNPCPosition = npcState.stateMachine.NPC.Instance.transform.position;
-		
-		foreach (NPCDriver guard in guardsInSight)
-		{
-			if (Vector3.Distance(thisNPCPosition, guard.Instance.transform.position) <= (npcState.stateMachine as CollectorStateMachine).FleeRange)
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	public static bool GuardsInEmergencyFleeRange(NPCState npcState)
-	{
-		Vector3 thisNPCPosition = npcState.stateMachine.NPC.Instance.transform.position;
-		
-		foreach (NPCDriver guard in guardsInSight)
-		{
-			if (Vector3.Distance(thisNPCPosition, guard.Instance.transform.position) <= (npcState.stateMachine as CollectorStateMachine).EmergencyFleeRange)
-			{
-				return true;
-			}
-		}
-		
-		return false;
-	}*/
+	
 }
