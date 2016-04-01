@@ -22,7 +22,7 @@ public class CollectorSearchSoulsState : CollectorCollectingState
 
 		if (CollectorStateHelper.GuardsInEmergencyFleeRange(this)) ; // return emergencyFlee state
 		if (CollectorStateHelper.GuardsInFleeRange(this)) return new CollectorFleeState(this.stateMachine); // return flee state
-
+		
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
 
         if (movementDriver.AttainedFinalNode)
@@ -31,6 +31,6 @@ public class CollectorSearchSoulsState : CollectorCollectingState
             movementDriver.ChangePath(newEndNode);
         }
 
-        return this;
+        return base.Update();
     }
 }
