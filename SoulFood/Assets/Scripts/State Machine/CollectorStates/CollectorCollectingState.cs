@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CollectorCollectingState : NPCState
+public abstract class CollectorCollectingState : NPCState
 {
     protected List<NPCDriver> guardsInSight;
 

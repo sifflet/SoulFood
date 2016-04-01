@@ -13,6 +13,9 @@ public class GameManager : MonoBehaviour
     public GameObject treeTwoButton;
     public GameObject treeThreeButton;
 
+	public const float FLEE_RANGE = 20.0f;
+	public const float EMERGENCY_FLEE_RANGE = 10.0f;
+
     private static int livesRemaining;
     private static int soulsConsumed;
     private static int soulLimit;
