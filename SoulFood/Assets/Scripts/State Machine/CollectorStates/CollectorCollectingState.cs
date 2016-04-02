@@ -20,8 +20,8 @@ public abstract class CollectorCollectingState : NPCState
     {
 		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
 
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, "emergency")) ; // return emergencyFlee state
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, "default")) return new CollectorFleeState(this.stateMachine); // return flee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Emergency)) ; // return emergencyFlee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Default)) return new CollectorFleeState(this.stateMachine); // return flee state
 
         return this.stateMachine.CurrentState;
     }

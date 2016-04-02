@@ -39,14 +39,14 @@ public static class CollectorStateHelper {
 	}
 
 
-	public static bool GuardsInFleeRange(NPCStateMachine npcStateMachine, string range) // Range should be "default" for default flee range or "emergency" for emergency flee range
+	public static bool GuardsInFleeRange(NPCStateMachine npcStateMachine, GameManager.FleeRangeType range) // Range should be "default" for default flee range or "emergency" for emergency flee range
 	{
         GameObject thisNPC = npcStateMachine.NPC.Instance;
 		float fleeRange = (npcStateMachine as CollectorStateMachine).FleeRange; // Default flee range
 		List<NPCDriver> guardsInSight = FindGuardsInSight(npcStateMachine);
 
 		// Get emergency range based on inputted string
-		if (range.Equals("emergency", StringComparison.OrdinalIgnoreCase))
+		if (range == GameManager.FleeRangeType.Emergency)
 		{
 			fleeRange = (npcStateMachine as CollectorStateMachine).EmergencyFleeRange;
 		}

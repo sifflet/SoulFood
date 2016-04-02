@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
 
+	public enum FleeRangeType { Default, Emergency };
+
     private static int livesRemaining;
     private static int soulsConsumed;
     private static int soulLimit;
