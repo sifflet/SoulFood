@@ -41,8 +41,8 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 			if (visibleSouls.Count > 0) {
 				GameObject closetSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
 				Debug.Log ("In search state: Moving to " + closetSoul.name);
-				NPCStateHelper.MoveTo(this.stateMachine.NPC, closetSoul, 1f);
-				// Stop movement when in collider range?
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, closetSoul, 5f);
+				// To add? Stop movement when in collider range?
 				return new CollectorCollectSoulsState(this.stateMachine); // Transition to CollectSouls state
 			
 			}
