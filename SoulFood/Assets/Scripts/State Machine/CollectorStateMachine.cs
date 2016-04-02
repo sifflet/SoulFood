@@ -3,8 +3,8 @@ using System.Collections;
 
 public class CollectorStateMachine : NPCStateMachine
 {
-    private float fleeRange = 20.0f;
-    private float emergencyFleeRange = 10.0f;
+	private float fleeRange = GameManager.FLEE_RANGE;
+    private float emergencyFleeRange = GameManager.EMERGENCY_FLEE_RANGE;
 
     public float FleeRange { get { return this.fleeRange; } }
     public float EmergencyFleeRange { get { return this.emergencyFleeRange; } }

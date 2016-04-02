@@ -20,6 +20,7 @@ public abstract class NPCDriver : MonoBehaviour
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
+	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
 
     public Collider[] CollisionArray
     {
@@ -37,7 +38,6 @@ public abstract class NPCDriver : MonoBehaviour
             //movementDriver.Update();
             //stateMachine.Update();
         }
-        PassTime();
         //cameraDriver.Update();
         FindVisibleNPCs();
     }
@@ -68,6 +68,6 @@ public abstract class NPCDriver : MonoBehaviour
     {
         this.stateMachine.EnterFirstState();
     }
-    protected abstract void PassTime();
+
     protected abstract void FindVisibleNPCs();
 }

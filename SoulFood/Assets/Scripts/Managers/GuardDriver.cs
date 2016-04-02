@@ -44,11 +44,6 @@ public class GuardDriver : NPCDriver
         this.movementDriver.enabled = controlledByAI;
     }
 
-    protected override void PassTime()
-    {
-        //decrease lunge timer here
-    }
-
     protected override void FindVisibleNPCs()
     {
         this.visibleNPCs.Clear();

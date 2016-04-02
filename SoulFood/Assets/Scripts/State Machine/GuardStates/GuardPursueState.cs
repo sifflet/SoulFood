@@ -19,14 +19,7 @@ public class GuardPursueState : NPCState
         this.targetNPC = GetClosestVisibleCollector();
         this.targetNPCCurrentTargetNode = targetNPC.MovementDriver.CurrentTargetNode;
 
-        if (targetNPC.MovementDriver.CurrentTargetNode == null)
-        {
-            thisNPCMovementDriver.ChangePath(targetNPC.MovementDriver.FindClosestNode());
-        }
-        else
-        {
-            thisNPCMovementDriver.ChangePath(this.targetNPCCurrentTargetNode);
-        }
+        NPCStateHelper.MoveTo(stateMachine.NPC, targetNPC.Instance, 5f);
     }
 
     public override NPCState Update()
@@ -35,17 +28,7 @@ public class GuardPursueState : NPCState
         // direct pursue
         // this class should be abstract
 
-        NPCMovementDriver thisNPCMovementDriver = this.stateMachine.NPC.MovementDriver;
-
-        if (targetNPC.MovementDriver.CurrentTargetNode == null)
-        {
-            thisNPCMovementDriver.ChangePath(targetNPC.MovementDriver.FindClosestNode());
-        }
-        else if (this.targetNPCCurrentTargetNode != targetNPC.MovementDriver.CurrentTargetNode)
-        {
-            this.targetNPCCurrentTargetNode = targetNPC.MovementDriver.CurrentTargetNode;
-            this.stateMachine.NPC.MovementDriver.ChangePath(this.targetNPCCurrentTargetNode);
-        }
+        NPCStateHelper.MoveTo(stateMachine.NPC, targetNPC.Instance, 5f);
 
         return this;
     }
@@ -53,16 +36,19 @@ public class GuardPursueState : NPCState
     private NPCDriver GetClosestVisibleCollector()
     {
         NPCDriver result = this.stateMachine.NPC.VisibleNPCs[0];
+        float currentClosestDistance = NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, stateMachine.NPC.VisibleNPCs[0].Instance);
 
         foreach (NPCDriver npc in this.stateMachine.NPC.VisibleNPCs)
         {
-            Vector3 thisNPCPosition = this.stateMachine.NPC.Instance.transform.position;
-            Vector3 otherNPCPosition = npc.Instance.transform.position;
-            Vector3 currentClosestNPCPosition = result.Instance.transform.position;
+            GameObject thisNPC = this.stateMachine.NPC.Instance;
+            GameObject otherNPC = npc.Instance;
+            GameObject currentClosestNPC = result.Instance;
 
-            if (Vector3.Distance(thisNPCPosition, otherNPCPosition) < Vector3.Distance(thisNPCPosition, currentClosestNPCPosition))
+            float distanceToOtherNPC = NPCStateHelper.GetShortestPathDistance(thisNPC, otherNPC);
+            if (distanceToOtherNPC < currentClosestDistance)
             {
                 result = npc;
+                currentClosestDistance = distanceToOtherNPC;
             }
         }
 
