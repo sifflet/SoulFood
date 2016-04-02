@@ -20,6 +20,7 @@ public abstract class NPCDriver : MonoBehaviour
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
+    public NPCStateMachine StateMachine { get { return this.stateMachine; } }
 
     public Collider[] CollisionArray
     {
