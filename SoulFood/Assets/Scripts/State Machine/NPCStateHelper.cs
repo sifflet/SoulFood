@@ -23,6 +23,14 @@ public static class NPCStateHelper
         return result;
     }
 
+    /// <summary>
+    /// Moves a NPC towards a target, uses the pathfinding algorithm if the target is far
+    /// or uses Steering arrive if the target is close.
+    /// </summary>
+    /// <param name="npc">The moving NPC's NPCDriver</param>
+    /// <param name="target">The target game object</param>
+    /// <param name="directMoveDistance">The distance at which the NPC should start using
+    /// steering arrive to move towards its target</param>
     public static void MoveTo(NPCDriver npc, GameObject target, float directMoveDistance)
     {
         float distanceToTarget = GetShortestPathDistance(npc.Instance, target);
