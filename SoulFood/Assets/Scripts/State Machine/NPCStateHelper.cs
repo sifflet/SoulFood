@@ -63,4 +63,23 @@ public static class NPCStateHelper
 
         return result;
     }
+
+	public static GameObject FindClosestGameObject(GameObject target, List<GameObject> gameObjects)
+	{
+		GameObject result = null;
+		
+		for (int i = 0; i < gameObjects.Count; i++)
+		{
+			if (i == 0)
+			{
+				result = gameObjects[i];
+			}
+			if (Vector3.Distance(target.transform.position, gameObjects[i].transform.position) < Vector3.Distance(target.transform.position, result.transform.position))
+			{
+				result = gameObjects[i];
+			}
+		}
+		
+		return result;
+	}
 }

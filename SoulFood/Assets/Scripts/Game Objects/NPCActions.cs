@@ -6,7 +6,7 @@ public static class NPCActions
     public static void ConsumeSoul(CollectorDriver collector)
     {
         Soul closestSoul = null;
-        float closestDistance = 2f; //adjust size upon implementation
+        float closestDistance = 0.5f; //adjust size upon implementation
         Vector3 collectorPos = collector.Instance.transform.position;
         Collider[] collisions = collector.CollisionArray;
 
@@ -21,7 +21,7 @@ public static class NPCActions
 
         if (closestSoul)
         {
-            closestSoul.getConsumed(collectorPos);
+            closestSoul.IsConsumed(collectorPos);
             collector.AddSoul();
             GameManager.SoulConsumed();
             Debug.Log("I've consumed a soul!"); //to be removed

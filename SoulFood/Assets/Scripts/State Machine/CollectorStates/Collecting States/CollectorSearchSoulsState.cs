@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class CollectorSearchSoulsState : CollectorCollectingState
+public class CollectorSearchSoulsState : CollectorCollectingSuperState
 {
 	private float soulSearchingTimer = GameManager.TIME_SPENT_SOUL_SEARCHING;
-	private List<Soul> visibleSouls = new List<Soul>();
+	private List<GameObject> visibleSouls = new List<GameObject>();
 
 	private NPCMovementDriver movementDriver;
 
@@ -39,12 +39,12 @@ public class CollectorSearchSoulsState : CollectorCollectingState
 			// Collect souls in close proximity as you go
 			FindVisibleSouls();
 			if (visibleSouls.Count > 0) {
-				foreach (Soul soul in visibleSouls) {
-					Debug.Log ("Moving to " + soul.name);
-					NPCStateHelper.MoveTo(this.stateMachine.NPC, soul.gameObject, 5f);
-					// Stop movement when in collider range?
-					// Transition to CollectSoul state
-				}
+				GameObject closetSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
+				Debug.Log ("In search state: Moving to " + closetSoul.name);
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, closetSoul, 1f);
+				// Stop movement when in collider range?
+				return new CollectorCollectSoulsState(this.stateMachine); // Transition to CollectSouls state
+			
 			}
 
 			// If we're at the end of our path, find a new random one
@@ -75,7 +75,7 @@ public class CollectorSearchSoulsState : CollectorCollectingState
 			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
 			    viewPortPosition.z >= 0.0f)
 			{
-				visibleSouls.Add(soul);
+				visibleSouls.Add(soul.gameObject);
 			}
 		}
 

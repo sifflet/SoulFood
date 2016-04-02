@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public abstract class CollectorCollectingState : NPCState
+public abstract class CollectorCollectingSuperState : NPCState
 {
     protected List<NPCDriver> guardsInSight;
 
-    public CollectorCollectingState(NPCStateMachine stateMachine)
+    public CollectorCollectingSuperState(NPCStateMachine stateMachine)
         : base(stateMachine)
     {
         this.guardsInSight = new List<NPCDriver>();
