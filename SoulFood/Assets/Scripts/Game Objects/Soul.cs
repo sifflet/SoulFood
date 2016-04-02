@@ -8,14 +8,13 @@ public class Soul : MonoBehaviour {
 	
 	}
 	
-    public void getConsumed(Vector3 playerPosition)//to be used for the animation of the soul getting consumed
+    public void IsConsumed(Vector3 playerPosition)//to be used for the animation of the soul getting consumed
     {
-        //Fancy soul movement here
-        Invoke("disableSoul", 0.5f);
+		DisableSoul();
     }
 
-    void disableSoul()
+    void DisableSoul()
     {
-        Destroy(this);
+        Destroy(this.gameObject);
     }
 }

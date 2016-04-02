@@ -12,19 +12,19 @@ public static class NPCActions
 
         for (int i = 0; i < collector.CollisionArray.Length; i++)
         {
-            if (collisions[i].tag == "Soul" && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
+			Soul soul = collisions[i].GetComponent<Soul>();
+			if (soul && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
             {
-                closestSoul = collisions[i].GetComponent<Soul>();
+				closestSoul = soul;
             }
         }
 
-        if (closestSoul != null)
+        if (closestSoul)
         {
             closestSoul.getConsumed(collectorPos);
             collector.AddSoul();
             GameManager.SoulConsumed();
-            collector.eatingDelay = 0.5f;
-            Debug.Log("test"); //to be removed
+            Debug.Log("I've consumed a soul!"); //to be removed
         };
     }
 
