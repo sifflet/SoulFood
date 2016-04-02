@@ -268,12 +268,19 @@ static class Graph
         return result;
     }
 
+    /// <summary>
+    /// Calculate heuristic for flanking
+    /// </summary>
+    /// <param name="currentNode"></param>
+    /// <param name="targetNode"></param>
+    /// <param name="npc"></param>
+    /// <returns></returns>
     private static float CalculateEuclideanDistanceHeuristic(Node currentNode, Node targetNode, NPCDriver npc)
     {
         float result = 0.0f;
            
         result += Vector3.Distance(currentNode.position, targetNode.position);
-        result += Vector3.Distance(currentNode.position, npc.Instance.transform.position);
+        result += 200 - Vector3.Distance(currentNode.position, npc.Instance.transform.position);
 
         return result;
     }
