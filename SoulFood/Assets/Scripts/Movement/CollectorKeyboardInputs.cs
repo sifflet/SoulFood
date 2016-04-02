@@ -33,7 +33,7 @@ public class CollectorKeyboardInputs : KeyboardInputs
         
         if (Input.GetKeyDown(pickupCandyKey))
         {
-            CollectorAction.ConsumeSoul(this.npc as CollectorDriver);
+            NPCActions.ConsumeSoul(this.npc as CollectorDriver);
         }
     }
 

@@ -6,7 +6,7 @@ public class CollectorDriver : NPCDriver
 {
 	private const float MAX_SPEED = 15f;
     private int soulsStored = 0;
-
+    public float eatingDelay = 0.5f;
 	public int SoulsStored { get { return this.soulsStored; } }
 
     public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
