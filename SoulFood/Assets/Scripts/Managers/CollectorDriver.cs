@@ -51,10 +51,7 @@ public class CollectorDriver : NPCDriver
     {
         this.visibleNPCs.Clear();
 
-        List<NPCDriver> allNPCs = new List<NPCDriver>(GameManager.Deathies);
-        allNPCs.AddRange(GameManager.Guards);
-
-        foreach (NPCDriver npc in allNPCs)
+        foreach (NPCDriver npc in GameManager.AllNPCs)
         {
             if (npc == this) continue;
 

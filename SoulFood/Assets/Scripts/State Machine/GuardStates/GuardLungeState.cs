@@ -8,6 +8,13 @@ public class GuardLungeState : NPCState
     {
     }
 
-    public override void Entry() { }
-    public override NPCState Update() { return this; }
+    public override void Entry()
+    {
+        Debug.Log("Lunge entry");
+    }
+
+    public override NPCState Update()
+    {
+        return this;
+    }
 }

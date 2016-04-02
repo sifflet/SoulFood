@@ -10,20 +10,20 @@ public class GuardFlankPursueState : GuardPursueState
 
     public override void Entry()
     {
+        Debug.Log("Flank Pursue entry");
         base.Entry();
     }
 
     public override NPCState Update()
     {
-        if (false)
-        {
+        NPCState stateFromBase = base.Update();
+        if (stateFromBase != this) return stateFromBase;
 
-        }
-        else
-        {
-            base.Update();
-        }
+        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, targetNPC.Instance) <= GameManager.DIRECT_PURSUE_RANGE) return new GuardDirectPursueState(stateMachine);
 
+        // implement flanking
+        NPCStateHelper.MoveTo(stateMachine.NPC, targetNPC.Instance, 5f);
+        
         return this;
     }
 }

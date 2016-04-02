@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
 
+    public const float ACTIVATE_LUNGE_DISTANCE = 3.0f;
+    public const float DIRECT_PURSUE_RANGE = 15.0f;
+
 	public enum FleeRangeType { Default, Emergency };
 
     private static int livesRemaining;
