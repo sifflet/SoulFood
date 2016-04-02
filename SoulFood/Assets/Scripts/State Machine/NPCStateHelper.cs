@@ -41,6 +41,7 @@ public static class NPCStateHelper
         }
         else
         {
+			Debug.Log ("NPC x position: " + npc.gameObject.transform.position.x + " NPC z position: " + npc.gameObject.transform.position.z);
 			float npcYPosition = npc.gameObject.transform.position.y;
 			Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);
 			npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition, false);
