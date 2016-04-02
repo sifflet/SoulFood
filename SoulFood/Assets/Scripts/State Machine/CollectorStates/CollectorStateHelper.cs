@@ -79,18 +79,6 @@ public static class CollectorStateHelper {
 				visibleSouls.Add(soul.gameObject);
 			}
 		}
-		
-		// Sort visible souls by path distance, closest to farthest
-		/*visibleSouls.Sort (delegate(Soul x, Soul y) 
-		{
-			float xDistance = NPCStateHelper.GetShortestPathDistance(this.stateMachine.NPC.gameObject, x.gameObject);
-			float yDistance = NPCStateHelper.GetShortestPathDistance(this.stateMachine.NPC.gameObject, y.gameObject);
-
-			if (xDistance == yDistance) return 0;
-			else if (xDistance < yDistance) return -1;
-			else if (xDistance > yDistance) return 1;
-			else return 0;
-		});*/
 
 		return visibleSouls;
 	}
