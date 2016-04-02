@@ -3,6 +3,8 @@ using System.Collections;
 
 public class GuardFlankPursueState : GuardPursueState
 {
+    private NPCDriver otherGuard;
+
     public GuardFlankPursueState(NPCStateMachine stateMachine)
         : base(stateMachine)
     {
@@ -11,6 +13,7 @@ public class GuardFlankPursueState : GuardPursueState
     public override void Entry()
     {
         Debug.Log("Flank Pursue entry");
+        otherGuard = FindOtherGuard();
         base.Entry();
     }
 
@@ -21,9 +24,20 @@ public class GuardFlankPursueState : GuardPursueState
 
         if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, targetNPC.Instance) <= GameManager.DIRECT_PURSUE_RANGE) return new GuardDirectPursueState(stateMachine);
 
-        // implement flanking
-        NPCStateHelper.MoveTo(stateMachine.NPC, targetNPC.Instance, 5f);
+        stateMachine.NPC.MovementDriver.ChangePathToFlank(NPCStateHelper.FindClosestNode(targetNPC.Instance), otherGuard);
         
         return this;
+    }
+
+    private NPCDriver FindOtherGuard()
+    {
+        foreach (NPCDriver npc in GameManager.Guards)
+        {
+            if (npc == this.stateMachine.NPC) continue;
+
+            return npc;
+        }
+
+        return null;
     }
 }

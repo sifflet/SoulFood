@@ -185,6 +185,58 @@ static class Graph
         return null;
     }
 
+    public static List<Node> AStarFlank(Node start, Node finish, NPCDriver otherGuard)
+    {
+        List<Node> openList = new List<Node>();
+        List<Node> closedList = new List<Node>();
+        Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
+        Dictionary<Node, float> costSoFar = new Dictionary<Node, float>();
+        Dictionary<Node, float> totalCost = new Dictionary<Node, float>();
+
+        foreach (Node node in vertices.Keys)
+        {
+            previous[node] = null;
+            costSoFar[node] = float.MaxValue;
+            totalCost[node] = float.MaxValue;
+        }
+
+        openList.Add(start);
+        costSoFar[start] = 0.0f;
+        totalCost[start] = CalculateEuclideanDistanceHeuristic(start, finish, otherGuard);
+
+        while (openList.Count > 0)
+        {
+            Node currentNode = FindNodeWithMinCost(openList, totalCost);
+            currentNode.SetMaterialColor(Color.blue);
+
+            if (currentNode == finish) return StackToList(GetPath(start, finish, previous));
+
+            openList.Remove(currentNode);
+            closedList.Add(currentNode);
+
+            foreach (Node neighbor in vertices[currentNode].Keys)
+            {
+                if (closedList.Contains(neighbor)) continue;
+
+                float newCostSoFar = costSoFar[currentNode] + vertices[currentNode][neighbor];
+
+                if (!openList.Contains(neighbor))
+                {
+                    openList.Add(neighbor);
+                    neighbor.SetMaterialColor(Color.yellow);
+                }
+
+                if (newCostSoFar >= costSoFar[neighbor]) continue;
+
+                previous[neighbor] = currentNode;
+                costSoFar[neighbor] = newCostSoFar;
+                totalCost[neighbor] = costSoFar[neighbor] + CalculateEuclideanDistanceHeuristic(neighbor, finish, otherGuard);
+            }
+        }
+
+        return null;
+    }
+
     private static bool CanTerminate(Node currentNode, float terminateDistance, List<NPCDriver> threats)
     {
         bool result = true;
@@ -212,6 +264,16 @@ static class Graph
         {
             result += Vector3.Distance(currentNode.position, target.Instance.transform.position);
         }
+
+        return result;
+    }
+
+    private static float CalculateEuclideanDistanceHeuristic(Node currentNode, Node targetNode, NPCDriver npc)
+    {
+        float result = 0.0f;
+           
+        result += Vector3.Distance(currentNode.position, targetNode.position);
+        result += Vector3.Distance(currentNode.position, npc.Instance.transform.position);
 
         return result;
     }
