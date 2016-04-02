@@ -13,9 +13,10 @@ public class GameManager : MonoBehaviour
     public GameObject treeTwoButton;
     public GameObject treeThreeButton;
 
+	/* Collector variables */
+	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
-
 	public enum FleeRangeType { Default, Emergency };
 
     private static int livesRemaining;

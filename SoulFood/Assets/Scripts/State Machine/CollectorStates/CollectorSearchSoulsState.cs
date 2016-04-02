@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class CollectorSearchSoulsState : CollectorCollectingState
 {
+	private float soulSearchingTimer = GameManager.TIME_SPENT_SOUL_SEARCHING;
+
     public CollectorSearchSoulsState(NPCStateMachine stateMachine)
         : base(stateMachine)
     {
@@ -18,11 +20,14 @@ public class CollectorSearchSoulsState : CollectorCollectingState
 
     public override NPCState Update()
     {
-		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
+		// Check if guards are in sight and if a transition to flee states is necessary
+		// These checks are in the base state
+		NPCState stateFromBase = base.Update();
+		if (stateFromBase != this)
+		{
+			return stateFromBase;
+		}
 
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Emergency)) ; // return emergencyFlee state
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Default)) return new CollectorFleeState(this.stateMachine); // return flee state
-		
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
 
         if (movementDriver.AttainedFinalNode)
@@ -31,6 +36,6 @@ public class CollectorSearchSoulsState : CollectorCollectingState
             movementDriver.ChangePath(newEndNode);
         }
 
-        return base.Update();
+        return this;
     }
 }
