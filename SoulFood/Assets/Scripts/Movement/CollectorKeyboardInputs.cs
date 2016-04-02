@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -33,7 +33,7 @@ public class CollectorKeyboardInputs : KeyboardInputs
         
         if (Input.GetKeyDown(pickupCandyKey))
         {
-            Actions.ConsumeSoul(this.npc as CollectorDriver);
+            CollectorAction.ConsumeSoul(this.npc as CollectorDriver);
         }
     }
 
