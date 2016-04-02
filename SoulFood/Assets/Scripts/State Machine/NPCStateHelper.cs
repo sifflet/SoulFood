@@ -45,13 +45,6 @@ public static class NPCStateHelper
 			Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);
 			npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition, false);
         }
-    }
-
-	public static void SteeringMoveTo(NPCDriver npc, GameObject target) 
-	{
-		float npcYPosition = npc.gameObject.transform.position.y;
-		Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);
-		npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition, false);
 	}
 
     public static Node FindClosestNode(GameObject obj)

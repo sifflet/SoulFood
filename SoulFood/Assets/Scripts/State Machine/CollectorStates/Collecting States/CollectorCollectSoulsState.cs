@@ -19,7 +19,6 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 	
 	public override NPCState Update()
 	{
-		Debug.Log ("I'm in collect state");
 		// Check if guards are in sight and if a transition to flee states is necessary
 		// These checks are in the base state
 		NPCState stateFromBase = base.Update();
@@ -43,6 +42,9 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 			{
 				NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);			
 			}
+		}
+		else {	// All visible souls have been collected, return to soul search state
+			return new CollectorSearchSoulsState(this.stateMachine);
 		}
 		
 		return this;

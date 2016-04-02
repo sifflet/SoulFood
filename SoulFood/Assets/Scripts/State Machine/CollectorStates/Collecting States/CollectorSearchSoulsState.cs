@@ -40,12 +40,10 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 			visibleSouls = CollectorStateHelper.FindVisibleSouls(this.stateMachine.NPC);
 			if (visibleSouls.Count > 0) {
 				GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
-				Debug.Log ("In search state: Moving to " + closestSoul.name + " position x " + closestSoul.transform.position.x + "at position z " + closestSoul.transform.position.z);
-			
+							
 				// Then, once the NPC is at the soul, stop movement and transition to CollectSouls state
 				if (NPCStateHelper.IsColliding(this.stateMachine.NPC, closestSoul))
 				{
-					Debug.Log ("I'm at target");
 					return new CollectorCollectSoulsState(this.stateMachine);
 				}
 				else { // If not yet at target, keep moving
