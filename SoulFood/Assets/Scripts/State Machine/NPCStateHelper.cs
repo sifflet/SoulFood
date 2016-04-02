@@ -41,12 +41,18 @@ public static class NPCStateHelper
         }
         else
         {
-			Debug.Log ("NPC x position: " + npc.gameObject.transform.position.x + " NPC z position: " + npc.gameObject.transform.position.z);
 			float npcYPosition = npc.gameObject.transform.position.y;
 			Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);
 			npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition, false);
         }
     }
+
+	public static void SteeringMoveTo(NPCDriver npc, GameObject target) 
+	{
+		float npcYPosition = npc.gameObject.transform.position.y;
+		Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);
+		npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition, false);
+	}
 
     public static Node FindClosestNode(GameObject obj)
     {
@@ -84,5 +90,18 @@ public static class NPCStateHelper
 		}
 		
 		return result;
+	}
+
+	public static bool IsColliding(NPCDriver npc, GameObject collisionTarget)
+	{
+		Collider[] collisions = npc.CollisionArray;
+
+		foreach (Collider collider in collisions) {
+			if (collider.gameObject == collisionTarget) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

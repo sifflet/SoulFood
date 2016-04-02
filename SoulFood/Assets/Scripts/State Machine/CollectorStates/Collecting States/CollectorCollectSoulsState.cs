@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 
 	private NPCMovementDriver movementDriver;
+	private List<GameObject> visibleSouls = new List<GameObject>();
 	
 	public CollectorCollectSoulsState(NPCStateMachine stateMachine)
 		: base(stateMachine)
@@ -17,6 +19,7 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 	
 	public override NPCState Update()
 	{
+		Debug.Log ("I'm in collect state");
 		// Check if guards are in sight and if a transition to flee states is necessary
 		// These checks are in the base state
 		NPCState stateFromBase = base.Update();
@@ -27,6 +30,20 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 
+		visibleSouls = CollectorStateHelper.FindVisibleSouls(this.stateMachine.NPC);
+
+		if (visibleSouls.Count > 0) {
+			GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
+
+			if (NPCStateHelper.IsColliding(this.stateMachine.NPC, closestSoul))
+			{
+				NPCActions.ConsumeSoul((CollectorDriver)this.stateMachine.NPC, closestSoul);
+			}
+			else 
+			{
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);			
+			}
+		}
 		
 		return this;
 	}

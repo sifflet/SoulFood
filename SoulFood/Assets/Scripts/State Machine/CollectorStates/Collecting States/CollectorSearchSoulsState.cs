@@ -36,18 +36,25 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 
 		if (soulSearchingTimer > 0) {	// If the time period for soul searching is not over
 
-			// Collect souls in close proximity as you go
-			FindVisibleSouls();
+			// Move to closest soul
+			visibleSouls = CollectorStateHelper.FindVisibleSouls(this.stateMachine.NPC);
 			if (visibleSouls.Count > 0) {
-				GameObject closetSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
-				Debug.Log ("In search state: Moving to " + closetSoul.name + " position x " + closetSoul.transform.position.x + "at position z " + closetSoul.transform.position.z);
-				NPCStateHelper.MoveTo(this.stateMachine.NPC, closetSoul, 5f);
-				// To add? Stop movement when in collider range?
-				return new CollectorCollectSoulsState(this.stateMachine); // Transition to CollectSouls state
+				GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
+				Debug.Log ("In search state: Moving to " + closestSoul.name + " position x " + closestSoul.transform.position.x + "at position z " + closestSoul.transform.position.z);
+			
+				// Then, once the NPC is at the soul, stop movement and transition to CollectSouls state
+				if (NPCStateHelper.IsColliding(this.stateMachine.NPC, closestSoul))
+				{
+					Debug.Log ("I'm at target");
+					return new CollectorCollectSoulsState(this.stateMachine);
+				}
+				else { // If not yet at target, keep moving
+					NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);
+				}
 			
 			}
 
-			// If we're at the end of our path, find a new random one
+			// If we're at the end of our path having found no souls, find a new random one
 	        if (movementDriver.AttainedFinalNode)
 	        {
 	            Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
@@ -60,36 +67,4 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 
         return this;
     }
-
-	private void FindVisibleSouls()
-	{
-		this.visibleSouls.Clear();
-		
-		Soul[] allSouls = GameObject.FindObjectsOfType(typeof(Soul)) as Soul[];
-
-		foreach (Soul soul in allSouls)
-		{		
-			Vector3 viewPortPosition = this.stateMachine.NPC.CameraDriver.Camera.WorldToViewportPoint(this.stateMachine.NPC.Instance.transform.position);
-			
-			if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
-			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
-			    viewPortPosition.z >= 0.0f)
-			{
-				visibleSouls.Add(soul.gameObject);
-			}
-		}
-
-		// Sort visible souls by path distance, closest to farthest
-		/*visibleSouls.Sort (delegate(Soul x, Soul y) 
-		{
-			float xDistance = NPCStateHelper.GetShortestPathDistance(this.stateMachine.NPC.gameObject, x.gameObject);
-			float yDistance = NPCStateHelper.GetShortestPathDistance(this.stateMachine.NPC.gameObject, y.gameObject);
-
-			if (xDistance == yDistance) return 0;
-			else if (xDistance < yDistance) return -1;
-			else if (xDistance > yDistance) return 1;
-			else return 0;
-		});*/
-		
-	}
 }
