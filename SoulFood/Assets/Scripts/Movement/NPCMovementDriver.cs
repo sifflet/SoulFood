@@ -100,6 +100,15 @@ public class NPCMovementDriver : MonoBehaviour
         this.pathCounter = 0;
     }
 
+    public void ChangePathToFlank(Node endNode, NPCDriver otherGuard)
+    {
+        this.startNode = FindClosestNode();
+        this.endNode = endNode;
+        this.pathList = Graph.AStarFlank(startNode, endNode, otherGuard);
+        this.AttainedFinalNode = false;
+        this.pathCounter = 0;
+    }
+
     public Node FindClosestNode()
     {
         Node result = null;

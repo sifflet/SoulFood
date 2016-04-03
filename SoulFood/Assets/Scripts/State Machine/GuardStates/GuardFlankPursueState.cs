@@ -10,20 +10,26 @@ public class GuardFlankPursueState : GuardPursueState
 
     public override void Entry()
     {
+        Debug.Log("Flank Pursue entry");
         base.Entry();
     }
 
     public override NPCState Update()
     {
-        if (false)
-        {
+        NPCState stateFromBase = base.Update();
+        if (stateFromBase != this) return stateFromBase;
 
+        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GameManager.DIRECT_PURSUE_RANGE) return new GuardDirectPursueState(stateMachine);
+
+        if ((stateMachine.NPC as GuardDriver).IsLeader)
+        {
+            NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 5f);
         }
         else
         {
-            base.Update();
+            stateMachine.NPC.MovementDriver.ChangePathToFlank(NPCStateHelper.FindClosestNode((stateMachine as GuardStateMachine).TargetNPC.Instance), otherGuard);
         }
-
+        
         return this;
     }
 }

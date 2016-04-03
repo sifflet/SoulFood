@@ -23,6 +23,9 @@ public class GameManager : MonoBehaviour
 	public const float SOUL_COLLECTIBLE_RANGE = 0.5f;
 	public enum FleeRangeType { Default, Emergency };
 
+    public const float ACTIVATE_LUNGE_DISTANCE = 0.2f;
+    public const float DIRECT_PURSUE_RANGE = 15.0f;
+
     private static int livesRemaining;
     private static int soulsConsumed;
     private static int soulLimit;

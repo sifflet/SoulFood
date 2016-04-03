@@ -21,6 +21,7 @@ public abstract class NPCDriver : MonoBehaviour
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
+    public NPCStateMachine StateMachine { get { return this.stateMachine; } }
 
     public Collider[] CollisionArray
     {
@@ -33,12 +34,6 @@ public abstract class NPCDriver : MonoBehaviour
 
     public void Update()
     {
-        if (controlledByAI)
-        {
-            //movementDriver.Update();
-            //stateMachine.Update();
-        }
-        //cameraDriver.Update();
         FindVisibleNPCs();
     }
 
