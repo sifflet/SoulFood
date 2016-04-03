@@ -24,10 +24,7 @@ public abstract class CollectorCollectingSuperState : NPCState
 		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Emergency)) ; // return emergencyFlee state
 		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Default)) return new CollectorFleeState(this.stateMachine); // return flee state
 
-		// If you're close to a soul, you need to move to CollectSoul state (quick change) --> NOTE: this doesn't seem to be needed
-		//if (CollectorStateHelper.SoulsInCollectibleRange(this.stateMachine)) return new CollectorCollectSoulsState(this.stateMachine); // return soul collecting state
-
-        return this.stateMachine.CurrentState;
+		return this.stateMachine.CurrentState;
     }
 
 }

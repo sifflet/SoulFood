@@ -116,4 +116,20 @@ public static class NPCStateHelper
 
 		return false;
 	}
+
+	public static bool IsWithinCollisionRangeAtGroundLevel(GameObject mainObj, GameObject collisionObj) 
+	{
+		Vector3 collisionObjGroundLevelPos = collisionObj.transform.position;
+		collisionObjGroundLevelPos.y = 0.0f;
+		
+		Vector3 mainObjGroundLevelPos = mainObj.transform.position;
+		mainObjGroundLevelPos.y = 0.0f;
+		
+		if (Vector3.Distance(mainObjGroundLevelPos, collisionObjGroundLevelPos) <= GameManager.COLLISION_RANGE)
+		{
+			return true;
+		}
+
+		return false;
+	}
 }

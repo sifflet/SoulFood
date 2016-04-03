@@ -100,6 +100,16 @@ public static class CollectorStateHelper {
 		return visibleSouls;
 	}
 
+	public static bool HasVisibleSouls(NPCDriver npc) 
+	{
+		List<GameObject> visibleSouls = FindVisibleSouls(npc);
+
+		if (visibleSouls.Count > 0)
+			return true;
+
+		return false;
+	}
+
 	// Note: Can't seem to make this method generic using System.Type as a parameter
 	// Thus, the repetition here
 	public static List<GameObject> FindVisibleTrees(NPCDriver npc)
