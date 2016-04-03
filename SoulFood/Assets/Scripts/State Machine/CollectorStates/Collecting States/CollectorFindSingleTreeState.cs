@@ -15,7 +15,7 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 	
 	public override void Entry()
 	{
-		Debug.Log ("Find Single Tree State Entry");
+		Debug.Log (this.stateMachine.NPC.name + ": Find Single Tree State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 	}
 	
@@ -29,8 +29,6 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 			return stateFromBase;
 		}
 
-		if (CollectorStateHelper.HasVisibleSouls(stateMachine.NPC)) return new CollectorCollectSoulsState(this.stateMachine); // return soul collecting state
-
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		
 		GameObject buttonTargetForClosestSingleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 1); 
@@ -39,8 +37,6 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		{
 			
 			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree)) {
-
-				//if (CollectorStateHelper.HasVisibleSouls(stateMachine.NPC)) return new CollectorCollectSoulsState(this.stateMachine); // return soul collecting state
 
 				return this;
 			}

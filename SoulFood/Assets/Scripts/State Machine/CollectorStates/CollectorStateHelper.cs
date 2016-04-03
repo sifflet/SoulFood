@@ -69,9 +69,15 @@ public static class CollectorStateHelper {
 		float collectibleRange = GameManager.SOUL_COLLECTIBLE_RANGE;
 		List<GameObject> soulsInSight = FindVisibleSouls(npcStateMachine.NPC);
 
+		Vector3 npcGroundLevelPos = thisNPC.transform.position;
+		npcGroundLevelPos.y = 0.0f;
+
 		foreach (GameObject soul in soulsInSight)
 		{
-			if (NPCStateHelper.GetShortestPathDistance(thisNPC, soul) <= collectibleRange)
+			Vector3 soulGroundLevelPos = soul.transform.position;
+			soulGroundLevelPos.y = 0.0f;
+
+			if (Vector3.Distance(npcGroundLevelPos, soulGroundLevelPos) <= collectibleRange)
 			{
 				return true;
 			}

@@ -10,7 +10,7 @@ public class GuardLungeState : NPCState
 
     public override void Entry()
     {
-        Debug.Log("Lunge entry");
+		Debug.Log (this.stateMachine.NPC.name + ": Lunge entry");
     }
 
     public override NPCState Update()

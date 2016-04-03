@@ -10,7 +10,7 @@ public class GuardSearchState : NPCState
 
     public override void Entry()
     {
-        Debug.Log("Guard Search entry");
+		Debug.Log (this.stateMachine.NPC.name + ": Guard Search entry");
         NPCMovementDriver movementDriver = this.stateMachine.NPC.MovementDriver;
         Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
         movementDriver.ChangePath(newEndNode);

@@ -16,7 +16,7 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 
     public override void Entry()
     {
-		Debug.Log ("Search Soul State Entry");
+		Debug.Log (this.stateMachine.NPC.name + ": Search Soul State Entry");
         movementDriver = this.stateMachine.NPC.MovementDriver;
         Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
         movementDriver.ChangePath(newEndNode);
@@ -41,15 +41,20 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 			visibleSouls = CollectorStateHelper.FindVisibleSouls(this.stateMachine.NPC);
 			if (visibleSouls.Count > 0) {
 				GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
-							
+
+				if (!NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, closestSoul))
+				{
+					NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);
+				}
+		
 				// Then, once the NPC is at the soul, stop movement and transition to CollectSouls state
-				if (NPCStateHelper.IsColliding(this.stateMachine.NPC, closestSoul))
+				/*if (NPCStateHelper.IsColliding(this.stateMachine.NPC, closestSoul))
 				{
 					return new CollectorCollectSoulsState(this.stateMachine);
 				}
 				else { // If not yet at target, keep moving
 					NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);
-				}
+				}*/
 			
 			}
 

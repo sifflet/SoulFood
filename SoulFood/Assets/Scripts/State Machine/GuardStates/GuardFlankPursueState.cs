@@ -10,7 +10,7 @@ public class GuardFlankPursueState : GuardPursueState
 
     public override void Entry()
     {
-        Debug.Log("Flank Pursue entry");
+		Debug.Log (this.stateMachine.NPC.name + ": Flank Pursue entry");
         base.Entry();
     }
 

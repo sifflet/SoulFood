@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
-	public const float SOUL_COLLECTIBLE_RANGE = 0.5f;
+	public const float SOUL_COLLECTIBLE_RANGE = 2f;
 	public enum FleeRangeType { Default, Emergency };
 
     /* Guards variables */
@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = deathyPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
+			npcInstance.name = "Collector " + i;
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
             npcInstance.AddComponent<CollectorDriver>();
@@ -110,7 +111,8 @@ public class GameManager : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = guardPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
-            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
+			npcInstance.name = "Guard " + i;
+			GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
             npcInstance.AddComponent<GuardDriver>();
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();

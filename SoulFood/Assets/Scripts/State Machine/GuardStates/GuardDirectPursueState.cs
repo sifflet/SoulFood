@@ -10,7 +10,7 @@ public class GuardDirectPursueState : GuardPursueState
 
     public override void Entry()
     {
-        Debug.Log("Direct Pursue entry");
+		Debug.Log (this.stateMachine.NPC.name + ": Direct Pursue entry");
         base.Entry();
     }
 
