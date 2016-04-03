@@ -16,6 +16,7 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 
     public override void Entry()
     {
+		Debug.Log ("Search Soul State Entry");
         movementDriver = this.stateMachine.NPC.MovementDriver;
         Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
         movementDriver.ChangePath(newEndNode);

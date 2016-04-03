@@ -14,6 +14,7 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 	
 	public override void Entry()
 	{
+		Debug.Log ("Find Single Tree State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 	}
 	
@@ -33,7 +34,14 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 
 		if (buttonTargetForClosestSingleTree) 
 		{
-			NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 1f);
+			// If at target, release souls from single tree
+			if (NPCStateHelper.IsColliding(this.stateMachine.NPC, buttonTargetForClosestSingleTree))
+			{
+				Debug.Log("I'm at the button");
+			}
+			else { // If not yet at target, keep moving
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 1f);
+			}
 		}
 		else 
 		{

@@ -14,6 +14,7 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 	
 	public override void Entry()
 	{
+		Debug.Log ("Collect Soul State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 	}
 	
