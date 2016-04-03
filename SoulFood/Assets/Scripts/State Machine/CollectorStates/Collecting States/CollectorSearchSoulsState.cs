@@ -60,7 +60,7 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 	        }
 		}
 		else {	// Time period for soul searching is over
-			// Transition to looking for soul-tree with help call 
+			return new CollectorFindSingleTreeState(this.stateMachine);
 		}
 
         return this;

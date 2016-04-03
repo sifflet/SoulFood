@@ -29,6 +29,16 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		
+		GameObject buttonTargetForClosestSingleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 1); 
+
+		if (buttonTargetForClosestSingleTree) 
+		{
+			NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 1f);
+		}
+		else 
+		{
+			// return FindMultiplayerTreeState
+		}
 
 		return this;
 	}

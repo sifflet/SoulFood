@@ -1,17 +1,29 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class SoulTree : MonoBehaviour {
 
 	private int triggeredCount;
 	private bool isFull = true;
 	private int treeType;
+	private List<GameObject> treeButtons = new List<GameObject>();
 
 	public int TreeType { get { return this.treeType; } }
+	public bool IsFull { get { return this.isFull; } }
+	public List<GameObject> TreeButtons { get { return this.treeButtons; } }
 	public GameObject soulObject;
 
 	void Awake () {
 		treeType = transform.childCount;
+		foreach (Transform child in transform) 
+		{
+			Button childButton = child.GetComponent<Button>();
+			if (childButton)	// Child is a button
+			{
+				treeButtons.Add(transform.gameObject);
+			}
+		}
 	}
 
 	void Update () {

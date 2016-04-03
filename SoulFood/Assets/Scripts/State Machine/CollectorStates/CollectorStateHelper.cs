@@ -123,20 +123,35 @@ public static class CollectorStateHelper {
 	}
 
 
-	public static Button FindClosestTreeButton(NPCDriver npc, int treeType) 
+	public static GameObject FindClosestFullTreeButton(NPCDriver npc, int treeType) 
 	{
 		List<GameObject> visibleTrees = FindVisibleTrees(npc);
+		List<SoulTree> filteredTrees = new List<SoulTree>();
 		List<GameObject> filteredTreeObjects = new List<GameObject>();
 
 		// Filter tree list by desired tree type and whether or not it has souls
 		foreach (GameObject tree in visibleTrees) 
 		{
-			// TODO: Add full tree check
-			if (tree.GetComponent<SoulTree>().TreeType == treeType)
+			SoulTree treeScript = tree.GetComponent<SoulTree>();
+			if (treeScript.TreeType == treeType && treeScript.IsFull)
+			{
+				filteredTrees.Add(treeScript);
 				filteredTreeObjects.Add(tree);
+			}
 		}
 
-		// TODO: Go through list to find closest tree & return its button
+		if (filteredTrees.Count > 1)
+		{
+			GameObject closestTreeObj = NPCStateHelper.FindClosestGameObjectByPath(npc.gameObject, filteredTreeObjects);
+			GameObject firstButtonOfTree = closestTreeObj.GetComponent<SoulTree>().TreeButtons[0];
+			if (firstButtonOfTree)
+				return firstButtonOfTree;
+		}
+		else {
+			GameObject firstButtonOfTree = filteredTrees[0].TreeButtons[0];
+			if (firstButtonOfTree)
+				return firstButtonOfTree;
+		}
 		return null;
 	}
 }
