@@ -10,15 +10,15 @@ public class Tree : MonoBehaviour {
 	void Update () {
 		triggeredCount = 0;
 		foreach (Transform button in transform) {
-			if(button.gameObject.GetComponent<Button>().getButtonStatus())
+			if(button.gameObject.GetComponent<Button>().GetButtonStatus())
 				triggeredCount++;
 		}
 		if (triggeredCount++ == transform.childCount) {
-			dropItems();
+			DropItems();
 		}
 	}
 
-	void dropItems(){
+	void DropItems(){
 		if (isFull) {
             GameObject soul1, soul2, soul3, soul4, soul5, soul6, soul7, soul8, soul9;
             Vector3 explosionVec = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z + 2f);
@@ -73,7 +73,7 @@ public class Tree : MonoBehaviour {
 		}
 	}
 
-    void resetTree()
+    void ResetTree()
     {
         isFull = true;
         //Animator things here to show its full again

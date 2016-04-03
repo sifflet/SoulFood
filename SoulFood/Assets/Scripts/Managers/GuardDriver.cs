@@ -5,26 +5,34 @@ using System.Collections.Generic;
 public class GuardDriver : NPCDriver
 {
     private bool isLeader;
+    private const float MAX_SPEED = 12f;
 
     public bool IsLeader {
         get { return this.isLeader; } 
         set { this.isLeader = value; (this.keyboardInputs as GuardKeyboardInputs).IsLeader = true; }
     }
 
-    public GuardDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
-        : base(instance, cameraInstance, spawnPoint)
+    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
-        this.isLeader = false;
-        this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
+        base.Setup(instance, cameraInstance, spawnPoint);
 
+        this.isLeader = false;
+
+        this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
         this.instance.AddComponent<GuardKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<GuardKeyboardInputs>();
+        this.keyboardInputs.Setup(this);
 
-        this.cameraDriver = new GuardsCameraDriver(cameraInstance);
+        this.instance.AddComponent<GuardsCameraDriver>();
+        this.cameraDriver = this.instance.GetComponent<GuardsCameraDriver>();
+        this.cameraDriver.Setup(cameraInstance);
 
         this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
-        this.stateMachine = new GuardStateMachine(this);
+
+        this.instance.AddComponent<GuardStateMachine>();
+        this.stateMachine = this.instance.GetComponent<GuardStateMachine>();
+        this.stateMachine.Setup(this);
     }
 
     public override void SetControlledByAI(bool controlledByAI)
@@ -32,6 +40,8 @@ public class GuardDriver : NPCDriver
         this.controlledByAI = controlledByAI;
         this.keyboardInputs.enabled = !controlledByAI;
         if (IsLeader) this.cameraDriver.SetEnabled(!controlledByAI);
+        this.stateMachine.enabled = controlledByAI;
+        this.movementDriver.enabled = controlledByAI;
     }
 
     protected override void FindVisibleNPCs()

@@ -4,12 +4,11 @@ using System;
 using System.Collections.Generic;
 
 [Serializable]
-public abstract class NPCDriver
+public abstract class NPCDriver : MonoBehaviour
 {
     protected GameObject instance;
     protected bool controlledByAI;
     protected Transform spawnPoint;
-
     protected NPCMovementDriver movementDriver;
     protected KeyboardInputs keyboardInputs;
 
@@ -21,14 +20,39 @@ public abstract class NPCDriver
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
+	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
 
-    protected NPCDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
+    public Collider[] CollisionArray
+    {
+        get
+        {
+            Vector3 location = this.instance.GetComponent<NPCMovement>().transform.position;
+            return Physics.OverlapSphere(location, GameManager.COLLISION_RANGE);
+        }
+    }
+
+    public void Update()
+    {
+        if (controlledByAI)
+        {
+            //movementDriver.Update();
+            //stateMachine.Update();
+        }
+        //cameraDriver.Update();
+        FindVisibleNPCs();
+    }
+
+    public virtual void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         this.instance = instance;
         this.controlledByAI = true;
         this.spawnPoint = spawnPoint;
 
         this.visibleNPCs = new List<NPCDriver>();
+
+        this.instance.AddComponent<NPCMovementDriver>();
+        this.movementDriver = this.instance.GetComponent<NPCMovementDriver>();
+        this.movementDriver.Setup(this.GetComponent<NPCMovement>());
     }
 
     public virtual void SetControlledByAI(bool controlledByAI)
@@ -36,23 +60,13 @@ public abstract class NPCDriver
         this.controlledByAI = controlledByAI;
         this.keyboardInputs.enabled = !controlledByAI;
         this.cameraDriver.SetEnabled(!controlledByAI);
+        this.stateMachine.enabled = controlledByAI;
+        this.movementDriver.enabled = controlledByAI;
     }
 
-    public void Update()
+    public void StartStateMachine()
     {
-        if (controlledByAI)
-        {
-            movementDriver.Update();
-            stateMachine.Update();
-        }
-
-        cameraDriver.Update();
-        FindVisibleNPCs();
-    }
-
-    public void SetupStateMachine()
-    {
-        this.stateMachine.Setup();
+        this.stateMachine.EnterFirstState();
     }
 
     protected abstract void FindVisibleNPCs();

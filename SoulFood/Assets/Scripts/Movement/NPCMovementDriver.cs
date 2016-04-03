@@ -3,63 +3,36 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NPCMovementDriver
+public class NPCMovementDriver : MonoBehaviour
 {
 	private NPCMovement currentNPC;
 
 	// Pathfinding variables
 	private Node startNode, endNode;
 	private List<Node> pathList;
-	private Graph graph;
-	private List<Node> nodes;
+    private List<Node> nodes;
 
+    public bool AttainedFinalNode { get; set; }
     public Node CurrentTargetNode
     { 
         get
         {
             if (this.pathList.Count == 0) return null;
-            return this.pathList[pathCounter];
+
+            int index = pathCounter;
+            if (pathCounter > pathList.Count - 1) index = pathList.Count - 1;
+            return this.pathList[index];
         }
     }
-    public bool AttainedFinalNode { get; set; }
-    public List<Node> AllNodes { get { return this.nodes; } }
+
+    public NPCMovement NPCMovement { get { return this.currentNPC; } }
 	
-	public NPCMovementDriver (NPCMovement movement)
+	public void Setup (NPCMovement movement)
     {
         this.currentNPC = movement;
         this.pathList = new List<Node>();
-		/**
-		 * Setup pathfinding graph
-		 */
-		// Get all node GameObjects in the scene
-		GameObject[] nodeGameObjects = GameObject.FindGameObjectsWithTag("Node");
-
-		// Get all Node objects from node GameObjects
-		nodes = new List<Node>();
-		
-		foreach (var nodeGameObject in nodeGameObjects)
-        {
-			nodes.Add(nodeGameObject.GetComponent<Node>());
-		}
-		
-		// Initialize the pathfinding graph
-		graph = new Graph(); 
-		
-		// Add all nodes to the graph
-		foreach (var node in nodes)
-        {
-			graph.AddVertex(node, node.neighboringNodeDistances);
-		}
-
         this.AttainedFinalNode = false;
-
-		//Set up for NPC movement for testing purposes
-        /*
-		FindStartNode();
-		endNode	= nodes[56]; // End node is hardcoded here for testing purposes
-		pathList = graph.ShortestPathEuclideanHeuristic(startNode, endNode);
-         * */
-
+        this.nodes = GameManager.AllNodes;
 	}
 	
 	private int pathCounter = 0;		// Used for keeping track where NPC is along a path
@@ -113,7 +86,16 @@ public class NPCMovementDriver
     {
         this.startNode = FindClosestNode();
         this.endNode = endNode;
-        this.pathList = graph.ShortestPathEuclideanHeuristic(startNode, endNode);
+        this.pathList = Graph.ShortestPathEuclideanHeuristic(startNode, endNode);
+        this.AttainedFinalNode = false;
+        this.pathCounter = 0;
+    }
+
+    public void ChangePathToFlee(float terminateDistance, List<NPCDriver> threats)
+    {
+        this.startNode = FindClosestNode();
+        this.pathList = Graph.InverseAStar(startNode, terminateDistance, threats);
+        this.endNode = pathList[pathList.Count - 1];
         this.AttainedFinalNode = false;
         this.pathCounter = 0;
     }

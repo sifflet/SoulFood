@@ -4,20 +4,41 @@ using System.Collections.Generic;
 
 public class CollectorDriver : NPCDriver
 {
-    public CollectorDriver(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
-        : base(instance, cameraInstance, spawnPoint)
+	private const float MAX_SPEED = 15f;
+    private int soulsStored = 0;
+
+	public int SoulsStored { get { return this.soulsStored; } }
+
+    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
-        this.movementDriver = new NPCMovementDriver(this.instance.GetComponent<NPCMovement>());
+        base.Setup(instance, cameraInstance, spawnPoint);
+
+        this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
 
         this.instance.AddComponent<CollectorKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<CollectorKeyboardInputs>();
+        this.keyboardInputs.Setup(this);
 
-        this.cameraDriver = new CollectorsCameraDriver(cameraInstance, instance);
+        this.instance.AddComponent<CollectorsCameraDriver>();
+        this.cameraDriver = this.instance.GetComponent<CollectorsCameraDriver>();
+        this.cameraDriver.Setup(cameraInstance, this.instance);
 
         this.keyboardInputs.enabled = false;
         this.cameraDriver.SetEnabled(false);
 
-        this.stateMachine = new CollectorStateMachine(this);
+        this.instance.AddComponent<CollectorStateMachine>();
+        this.stateMachine = this.instance.GetComponent<CollectorStateMachine>();
+        this.stateMachine.Setup(this);
+    }
+
+    public void AddSoul()
+    {
+        this.soulsStored++;
+    }
+
+    public void DropSoul()
+    {
+        this.soulsStored--;
     }
 
     protected override void FindVisibleNPCs()

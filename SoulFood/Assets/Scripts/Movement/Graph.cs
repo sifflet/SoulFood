@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-class Graph
+static class Graph
 {
 	// Collection with all the nodes and neighbors of nodes
-	Dictionary<Node, Dictionary<Node, float>> vertices = new Dictionary<Node, Dictionary<Node, float>>();
+	private static Dictionary<Node, Dictionary<Node, float>> vertices = new Dictionary<Node, Dictionary<Node, float>>();
 	
 	// AddVertex is used to add nodes to the Graph's vertices
-	public void AddVertex(Node node, Dictionary<Node, float> edges)
+	public static void AddVertex(Node node, Dictionary<Node, float> edges)
 	{
 		vertices[node] = edges;
 	}
 
-	public List<Node> ShortestPathNullHeuristic(Node start, Node finish)
+	public static List<Node> ShortestPathNullHeuristic(Node start, Node finish)
 	{
 		var previous = new Dictionary<Node, Node>();	// Previous nodes in shortest path
 		var distances = new Dictionary<Node, float>();	// Distances from source to current node
@@ -81,7 +81,7 @@ class Graph
 		return pathList;
 	}
 
-	public List<Node> ShortestPathEuclideanHeuristic(Node start, Node finish)
+	public static List<Node> ShortestPathEuclideanHeuristic(Node start, Node finish)
 	{
         List<Node> openList = new List<Node>();
         List<Node> closedList = new List<Node>();
@@ -133,11 +133,91 @@ class Graph
         return null;
 	}
 
-	private float CalculateEuclideanDistanceHeuristic(Node currentNode, Node targetNode) {
+    public static List<Node> InverseAStar(Node start, float terminateDistance, List<NPCDriver> threats)
+    {
+        List<Node> openList = new List<Node>();
+        List<Node> closedList = new List<Node>();
+        Dictionary<Node, Node> previous = new Dictionary<Node, Node>();
+        Dictionary<Node, float> costSoFar = new Dictionary<Node, float>();
+        Dictionary<Node, float> totalCost = new Dictionary<Node, float>();
+
+        foreach (Node node in vertices.Keys)
+        {
+            previous[node] = null;
+            costSoFar[node] = 0.0f;
+            totalCost[node] = 0.0f;
+        }
+
+        openList.Add(start);
+        costSoFar[start] = float.MaxValue;
+        totalCost[start] = CalculateEuclideanDistanceHeuristic(start, threats);
+
+        while (openList.Count > 0)
+        {
+            Node currentNode = FindNodeWithMaxCost(openList, totalCost);
+            currentNode.SetMaterialColor(Color.blue);
+
+            if (CanTerminate(currentNode, terminateDistance, threats)) return StackToList(GetPath(start, currentNode, previous));
+
+            openList.Remove(currentNode);
+            closedList.Add(currentNode);
+
+            foreach (Node neighbor in vertices[currentNode].Keys)
+            {
+                if (closedList.Contains(neighbor)) continue;
+
+                float newCostSoFar = costSoFar[currentNode] + vertices[currentNode][neighbor];
+
+                if (!openList.Contains(neighbor))
+                {
+                    openList.Add(neighbor);
+                    neighbor.SetMaterialColor(Color.yellow);
+                }
+
+                if (newCostSoFar <= costSoFar[neighbor]) continue;
+
+                previous[neighbor] = currentNode;
+                costSoFar[neighbor] = newCostSoFar;
+                totalCost[neighbor] = costSoFar[neighbor] + CalculateEuclideanDistanceHeuristic(neighbor, threats);
+            }
+        }
+
+        return null;
+    }
+
+    private static bool CanTerminate(Node currentNode, float terminateDistance, List<NPCDriver> threats)
+    {
+        bool result = true;
+
+        foreach (NPCDriver threat in threats)
+        {
+            if (Vector3.Distance(currentNode.position, threat.Instance.transform.position) < terminateDistance)
+            {
+                result = false;
+            }
+        }
+
+        return result;
+    }
+
+	private static float CalculateEuclideanDistanceHeuristic(Node currentNode, Node targetNode) {
         return Vector3.Distance(currentNode.position, targetNode.position);
 	}
 
-	private Node FindNodeWithMinCost(List<Node> nodeList, Dictionary<Node, float> cost) {
+    private static float CalculateEuclideanDistanceHeuristic(Node currentNode, List<NPCDriver> targets)
+    {
+        float result = 0.0f;
+
+        foreach (NPCDriver target in targets)
+        {
+            result += Vector3.Distance(currentNode.position, target.Instance.transform.position);
+        }
+
+        return result;
+    }
+
+	private static Node FindNodeWithMinCost(List<Node> nodeList, Dictionary<Node, float> cost)
+    {
 		Node minCostNode = nodeList[0];
 
 		foreach (var node in nodeList) {
@@ -150,7 +230,22 @@ class Graph
 		return minCostNode;
 	}
 
-    private Stack<Node> GetPath(Node start, Node finish, Dictionary<Node, Node> previousNode)
+    private static Node FindNodeWithMaxCost(List<Node> nodeList, Dictionary<Node, float> cost)
+    {
+        Node maxCostNode = nodeList[0];
+
+        foreach (var node in nodeList)
+        {
+            if (cost[node] > cost[maxCostNode])
+            {
+                maxCostNode = node;
+            }
+        }
+
+        return maxCostNode;
+    }
+
+    private static Stack<Node> GetPath(Node start, Node finish, Dictionary<Node, Node> previousNode)
     {
         Stack<Node> path = new Stack<Node>();
         Node currentNode = finish;
@@ -168,7 +263,7 @@ class Graph
         return path;
     }
 
-    private List<Node> StackToList(Stack<Node> path)
+    private static List<Node> StackToList(Stack<Node> path)
     {
         List<Node> result = new List<Node>();
 
