@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public GameObject treeThreeButton;
 
 	/* NPC variables */
-	public const float COLLISION_RANGE = 0.5f;
+	public const float COLLISION_RANGE = 1f;
 
 	/* Collector variables */
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 	public const float SOUL_COLLECTIBLE_RANGE = 0.5f;
 	public enum FleeRangeType { Default, Emergency };
 
+    /* Guards variables */
     public const float ACTIVATE_LUNGE_DISTANCE = 0.2f;
     public const float DIRECT_PURSUE_RANGE = 15.0f;
 

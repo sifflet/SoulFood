@@ -42,7 +42,7 @@ public abstract class GuardPursueState : NPCState
 
         if (stateMachine.NPC.VisibleNPCs.Count == 0) return new GuardSearchState(stateMachine);
 
-        return this;
+        return this.stateMachine.CurrentState;
     }
 
     protected NPCDriver GetClosestVisibleCollector()

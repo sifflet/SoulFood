@@ -34,14 +34,32 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 
 		if (buttonTargetForClosestSingleTree) 
 		{
+            Vector3 buttonGroundLevelPos = buttonTargetForClosestSingleTree.transform.position;
+            buttonGroundLevelPos.y = 0.0f;
+
+            Vector3 npcGroundLevelPos = stateMachine.NPC.Instance.transform.position;
+            npcGroundLevelPos.y = 0.0f;
+
+            if (Vector3.Distance(npcGroundLevelPos, buttonGroundLevelPos) <= GameManager.COLLISION_RANGE)
+            {
+                return this;
+            }
+
+            NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 5f);
+            /*
 			// If at target, release souls from single tree
 			if (NPCStateHelper.IsColliding(this.stateMachine.NPC, buttonTargetForClosestSingleTree))
 			{
 				Debug.Log("I'm at the button");
+                if (Vector3.Distance(stateMachine.NPC.Instance.transform.position, buttonTargetForClosestSingleTree.transform.position) > 0.2f)
+                {
+                    NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 5f);
+                }
 			}
 			else { // If not yet at target, keep moving
-				NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 1f);
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 5f);
 			}
+             * */
 		}
 		else 
 		{
