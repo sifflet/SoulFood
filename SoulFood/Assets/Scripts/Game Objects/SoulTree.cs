@@ -21,7 +21,7 @@ public class SoulTree : MonoBehaviour {
 			Button childButton = child.GetComponent<Button>();
 			if (childButton)	// Child is a button
 			{
-				treeButtons.Add(transform.gameObject);
+				treeButtons.Add(childButton.transform.gameObject);
 			}
 		}
 	}
