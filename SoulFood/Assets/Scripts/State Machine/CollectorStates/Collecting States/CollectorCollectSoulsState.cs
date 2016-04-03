@@ -30,7 +30,7 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 
 		visibleSouls = CollectorStateHelper.FindVisibleSouls(this.stateMachine.NPC);
-
+	
 		if (visibleSouls.Count > 0) {
 			GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
 

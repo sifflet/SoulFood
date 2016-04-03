@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
+	public const float SOUL_COLLECTIBLE_RANGE = 0.5f;
 	public enum FleeRangeType { Default, Emergency };
 
     private static int livesRemaining;
@@ -189,7 +190,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I beleive the souls ammount should adjust
+    private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I believe the souls ammount should adjust
     {
         switch (deathyNum)
         {

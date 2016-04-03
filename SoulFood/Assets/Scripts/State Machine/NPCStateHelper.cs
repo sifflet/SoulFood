@@ -66,7 +66,7 @@ public static class NPCStateHelper
         return result;
     }
 
-	public static GameObject FindClosestGameObject(GameObject target, List<GameObject> gameObjects)
+	public static GameObject FindClosestGameObject(GameObject mainObj, List<GameObject> gameObjects)
 	{
 		GameObject result = null;
 		
@@ -76,7 +76,26 @@ public static class NPCStateHelper
 			{
 				result = gameObjects[i];
 			}
-			if (Vector3.Distance(target.transform.position, gameObjects[i].transform.position) < Vector3.Distance(target.transform.position, result.transform.position))
+			if (Vector3.Distance(mainObj.transform.position, gameObjects[i].transform.position) < Vector3.Distance(mainObj.transform.position, result.transform.position))
+			{
+				result = gameObjects[i];
+			}
+		}
+		
+		return result;
+	}
+
+	public static GameObject FindClosestGameObjectByPath(GameObject mainObj, List<GameObject> gameObjects)
+	{
+		GameObject result = null;
+		
+		for (int i = 0; i < gameObjects.Count; i++)
+		{
+			if (i == 0)
+			{
+				result = gameObjects[i];
+			}
+			if (GetShortestPathDistance(mainObj, gameObjects[i]) < GetShortestPathDistance(mainObj, result))
 			{
 				result = gameObjects[i];
 			}

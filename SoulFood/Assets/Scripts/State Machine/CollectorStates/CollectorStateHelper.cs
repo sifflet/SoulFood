@@ -63,6 +63,23 @@ public static class CollectorStateHelper {
 		return false;
 	}
 
+	public static bool SoulsInCollectibleRange(NPCStateMachine npcStateMachine)
+	{
+		GameObject thisNPC = npcStateMachine.NPC.Instance;
+		float collectibleRange = GameManager.SOUL_COLLECTIBLE_RANGE;
+		List<GameObject> soulsInSight = FindVisibleSouls(npcStateMachine.NPC);
+
+		foreach (GameObject soul in soulsInSight)
+		{
+			if (NPCStateHelper.GetShortestPathDistance(thisNPC, soul) <= collectibleRange)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
 	public static List<GameObject> FindVisibleSouls(NPCDriver npc)
 	{
 		List<GameObject> visibleSouls = new List<GameObject>();
@@ -81,5 +98,45 @@ public static class CollectorStateHelper {
 		}
 
 		return visibleSouls;
+	}
+
+	// Note: Can't seem to make this method generic using System.Type as a parameter
+	// Thus, the repetition here
+	public static List<GameObject> FindVisibleTrees(NPCDriver npc)
+	{
+		List<GameObject> visibleTrees = new List<GameObject>();
+		SoulTree[] allTrees = GameObject.FindObjectsOfType(typeof(SoulTree)) as SoulTree[];
+		
+		foreach (SoulTree tree in allTrees)
+		{		
+			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
+			
+			if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
+			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
+			    viewPortPosition.z >= 0.0f)
+			{
+				visibleTrees.Add(tree.gameObject);
+			}
+		}
+		
+		return visibleTrees;
+	}
+
+
+	public static Button FindClosestTreeButton(NPCDriver npc, int treeType) 
+	{
+		List<GameObject> visibleTrees = FindVisibleTrees(npc);
+		List<GameObject> filteredTreeObjects = new List<GameObject>();
+
+		// Filter tree list by desired tree type and whether or not it has souls
+		foreach (GameObject tree in visibleTrees) 
+		{
+			// TODO: Add full tree check
+			if (tree.GetComponent<SoulTree>().TreeType == treeType)
+				filteredTreeObjects.Add(tree);
+		}
+
+		// TODO: Go through list to find closest tree & return its button
+		return null;
 	}
 }
