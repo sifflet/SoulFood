@@ -14,13 +14,18 @@ public class GameManager : MonoBehaviour
     public GameObject treeThreeButton;
 
 	/* NPC variables */
-	public const float COLLISION_RANGE = 2f;
+	public const float COLLISION_RANGE = 0.3f;
 
 	/* Collector variables */
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
+	public const float SOUL_COLLECTIBLE_RANGE = 2f;
 	public enum FleeRangeType { Default, Emergency };
+
+    /* Guards variables */
+    public const float ACTIVATE_LUNGE_DISTANCE = 0.2f;
+    public const float DIRECT_PURSUE_RANGE = 15.0f;
 
     private static int livesRemaining;
     private static int soulsConsumed;
@@ -91,6 +96,7 @@ public class GameManager : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = deathyPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
+			npcInstance.name = "Collector " + i;
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
             npcInstance.AddComponent<CollectorDriver>();
@@ -105,7 +111,8 @@ public class GameManager : MonoBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = guardPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
-            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
+			npcInstance.name = "Guard " + i;
+			GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
             npcInstance.AddComponent<GuardDriver>();
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
@@ -189,7 +196,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I beleive the souls ammount should adjust
+    private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I believe the souls ammount should adjust
     {
         switch (deathyNum)
         {

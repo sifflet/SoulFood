@@ -13,7 +13,6 @@ public class CollectorFleeState : NPCState
 
     public override void Entry()
     {
-        Debug.Log("Flee State Entry");
 		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
 		List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this.stateMachine);
         this.stateMachine.NPC.MovementDriver.ChangePathToFlee((this.stateMachine as CollectorStateMachine).FleeRange, guardsInFleeRange);

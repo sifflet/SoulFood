@@ -16,6 +16,7 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 
     public override void Entry()
     {
+		Debug.Log (this.stateMachine.NPC.name + ": Search Soul State Entry");
         movementDriver = this.stateMachine.NPC.MovementDriver;
         Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
         movementDriver.ChangePath(newEndNode);
@@ -34,33 +35,28 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 		soulSearchingTimer -= Time.deltaTime;
         movementDriver = this.stateMachine.NPC.MovementDriver;
 
-		if (soulSearchingTimer > 0) {	// If the time period for soul searching is not over
+		visibleSouls = CollectorStateHelper.FindVisibleSouls(this.stateMachine.NPC);
+		if (visibleSouls.Count > 0) { 		// If there are visible souls
+			GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
 
-			// Move to closest soul
-			visibleSouls = CollectorStateHelper.FindVisibleSouls(this.stateMachine.NPC);
-			if (visibleSouls.Count > 0) {
-				GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
-							
-				// Then, once the NPC is at the soul, stop movement and transition to CollectSouls state
-				if (NPCStateHelper.IsColliding(this.stateMachine.NPC, closestSoul))
-				{
-					return new CollectorCollectSoulsState(this.stateMachine);
-				}
-				else { // If not yet at target, keep moving
-					NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);
-				}
-			
-			}
-
-			// If we're at the end of our path having found no souls, find a new random one
-	        if (movementDriver.AttainedFinalNode)
-	        {
-	            Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
-	            movementDriver.ChangePath(newEndNode);
-	        }
+			if (!NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, closestSoul))
+			{
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);
+			}			
 		}
-		else {	// Time period for soul searching is over
-			// Transition to looking for soul-tree with help call 
+		else {	// There are no visible souls
+			if (soulSearchingTimer > 0) // If the time period for soul searching is not over
+			{
+				// If we're at the end of our path having found no souls, find a new random one
+		        if (movementDriver.AttainedFinalNode)
+		        {
+		            Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
+		            movementDriver.ChangePath(newEndNode);
+		        }
+			}
+			else {	// If the time period for soul searching is not over
+				return new CollectorFindSingleTreeState(this.stateMachine);
+			}
 		}
 
         return this;
