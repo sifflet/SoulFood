@@ -53,7 +53,7 @@ public class GameManager : MonoBehaviour
         deathies = new List<NPCDriver>();
         guards = new List<NPCDriver>();
 
-        SpawnAllNpcs();
+        //SpawnAllNpcs();
         SetupNPCStateMachines();
 
         (guards[0] as GuardDriver).IsLeader = true;

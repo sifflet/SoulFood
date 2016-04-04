@@ -2,9 +2,10 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 [Serializable]
-public abstract class NPCDriver : MonoBehaviour
+public abstract class NPCDriver : NetworkBehaviour
 {
     protected GameObject instance;
     protected bool controlledByAI;
