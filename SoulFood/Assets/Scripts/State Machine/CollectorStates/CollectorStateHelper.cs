@@ -93,7 +93,7 @@ public static class CollectorStateHelper {
 		
 		foreach (Soul soul in allSouls)
 		{		
-			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
+			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(soul.gameObject.transform.position);
 			
 			if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
 			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
