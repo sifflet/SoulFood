@@ -20,14 +20,11 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 	
 	public override NPCState Update()
 	{
-		// We can't call the super state's update here since the super state will call this child state and we will be stuck calling each other
-		// Thus. the guard check and flee transitions are repeated here instead of using the base.update() call
-		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
-		
-		// If you're close to a guard, you need to move to flee state (quick change)
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Emergency)) ; // return emergencyFlee state
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Default)) return new CollectorFleeState(this.stateMachine); // return flee state
-
+        NPCState stateFromBase = base.Update();
+        if (stateFromBase != this)
+        {
+            return stateFromBase;
+        }
 
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 

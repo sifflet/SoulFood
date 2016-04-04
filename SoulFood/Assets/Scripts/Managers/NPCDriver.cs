@@ -27,7 +27,8 @@ public abstract class NPCDriver : MonoBehaviour
     {
         get
         {
-            Vector3 location = this.instance.GetComponent<NPCMovement>().transform.position;
+            Vector3 location = this.instance.transform.position;
+            location.y = 0.0f;
             return Physics.OverlapSphere(location, GameManager.COLLISION_RANGE);
         }
     }
