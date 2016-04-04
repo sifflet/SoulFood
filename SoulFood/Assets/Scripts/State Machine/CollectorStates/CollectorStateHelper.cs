@@ -93,7 +93,7 @@ public static class CollectorStateHelper {
 		
 		foreach (Soul soul in allSouls)
 		{		
-			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
+			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(soul.gameObject.transform.position);
 			
 			if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
 			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
@@ -125,7 +125,7 @@ public static class CollectorStateHelper {
 		
 		foreach (SoulTree tree in allTrees)
 		{		
-			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
+			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(tree.gameObject.transform.position);
 			
 			if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
 			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
@@ -163,7 +163,7 @@ public static class CollectorStateHelper {
 			if (firstButtonOfTree)
 				return firstButtonOfTree;
 		}
-		else {
+		else if  (filteredTrees.Count == 1) {
 			GameObject firstButtonOfTree = filteredTrees[0].TreeButtons[0];
 			if (firstButtonOfTree)
 				return firstButtonOfTree;

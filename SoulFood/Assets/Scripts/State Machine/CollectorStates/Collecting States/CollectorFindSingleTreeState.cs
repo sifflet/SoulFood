@@ -46,6 +46,13 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		}
 		else 
 		{
+			// If we're at the end of our path having found no souls, find a new random one
+			if (movementDriver.AttainedFinalNode)
+			{
+				Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
+				movementDriver.ChangePath(newEndNode);
+			}
+			// TODO: Add timer to stop wandering and
 			// return FindMultiplayerTreeState
 		}
 
