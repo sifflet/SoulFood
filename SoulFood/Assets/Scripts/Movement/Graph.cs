@@ -320,18 +320,11 @@ static class Graph
         Node currentNode = finish;
         currentNode.SetMaterialColor(Color.red);
 
-        if (previousNode[currentNode] == null)
+        while (previousNode[currentNode] != null)
         {
             path.Push(currentNode);
-        }
-        else
-        {
-            while (previousNode[currentNode] != null)
-            {
-                path.Push(currentNode);
-                currentNode = previousNode[currentNode];
-                currentNode.SetMaterialColor(Color.red);
-            }
+            currentNode = previousNode[currentNode];
+            currentNode.SetMaterialColor(Color.red);
         }
 
         return path;
