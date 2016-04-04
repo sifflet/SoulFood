@@ -13,8 +13,10 @@ public class GameManager : MonoBehaviour
     public GameObject treeTwoButton;
     public GameObject treeThreeButton;
 
-	/* NPC variables */
-	public const float COLLISION_RANGE = 1f;
+    public GameObject soulPrefab;
+
+    /* NPC variables */
+    public const float COLLISION_RANGE = 2f;
 
 	/* Collector variables */
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
@@ -102,6 +104,7 @@ public class GameManager : MonoBehaviour
             npcInstance.AddComponent<CollectorDriver>();
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
+            driver.SetSoulPrefab(soulPrefab);
             deathies.Add(driver);
         }
 
