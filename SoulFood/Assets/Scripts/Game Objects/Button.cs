@@ -9,7 +9,7 @@ public class Button : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (isTriggered) {
-			if (getButtonStatus ())
+			if (GetButtonStatus ())
 				timer = 0f;
 			else
 				timer -= Time.deltaTime; //timer decreased overtime
@@ -21,7 +21,7 @@ public class Button : MonoBehaviour {
 		}
 	}
 
-	public bool getButtonStatus(){
+	public bool GetButtonStatus(){
 		if (timer <= 0f)
 			return true;
 		else
@@ -30,13 +30,15 @@ public class Button : MonoBehaviour {
 
 	void OnTriggerStay(Collider col)
 	{
-		if(col.gameObject.tag == "Player")//Change to whatever we name their tag
+		NPCDriver npcDriver = col.GetComponent<NPCDriver>();
+		if(npcDriver)
 			isTriggered = true;
 	}
 
 	void OnTriggerExit(Collider col)
 	{
-		if(col.gameObject.tag == "Player")//Change to whatever we name their tag
+		NPCDriver npcDriver = col.GetComponent<NPCDriver>();
+		if(npcDriver)
 			isTriggered = false;
 	}
 }

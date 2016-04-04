@@ -22,24 +22,20 @@ public abstract class NPCDriver : NetworkBehaviour
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
+    public NPCStateMachine StateMachine { get { return this.stateMachine; } }
 
     public Collider[] CollisionArray
     {
         get
         {
-            Vector3 location = this.instance.GetComponent<NPCMovement>().transform.position;
-            return Physics.OverlapSphere(location, 2.0f);
+            Vector3 location = this.instance.transform.position;
+            location.y = 0.0f;
+            return Physics.OverlapSphere(location, GameManager.COLLISION_RANGE);
         }
     }
 
     public void Update()
     {
-        if (controlledByAI)
-        {
-            //movementDriver.Update();
-            //stateMachine.Update();
-        }
-        //cameraDriver.Update();
         FindVisibleNPCs();
     }
 

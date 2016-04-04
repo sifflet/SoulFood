@@ -62,5 +62,112 @@ public static class CollectorStateHelper {
 		
 		return false;
 	}
-	
+
+	public static bool SoulsInCollectibleRange(NPCStateMachine npcStateMachine)
+	{
+		GameObject thisNPC = npcStateMachine.NPC.Instance;
+		float collectibleRange = GameManager.SOUL_COLLECTIBLE_RANGE;
+		List<GameObject> soulsInSight = FindVisibleSouls(npcStateMachine.NPC);
+
+		Vector3 npcGroundLevelPos = thisNPC.transform.position;
+		npcGroundLevelPos.y = 0.0f;
+
+		foreach (GameObject soul in soulsInSight)
+		{
+			Vector3 soulGroundLevelPos = soul.transform.position;
+			soulGroundLevelPos.y = 0.0f;
+
+			if (Vector3.Distance(npcGroundLevelPos, soulGroundLevelPos) <= collectibleRange)
+			{
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	public static List<GameObject> FindVisibleSouls(NPCDriver npc)
+	{
+		List<GameObject> visibleSouls = new List<GameObject>();
+		Soul[] allSouls = GameObject.FindObjectsOfType(typeof(Soul)) as Soul[];
+		
+		foreach (Soul soul in allSouls)
+		{		
+			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
+			
+			if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
+			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
+			    viewPortPosition.z >= 0.0f)
+			{
+				visibleSouls.Add(soul.gameObject);
+			}
+		}
+
+		return visibleSouls;
+	}
+
+	public static bool HasVisibleSouls(NPCDriver npc) 
+	{
+		List<GameObject> visibleSouls = FindVisibleSouls(npc);
+
+		if (visibleSouls.Count > 0)
+			return true;
+
+		return false;
+	}
+
+	// Note: Can't seem to make this method generic using System.Type as a parameter
+	// Thus, the repetition here
+	public static List<GameObject> FindVisibleTrees(NPCDriver npc)
+	{
+		List<GameObject> visibleTrees = new List<GameObject>();
+		SoulTree[] allTrees = GameObject.FindObjectsOfType(typeof(SoulTree)) as SoulTree[];
+		
+		foreach (SoulTree tree in allTrees)
+		{		
+			Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
+			
+			if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
+			    viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
+			    viewPortPosition.z >= 0.0f)
+			{
+				visibleTrees.Add(tree.gameObject);
+			}
+		}
+		
+		return visibleTrees;
+	}
+
+
+	public static GameObject FindClosestFullTreeButton(NPCDriver npc, int treeType) 
+	{
+		List<GameObject> visibleTrees = FindVisibleTrees(npc);
+		List<SoulTree> filteredTrees = new List<SoulTree>();
+		List<GameObject> filteredTreeObjects = new List<GameObject>();
+
+		// Filter tree list by desired tree type and whether or not it has souls
+		foreach (GameObject tree in visibleTrees) 
+		{
+			SoulTree treeScript = tree.GetComponent<SoulTree>();
+			if (treeScript.TreeType == treeType && treeScript.IsFull)
+			{
+				filteredTrees.Add(treeScript);
+				filteredTreeObjects.Add(tree);
+			}
+		}
+
+		if (filteredTrees.Count > 1)
+		{
+			GameObject closestTreeObj = NPCStateHelper.FindClosestGameObjectByPath(npc.gameObject, filteredTreeObjects);
+			GameObject firstButtonOfTree = closestTreeObj.GetComponent<SoulTree>().TreeButtons[0];
+			if (firstButtonOfTree)
+				return firstButtonOfTree;
+		}
+		else {
+			GameObject firstButtonOfTree = filteredTrees[0].TreeButtons[0];
+			if (firstButtonOfTree)
+				return firstButtonOfTree;
+		}
+		return null;
+	}
 }

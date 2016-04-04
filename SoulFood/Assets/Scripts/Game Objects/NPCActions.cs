@@ -5,28 +5,38 @@ public static class NPCActions
 {
     public static void ConsumeSoul(CollectorDriver collector)
     {
-        Soul closestSoul = null;
-        float closestDistance = 2f; //adjust size upon implementation
-        Vector3 collectorPos = collector.Instance.transform.position;
-        Collider[] collisions = collector.CollisionArray;
-
-        for (int i = 0; i < collector.CollisionArray.Length; i++)
-        {
-            if (collisions[i].tag == "Soul" && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
-            {
-                closestSoul = collisions[i].GetComponent<Soul>();
-            }
-        }
-
-        if (closestSoul != null)
-        {
-            closestSoul.getConsumed(collectorPos);
-            collector.AddSoul();
-            GameManager.SoulConsumed();
-            collector.eatingDelay = 0.5f;
-            Debug.Log("test"); //to be removed
-        };
+		Soul closestSoul = null;
+		float closestDistance = 0.5f; //adjust size upon implementation
+		Vector3 collectorPos = collector.Instance.transform.position;
+		Collider[] collisions = collector.CollisionArray;
+		
+		for (int i = 0; i < collector.CollisionArray.Length; i++)
+		{
+			Soul soul = collisions[i].GetComponent<Soul>();
+			if (soul && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
+			{
+				closestSoul = soul;
+			}
+		}
+		
+		if (closestSoul)
+		{
+			closestSoul.IsConsumed(collectorPos);
+			collector.AddSoul();
+			GameManager.SoulConsumed();
+			Debug.Log("I've consumed a soul!"); //to be removed
+		};
     }
+
+	public static void ConsumeSoul(CollectorDriver collector, GameObject soul)
+	{
+		Vector3 collectorPos = collector.Instance.transform.position;
+			
+		soul.GetComponent<Soul>().IsConsumed(collectorPos);
+		collector.AddSoul();
+		GameManager.SoulConsumed();
+	}
+
 
     public static void EjectSoul()
     {

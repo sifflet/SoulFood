@@ -41,9 +41,11 @@ public static class NPCStateHelper
         }
         else
         {
-            npc.MovementDriver.NPCMovement.Steering_Arrive(target.transform.position, false);
+			float npcYPosition = npc.gameObject.transform.position.y;
+			Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);
+			npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition, true);
         }
-    }
+	}
 
     public static Node FindClosestNode(GameObject obj)
     {
@@ -63,4 +65,71 @@ public static class NPCStateHelper
 
         return result;
     }
+
+	public static GameObject FindClosestGameObject(GameObject mainObj, List<GameObject> gameObjects)
+	{
+		GameObject result = null;
+		
+		for (int i = 0; i < gameObjects.Count; i++)
+		{
+			if (i == 0)
+			{
+				result = gameObjects[i];
+			}
+			if (Vector3.Distance(mainObj.transform.position, gameObjects[i].transform.position) < Vector3.Distance(mainObj.transform.position, result.transform.position))
+			{
+				result = gameObjects[i];
+			}
+		}
+		
+		return result;
+	}
+
+	public static GameObject FindClosestGameObjectByPath(GameObject mainObj, List<GameObject> gameObjects)
+	{
+		GameObject result = null;
+		
+		for (int i = 0; i < gameObjects.Count; i++)
+		{
+			if (i == 0)
+			{
+				result = gameObjects[i];
+			}
+			if (GetShortestPathDistance(mainObj, gameObjects[i]) < GetShortestPathDistance(mainObj, result))
+			{
+				result = gameObjects[i];
+			}
+		}
+		
+		return result;
+	}
+
+	public static bool IsColliding(NPCDriver npc, GameObject collisionTarget)
+	{
+		Collider[] collisions = npc.CollisionArray;
+
+		foreach (Collider collider in collisions) {
+			if (collider.gameObject == collisionTarget) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public static bool IsWithinCollisionRangeAtGroundLevel(GameObject mainObj, GameObject collisionObj) 
+	{
+		Vector3 collisionObjGroundLevelPos = collisionObj.transform.position;
+		collisionObjGroundLevelPos.y = 0.0f;
+		
+		Vector3 mainObjGroundLevelPos = mainObj.transform.position;
+		mainObjGroundLevelPos.y = 0.0f;
+		
+		if (Vector3.Distance(mainObjGroundLevelPos, collisionObjGroundLevelPos) <= GameManager.COLLISION_RANGE)
+		{
+			return true;
+		}
+
+		return false;
+	}
 }
