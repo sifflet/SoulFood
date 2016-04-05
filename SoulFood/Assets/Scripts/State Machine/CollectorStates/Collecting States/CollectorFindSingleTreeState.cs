@@ -5,8 +5,6 @@ using System.Collections.Generic;
 public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 
 	private NPCMovementDriver movementDriver;
-	private List<GameObject> visibleSouls = new List<GameObject>();
-	private float waitTimeForSoulReleaseFromTree = 2f;
 	
 	public CollectorFindSingleTreeState(NPCStateMachine stateMachine)
 		: base(stateMachine)

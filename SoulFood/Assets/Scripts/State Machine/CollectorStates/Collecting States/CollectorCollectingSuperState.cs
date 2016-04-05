@@ -24,7 +24,8 @@ public abstract class CollectorCollectingSuperState : NPCState
 		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Emergency)) ; // return emergencyFlee state
 		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Default)) return new CollectorFleeState(this.stateMachine); // return flee state
 
-		if (CollectorStateHelper.SoulsInCollectibleRange(this.stateMachine) && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState)) return new CollectorCollectSoulsState(this.stateMachine); // return soul collecting state
+		if (CollectorStateHelper.SoulsInCollectibleRange(this.stateMachine) && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState)) 
+			return new CollectorCollectSoulsState(this.stateMachine); // return soul collecting state
 
 		return this.stateMachine.CurrentState;
     }
