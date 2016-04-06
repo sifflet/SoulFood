@@ -35,7 +35,8 @@ public abstract class GuardPursueState : NPCState
     public override NPCState Update()
     {
         if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GameManager.ACTIVATE_LUNGE_DISTANCE &&
-            Vector3.Distance(stateMachine.NPC.Instance.transform.position, (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position) <= GameManager.ACTIVATE_LUNGE_DISTANCE)
+            Vector3.Distance(stateMachine.NPC.Instance.transform.position, (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position) <= GameManager.ACTIVATE_LUNGE_DISTANCE &&
+            TargetInLungeCone())
         {
             return new GuardLungeState(stateMachine);
         }
@@ -77,5 +78,13 @@ public abstract class GuardPursueState : NPCState
         }
 
         return null;
+    }
+
+    protected bool TargetInLungeCone()
+    {
+        Vector3 targetDir = (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position - stateMachine.NPC.Instance.transform.position;
+        Vector3 forward = stateMachine.NPC.Instance.transform.forward;
+
+        return Vector3.Angle(targetDir, forward) < GameManager.LUNGE_CONE_ANGLE;
     }
 }

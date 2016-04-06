@@ -9,22 +9,28 @@ public class GuardLungeState : NPCState
     }
 	
 	private float lungeTimer = 0f;		// time on lunging
-	private float lungeDuration = 0.1f;	// lunge during X sec only
 
     public override void Entry()
     {
 		Debug.Log (this.stateMachine.NPC.name + ": Lunge entry");
 
-		lungeTimer = Time.time;
+		lungeTimer = GameManager.LUNGE_TIME;
     }
 
     public override NPCState Update()
     {
-		if(Time.time - lungeTimer <= lungeDuration) {
-			NPCActions.Lunge(this.stateMachine.NPC.Instance);
-		}
-		
+        lungeTimer -= Time.deltaTime;
+
+        if (lungeTimer > 0)
+        {
+            NPCActions.Lunge(this.stateMachine.NPC.Instance);
+        }
+        else
+        {
+            this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            return new GuardSearchState(this.stateMachine);
+        }
+
         return this;
     }
-
 }

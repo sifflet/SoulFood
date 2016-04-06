@@ -45,5 +45,4 @@ public static class NPCActions
 		Vector3 lungeDirection = guard.transform.forward * Time.deltaTime;
 		guard.GetComponent<Rigidbody>().AddForce(lungeDirection * 100f, ForceMode.Impulse);
 	}
-
 }
