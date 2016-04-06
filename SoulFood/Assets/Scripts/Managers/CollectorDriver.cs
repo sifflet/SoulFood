@@ -6,7 +6,34 @@ public class CollectorDriver : NPCDriver
 {
 	private const float MAX_SPEED = 15f;
     private int soulsStored = 0;
+    private bool isImmortal = false;
+    private float immortalityTimer = 0f;
+
 	public int SoulsStored { get { return this.soulsStored; } }
+
+    public bool IsImmortal
+    {
+        get { return this.isImmortal; }
+
+        set
+        {
+            if (value)
+            {
+                Debug.Log("DEAD");
+                this.isImmortal = true;
+                this.immortalityTimer = GameManager.IMMORTALITY_TIME;
+
+                if (this.controlledByAI)
+                {
+                    this.stateMachine.enabled = false;
+                }
+                else
+                {
+                    this.keyboardInputs.enabled = false;
+                }
+            }
+        }
+    }
 
     public GameObject soulPrefab;
 
@@ -31,6 +58,30 @@ public class CollectorDriver : NPCDriver
         this.stateMachine = this.instance.GetComponent<CollectorStateMachine>();
         this.stateMachine.Setup(this);
     }
+
+    public override void Update()
+    {
+        base.Update();
+
+        if (isImmortal)
+        {
+            immortalityTimer -= Time.deltaTime;
+
+            if (immortalityTimer < 0)
+            {
+                if (this.controlledByAI)
+                {
+                    this.stateMachine.enabled = true;
+                }
+                else
+                {
+                    this.keyboardInputs.enabled = true;
+                }
+
+                isImmortal = false;
+            }
+        }
+    }
 
     /*
      *  Acquire soul prefab from GameManager since cannot set the soul prefab through the inspector on this script

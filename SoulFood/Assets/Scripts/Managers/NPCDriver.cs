@@ -33,7 +33,7 @@ public abstract class NPCDriver : MonoBehaviour
         }
     }
 
-    public void Update()
+    public virtual void Update()
     {
         FindVisibleNPCs();
     }

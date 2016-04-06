@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
 	public const float SOUL_COLLECTIBLE_RANGE = 2f;
 	public enum FleeRangeType { Default, Emergency };
+    public const float IMMORTALITY_TIME = 3.0f;
 
     /* Guards variables */
     public const float ACTIVATE_LUNGE_DISTANCE = 3f;

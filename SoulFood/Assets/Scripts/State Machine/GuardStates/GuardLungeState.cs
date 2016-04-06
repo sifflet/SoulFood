@@ -24,6 +24,11 @@ public class GuardLungeState : NPCState
         if (lungeTimer > 0)
         {
             NPCActions.Lunge(this.stateMachine.NPC.Instance);
+
+            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance))
+            {
+                ((stateMachine as GuardStateMachine).TargetNPC as CollectorDriver).IsImmortal = true;
+            }
         }
         else
         {
@@ -32,5 +37,14 @@ public class GuardLungeState : NPCState
         }
 
         return this;
+    }
+
+    private bool CollisionWithTarget()
+    {
+        bool result = false;
+
+        
+
+        return result;
     }
 }
