@@ -27,7 +27,7 @@ public class GuardLungeState : NPCState
         {
             NPCActions.Lunge(this.stateMachine.NPC, lungeDirection);
 
-            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance))
+            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance, GameManager.LUNGE_COLLISION_RANGE))
             {
                 ((stateMachine as GuardStateMachine).TargetNPC as CollectorDriver).IsImmortal = true;
             }

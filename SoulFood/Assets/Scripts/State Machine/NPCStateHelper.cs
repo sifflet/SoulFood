@@ -117,7 +117,7 @@ public static class NPCStateHelper
 		return false;
 	}
 
-	public static bool IsWithinCollisionRangeAtGroundLevel(GameObject mainObj, GameObject collisionObj) 
+	public static bool IsWithinCollisionRangeAtGroundLevel(GameObject mainObj, GameObject collisionObj, float range) 
 	{
 		Vector3 collisionObjGroundLevelPos = collisionObj.transform.position;
 		collisionObjGroundLevelPos.y = 0.0f;
@@ -125,7 +125,7 @@ public static class NPCStateHelper
 		Vector3 mainObjGroundLevelPos = mainObj.transform.position;
 		mainObjGroundLevelPos.y = 0.0f;
 		
-		if (Vector3.Distance(mainObjGroundLevelPos, collisionObjGroundLevelPos) <= GameManager.COLLISION_RANGE)
+		if (Vector3.Distance(mainObjGroundLevelPos, collisionObjGroundLevelPos) <= range)
 		{
 			return true;
 		}

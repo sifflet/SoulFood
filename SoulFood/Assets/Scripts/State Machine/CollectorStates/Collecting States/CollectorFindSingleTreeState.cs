@@ -34,7 +34,7 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		if (buttonTargetForClosestSingleTree) 
 		{
 			
-			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree)) {
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree, GameManager.COLLISION_RANGE)) {
 
 				return this;
 			}
