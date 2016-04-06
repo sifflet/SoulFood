@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour
     public const float IMMORTALITY_TIME = 3.0f;
 
     /* Guards variables */
-    public const float ACTIVATE_LUNGE_DISTANCE = 3f;
-    public const float DIRECT_PURSUE_RANGE = 15.0f;
+    public const float ACTIVATE_LUNGE_DISTANCE = 3.0f;
+    public const float DIRECT_PURSUE_RANGE = 5.0f;
     public const float LUNGE_TIME = 0.25f;
     public static float LUNGE_CONE_ANGLE = 30.0f;
 

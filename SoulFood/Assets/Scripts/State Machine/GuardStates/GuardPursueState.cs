@@ -29,7 +29,7 @@ public abstract class GuardPursueState : NPCState
             (stateMachine as GuardStateMachine).TargetNPC = (otherGuard.StateMachine as GuardStateMachine).TargetNPC;
         }
 
-        NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 5f);
+        NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 1f);
     }
 
     public override NPCState Update()

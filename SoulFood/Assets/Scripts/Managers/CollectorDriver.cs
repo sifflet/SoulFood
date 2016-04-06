@@ -19,7 +19,6 @@ public class CollectorDriver : NPCDriver
         {
             if (value)
             {
-                Debug.Log("DEAD");
                 this.isImmortal = true;
                 this.immortalityTimer = GameManager.IMMORTALITY_TIME;
 

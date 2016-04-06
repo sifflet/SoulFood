@@ -43,7 +43,7 @@ public static class NPCStateHelper
         {
 			float npcYPosition = npc.gameObject.transform.position.y;
 			Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);
-			npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition, true);
+			npc.MovementDriver.NPCMovement.Steering_Arrive(targetPosition);
         }
 	}
 

@@ -6,7 +6,7 @@ public class NPCMovement : MonoBehaviour {
 	//Fields
 	public float maximumSeekVelocity = 15f, maximumRotationVelocity = 2f, 
 		maximumFleeVelocity = 10f, maximumAcceleration = 0.05f, maxinumRotationAcceleration = 0.01f;
-	protected float currentVelocity = 0, currentRotationVelocity = 0, currentAcceleration = 0.05f;
+	public float currentVelocity = 0, currentRotationVelocity = 0, currentAcceleration = 0.05f;
 	Vector3 directionVector = new Vector3 (0, 0, 0);
 	Vector3 playerDistance;
 	Vector2 worldSize = new Vector2(70, 32.5f);
@@ -266,17 +266,20 @@ public class NPCMovement : MonoBehaviour {
 	}
 
 	//Chase the target with the steering arrive formula
-	public void Steering_Arrive (NPCMovement target) {
+	public void Steering_Arrive (Vector3 target) {
 		//Find the direction vector based on the target's position
-		directionVector = (target.transform.position - transform.position);
+		directionVector = (target - transform.position);
 		directionVector.Normalize ();
 		//Find the current rotation velocity
 		currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
+
 		//Create a goal velocity that is proportional to the distance to the target (interpolated from 0 to max)
-		float goalVelocity = maximumSeekVelocity * ((target.transform.position - transform.position).magnitude / 15f);
-		currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumFleeVelocity);
+        float goalVelocity = maximumSeekVelocity * ((target - transform.position).magnitude / 15f);
+		currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumSeekVelocity);
+
 		//Calculate the current acceleration based on the goal velocity and the current velocity
 		currentAcceleration = Mathf.Min ((goalVelocity - currentVelocity) / 2, maximumAcceleration);
+
 		//Interpolate the orientation of the NPC object
 		Quaternion targetRotation = Quaternion.LookRotation (directionVector);
 		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, currentRotationVelocity * Time.deltaTime);
@@ -396,16 +399,21 @@ public class NPCMovement : MonoBehaviour {
 			//Find the direction vector based on the target's position
 			directionVector = (targetPosition - transform.position);
 			directionVector.Normalize ();
+
 			//Find the current rotation velocity
 			currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
+
 			//Create a goal velocity that is proportional to the distance to the target (interpolated from 0 to max)
 			float goalVelocity = maximumSeekVelocity * ((targetPosition - transform.position).magnitude / 15f);
-			currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumFleeVelocity);
+			currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumSeekVelocity);
+
 			//Calculate the current acceleration based on the goal velocity and the current velocity
 			currentAcceleration = Mathf.Min ((goalVelocity - currentVelocity) / 2, maximumAcceleration);
+
 			//Interpolate the orientation of the NPC object
 			Quaternion targetRotation = Quaternion.LookRotation (directionVector);
 			transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, currentRotationVelocity * Time.deltaTime);
+
 			//Update the position
 			Vector3 newPosition = transform.position + (currentVelocity * Time.deltaTime) * transform.forward.normalized;
 			transform.position = newPosition;
@@ -414,12 +422,16 @@ public class NPCMovement : MonoBehaviour {
 			//Find the direction vector based on the target's position
 			directionVector = (targetPosition - transform.position);
 			directionVector.Normalize ();
+
 			//Find the current velocity
 			currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
 			currentVelocity = Mathf.Min (currentVelocity + maximumAcceleration, maximumSeekVelocity - 10);
+            //currentVelocity = currentVelocity * Vector3.Distance(targetPosition, transform.position)/3f;
+
 			//Interpolate the orientation of the NPC object
 			Quaternion targetRotation = Quaternion.LookRotation (directionVector);
 			transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, currentRotationVelocity * Time.deltaTime);
+
 			//Update the position
 			Vector3 newPosition = transform.position + (currentVelocity * Time.deltaTime) * transform.forward.normalized;
 			transform.position = newPosition;
