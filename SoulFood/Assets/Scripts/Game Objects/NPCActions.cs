@@ -40,9 +40,8 @@ public static class NPCActions
     }
 
 	// Should be used through the GuardLungeState only, as it implements a required timer
-	public static void Lunge(GameObject guard)
+	public static void Lunge(NPCDriver guard, Vector3 direction)
 	{
-		Vector3 lungeDirection = guard.transform.forward * Time.deltaTime;
-		guard.GetComponent<Rigidbody>().AddForce(lungeDirection * 100f, ForceMode.Impulse);
+		guard.Instance.GetComponent<Rigidbody>().AddForce(direction * 100f, ForceMode.Impulse);
 	}
 }

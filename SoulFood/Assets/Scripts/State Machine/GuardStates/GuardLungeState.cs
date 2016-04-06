@@ -9,12 +9,14 @@ public class GuardLungeState : NPCState
     }
 	
 	private float lungeTimer = 0f;		// time on lunging
+    private Vector3 lungeDirection;
 
     public override void Entry()
     {
 		Debug.Log (this.stateMachine.NPC.name + ": Lunge entry");
 
 		lungeTimer = GameManager.LUNGE_TIME;
+        lungeDirection = this.stateMachine.NPC.Instance.transform.forward;
     }
 
     public override NPCState Update()
@@ -23,7 +25,7 @@ public class GuardLungeState : NPCState
 
         if (lungeTimer > 0)
         {
-            NPCActions.Lunge(this.stateMachine.NPC.Instance);
+            NPCActions.Lunge(this.stateMachine.NPC, lungeDirection);
 
             if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance))
             {
@@ -37,14 +39,5 @@ public class GuardLungeState : NPCState
         }
 
         return this;
-    }
-
-    private bool CollisionWithTarget()
-    {
-        bool result = false;
-
-        
-
-        return result;
     }
 }
