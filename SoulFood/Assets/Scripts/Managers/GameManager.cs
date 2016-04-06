@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public GameObject deathyPrefab;
     public GameObject guardPrefab;
     public GameObject cameraRigPrefab;
+	public GameObject soulPrefab;
 
     public GameObject treeOneButton;
     public GameObject treeTwoButton;
@@ -24,7 +25,7 @@ public class GameManager : MonoBehaviour
 	public enum FleeRangeType { Default, Emergency };
 
     /* Guards variables */
-    public const float ACTIVATE_LUNGE_DISTANCE = 0.2f;
+    public const float ACTIVATE_LUNGE_DISTANCE = 1f;
     public const float DIRECT_PURSUE_RANGE = 15.0f;
 
     private static int livesRemaining;
@@ -102,6 +103,7 @@ public class GameManager : MonoBehaviour
             npcInstance.AddComponent<CollectorDriver>();
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
+            driver.SetSoulPrefab(soulPrefab);
             deathies.Add(driver);
         }
 
