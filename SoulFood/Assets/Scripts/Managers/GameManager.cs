@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     public GameObject treeThreeButton;
 
 	/* NPC variables */
-	public const float COLLISION_RANGE = 0.25f;
+	public const float COLLISION_RANGE = 1.25f;
 
 	/* Collector variables */
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
