@@ -9,6 +9,11 @@ public class CollectorDriver : NPCDriver
     public float eatingDelay = 0.5f;
 	public int SoulsStored { get { return this.soulsStored; } }
 
+    public override void OnStartLocalPlayer()
+    {
+        cameraDriver.enabled = true;
+    }
+
     public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
         base.Setup(instance, cameraInstance, spawnPoint);

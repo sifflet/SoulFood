@@ -13,6 +13,12 @@ public class NPCMovementDriver : MonoBehaviour
     private List<Node> nodes;
 
     public bool AttainedFinalNode { get; set; }
+
+    void Start()
+    {
+        nodes = GameManager.AllNodes; //Needed when spawning through network
+    }
+
     public Node CurrentTargetNode
     { 
         get
@@ -32,7 +38,6 @@ public class NPCMovementDriver : MonoBehaviour
         this.currentNPC = movement;
         this.pathList = new List<Node>();
         this.AttainedFinalNode = false;
-        this.nodes = GameManager.AllNodes;
 	}
 	
 	private int pathCounter = 0;		// Used for keeping track where NPC is along a path
