@@ -14,12 +14,14 @@ public class NetworkLobby : NetworkLobbyManager {
     {
         GameObject spawns = GameObject.FindGameObjectWithTag("Respawn");
         GameObject playerPrefab = null;
+        NPCDriver driver = null;
+
         if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Guard") //Currently NPC
         {
             playerPrefab = (GameObject)Instantiate(Guard);
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
-            playerPrefab.AddComponent<CollectorDriver>();
-            CollectorDriver driver = playerPrefab.GetComponent<CollectorDriver>();
+            playerPrefab.AddComponent<GuardDriver>();
+            driver = playerPrefab.GetComponent<GuardDriver>();
             driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform);
             playerPrefab.transform.position = spawns.transform.FindChild("Guard0").position;
         }
@@ -29,7 +31,7 @@ public class NetworkLobby : NetworkLobbyManager {
             playerPrefab = (GameObject)Instantiate(Collector);
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
             playerPrefab.AddComponent<CollectorDriver>();
-            CollectorDriver driver = playerPrefab.GetComponent<CollectorDriver>();
+            driver = playerPrefab.GetComponent<CollectorDriver>();
             driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform);
             playerPrefab.transform.position = spawns.transform.FindChild("Collect" + counter).position;
         }

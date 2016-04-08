@@ -16,7 +16,6 @@ public class NPCMovementDriver : MonoBehaviour
 
     void Start()
     {
-        nodes = GameManager.AllNodes; //Needed when spawning through network
     }
 
     public Node CurrentTargetNode
@@ -35,6 +34,7 @@ public class NPCMovementDriver : MonoBehaviour
 	
 	public void Setup (NPCMovement movement)
     {
+        nodes = GameManager.AllNodes;
         this.currentNPC = movement;
         this.pathList = new List<Node>();
         this.AttainedFinalNode = false;

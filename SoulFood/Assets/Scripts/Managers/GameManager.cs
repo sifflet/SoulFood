@@ -38,21 +38,18 @@ public class GameManager : MonoBehaviour
 
     private static List<Node> nodes;
 
-    private static List<NPCDriver> deathies;
-    private static List<NPCDriver> guards;
-
     private int deathyNum = 3;
     private const int GUARDS_NUM = 2;
 
     public static List<Node> AllNodes { get { return nodes; } }
-    public static List<NPCDriver> Deathies { get { return deathies; } }
-    public static List<NPCDriver> Guards { get { return guards; } }
+    public static List<NPCDriver> Deathies { get; set; }
+    public static List<NPCDriver> Guards { get; set; }
     public static List<NPCDriver> AllNPCs
     {
         get
         {
-            List<NPCDriver> allNPCs = new List<NPCDriver>(deathies);
-            allNPCs.AddRange(guards);
+            List<NPCDriver> allNPCs = new List<NPCDriver>(Deathies);
+            allNPCs.AddRange(Guards);
             return allNPCs;
         }
     }
@@ -63,16 +60,22 @@ public class GameManager : MonoBehaviour
         InitializeGraph();
         SpawnTrees();
         SetGameLimits();
-        deathies = new List<NPCDriver>();
-        guards = new List<NPCDriver>();
 
-        //SpawnAllNpcs();
+        Deathies = new List<NPCDriver>();
+        Guards = new List<NPCDriver>();
+
+        /*
+        SpawnAllNpcs();
         SetupNPCStateMachines();
-
+        
         (guards[0] as GuardDriver).IsLeader = true;
         deathies[0].SetControlledByAI(false); // human controlled
         //guards[0].SetControlledByAI(false);
         //guards[1].SetControlledByAI(false);
+        */
+
+        GetNetworkNPCs();
+        SetupNPCStateMachines();
 	}
 	
 	void Update ()
@@ -97,7 +100,7 @@ public class GameManager : MonoBehaviour
     {
         for (int i = 0; i < deathyNum; i++)
         {
-            Transform spawnPoint = GameObject.Find("DeathySpawn" + (i + 1)).transform;
+            Transform spawnPoint = GameObject.Find("Collect" + (i)).transform;
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = deathyPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
@@ -108,12 +111,12 @@ public class GameManager : MonoBehaviour
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             driver.SetSoulPrefab(soulPrefab);
-            deathies.Add(driver);
+            Deathies.Add(driver);
         }
 
         for (int i = 0; i < GUARDS_NUM; i++)
         {
-            Transform spawnPoint = GameObject.Find("GuardSpawn" + (i + 1)).transform;
+            Transform spawnPoint = GameObject.Find("Guard" + (i)).transform;
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = guardPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
@@ -123,7 +126,28 @@ public class GameManager : MonoBehaviour
             npcInstance.AddComponent<GuardDriver>();
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
-            guards.Add(driver);
+            Guards.Add(driver);
+        }
+    }
+
+    private void GetNetworkNPCs()
+    {
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (obj.name.Contains("Collector"))
+            {
+                NPCDriver driver = obj.GetComponent<CollectorDriver>();
+                Deathies.Add(driver);
+                AllNPCs.Add(driver);
+                driver.Sacrebleu();
+            }
+            else
+            {
+                NPCDriver driver = obj.GetComponent<GuardDriver>();
+                Guards.Add(driver);
+                AllNPCs.Add(driver);
+                driver.Sacrebleu();
+            }
         }
     }
 

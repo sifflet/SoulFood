@@ -71,5 +71,10 @@ public abstract class NPCDriver : NetworkBehaviour
         this.stateMachine.EnterFirstState();
     }
 
+    public void Sacrebleu()
+    {
+        this.movementDriver.Setup(this.GetComponent<NPCMovement>());
+    }
+
     protected abstract void FindVisibleNPCs();
 }
