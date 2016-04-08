@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour
         Deathies = new List<NPCDriver>();
         Guards = new List<NPCDriver>();
 
+        #region without networking
         /*
         SpawnAllNpcs();
         SetupNPCStateMachines();
@@ -73,10 +74,16 @@ public class GameManager : MonoBehaviour
         //guards[0].SetControlledByAI(false);
         //guards[1].SetControlledByAI(false);
         */
+        #endregion
 
+        #region with networking
         GetNetworkNPCs();
+        SpawnAllNpcs();
         SetupNPCStateMachines();
-	}
+
+        (Guards[0] as GuardDriver).IsLeader = true;
+        #endregion
+    }
 	
 	void Update ()
     {
@@ -98,7 +105,7 @@ public class GameManager : MonoBehaviour
 
     private void SpawnAllNpcs()
     {
-        for (int i = 0; i < deathyNum; i++)
+        for (int i = Deathies.Count; i < deathyNum; i++)
         {
             Transform spawnPoint = GameObject.Find("Collect" + (i)).transform;
             Vector3 spawnPosition = spawnPoint.position;
@@ -114,7 +121,7 @@ public class GameManager : MonoBehaviour
             Deathies.Add(driver);
         }
 
-        for (int i = 0; i < GUARDS_NUM; i++)
+        for (int i = Guards.Count; i < GUARDS_NUM; i++)
         {
             Transform spawnPoint = GameObject.Find("Guard" + (i)).transform;
             Vector3 spawnPosition = spawnPoint.position;

@@ -24,7 +24,7 @@ public class CollectorDriver : NPCDriver
 
                 if (this.controlledByAI)
                 {
-                    this.stateMachine.enabled = false;
+                    SetAIImmortalScripts();
                 }
                 else
                 {
@@ -68,16 +68,16 @@ public class CollectorDriver : NPCDriver
 
             if (immortalityTimer < 0)
             {
+                isImmortal = false;
+
                 if (this.controlledByAI)
                 {
-                    this.stateMachine.enabled = true;
+                    SetAIImmortalScripts();
                 }
                 else
                 {
                     this.keyboardInputs.enabled = true;
                 }
-
-                isImmortal = false;
             }
         }
     }
@@ -134,5 +134,11 @@ public class CollectorDriver : NPCDriver
                 this.visibleNPCs.Add(npc);
             }
         }
+    }
+
+    private void SetAIImmortalScripts()
+    {
+        this.stateMachine.enabled = !isImmortal;
+        this.movementDriver.enabled = !isImmortal;
     }
 }
