@@ -34,7 +34,7 @@ public abstract class NPCDriver : NetworkBehaviour
         }
     }
 
-    public void Update()
+    public virtual void Update()
     {
         FindVisibleNPCs();
     }

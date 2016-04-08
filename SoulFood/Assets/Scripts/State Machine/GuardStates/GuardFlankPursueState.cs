@@ -23,7 +23,7 @@ public class GuardFlankPursueState : GuardPursueState
 
         if ((stateMachine.NPC as GuardDriver).IsLeader)
         {
-            NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 5f);
+            NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 1f);
         }
         else
         {

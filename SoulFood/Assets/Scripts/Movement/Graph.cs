@@ -327,8 +327,6 @@ static class Graph
             currentNode.SetMaterialColor(Color.red);
         }
 
-        //path.Push(currentNode);
-
         return path;
     }
 

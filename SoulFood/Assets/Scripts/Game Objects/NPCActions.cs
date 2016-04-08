@@ -6,26 +6,22 @@ public static class NPCActions
     public static void ConsumeSoul(CollectorDriver collector)
     {
 		Soul closestSoul = null;
-		float closestDistance = 0.5f; //adjust size upon implementation
 		Vector3 collectorPos = collector.Instance.transform.position;
 		Collider[] collisions = collector.CollisionArray;
 		
-		for (int i = 0; i < collector.CollisionArray.Length; i++)
+		for (int i = 0; i < collector.CollisionArray.Length; ++i)
 		{
 			Soul soul = collisions[i].GetComponent<Soul>();
-			if (soul && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= closestDistance)
+			if (soul && Mathf.Abs((collectorPos - collisions[i].transform.position).magnitude) <= GameManager.COLLISION_RANGE)
 			{
 				closestSoul = soul;
 			}
 		}
-		
-		if (closestSoul)
+
+        if (closestSoul)
 		{
-			closestSoul.IsConsumed(collectorPos);
-			collector.AddSoul();
-			GameManager.SoulConsumed();
-			Debug.Log("I've consumed a soul!"); //to be removed
-		};
+            ConsumeSoul(collector, closestSoul.gameObject);
+        };
     }
 
 	public static void ConsumeSoul(CollectorDriver collector, GameObject soul)
@@ -35,17 +31,17 @@ public static class NPCActions
 		soul.GetComponent<Soul>().IsConsumed(collectorPos);
 		collector.AddSoul();
 		GameManager.SoulConsumed();
-	}
-
-
-    public static void EjectSoul()
-    {
-
     }
 
-	public static void Lunge()
-	{
-		
-	}
+    public static void EjectSoul(CollectorDriver collector, int numberOfSoulsEjected)
+    {
+        collector.DropSoul(numberOfSoulsEjected);
+        GameManager.SoulEjected(numberOfSoulsEjected);
+    }
 
+	// Should be used through the GuardLungeState only, as it implements a required timer
+	public static void Lunge(NPCDriver guard, Vector3 direction)
+	{
+		guard.Instance.GetComponent<Rigidbody>().AddForce(direction * 100f * Time.deltaTime, ForceMode.Impulse);
+	}
 }

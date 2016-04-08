@@ -21,7 +21,7 @@ public class GuardDirectPursueState : GuardPursueState
 
         if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) > GameManager.DIRECT_PURSUE_RANGE) return new GuardFlankPursueState(stateMachine);
 
-        NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 5f);
+        NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 1f);
 
         return this;
     }
