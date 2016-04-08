@@ -24,6 +24,14 @@ public abstract class NPCDriver : NetworkBehaviour
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
     public NPCStateMachine StateMachine { get { return this.stateMachine; } }
 
+    void Start()
+    {
+        if (isLocalPlayer)
+        {
+            cameraDriver.SetEnabled(true);
+        }
+    }
+
     public Collider[] CollisionArray
     {
         get
