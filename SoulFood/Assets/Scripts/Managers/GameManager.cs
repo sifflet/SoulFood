@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public const float LUNGE_TIME = 0.25f;
     public static float LUNGE_CONE_ANGLE = 30.0f;
     public const float LUNGE_COLLISION_RANGE = 1f;
+    public const float PURSUE_NEW_TARGET_TIME = 5.0f;
 
     private static int livesRemaining;
     private static int soulsConsumed;

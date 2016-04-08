@@ -4,6 +4,7 @@ using System.Collections;
 public abstract class GuardPursueState : NPCState
 {
     protected NPCDriver otherGuard;
+    protected float pursueNewTargetTimer = 0f;
 
     public GuardPursueState(NPCStateMachine stateMachine)
         : base(stateMachine)
@@ -42,6 +43,25 @@ public abstract class GuardPursueState : NPCState
         }
 
         if (stateMachine.NPC.VisibleNPCs.Count == 0) return new GuardSearchState(stateMachine);
+
+        // if a collector passes close by
+        NPCDriver newTarget = GetCollectorInLungeRange();
+        if (newTarget != null)
+        {
+            pursueNewTargetTimer = GameManager.PURSUE_NEW_TARGET_TIME;
+            (stateMachine as GuardStateMachine).TargetNPC = newTarget;
+        }
+
+        if (!(stateMachine.NPC as GuardDriver).IsLeader && pursueNewTargetTimer > 0)
+        {
+            pursueNewTargetTimer -= Time.deltaTime;
+
+            if (pursueNewTargetTimer <= 0)
+            {
+                (stateMachine as GuardStateMachine).TargetNPC = (otherGuard.StateMachine as GuardStateMachine).TargetNPC;
+                pursueNewTargetTimer = 0.0f;
+            }
+        }
 
         return this.stateMachine.CurrentState;
     }
@@ -86,5 +106,17 @@ public abstract class GuardPursueState : NPCState
         Vector3 forward = stateMachine.NPC.Instance.transform.forward;
 
         return Vector3.Angle(targetDir, forward) < GameManager.LUNGE_CONE_ANGLE;
+    }
+
+    protected NPCDriver GetCollectorInLungeRange()
+    {
+        foreach (NPCDriver npc in GameManager.Deathies)
+        {
+            if (npc == (stateMachine as GuardStateMachine).TargetNPC) continue;
+            if ((npc as CollectorDriver).IsImmortal) continue;
+            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GameManager.LUNGE_COLLISION_RANGE)) return npc;
+        }
+
+        return null;
     }
 }

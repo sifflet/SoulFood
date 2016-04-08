@@ -9,6 +9,8 @@ public class NetworkLobby : NetworkLobbyManager {
     public GameObject cameraRigPrefab;
     private int numOfCollectors;
     int counter = 0;
+    int guardCounter = 0;
+    int collectorCounter = 0;
 
     public override GameObject OnLobbyServerCreateGamePlayer(NetworkConnection conn, short playerControllerId)
     {
@@ -24,6 +26,8 @@ public class NetworkLobby : NetworkLobbyManager {
             driver = playerPrefab.GetComponent<GuardDriver>();
             driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform);
             playerPrefab.transform.position = spawns.transform.FindChild("Guard0").position;
+            playerPrefab.name = "Guard " + guardCounter;
+            guardCounter++;
         }
             
         if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Collector") //Currently NPC
@@ -34,6 +38,8 @@ public class NetworkLobby : NetworkLobbyManager {
             driver = playerPrefab.GetComponent<CollectorDriver>();
             driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform);
             playerPrefab.transform.position = spawns.transform.FindChild("Collect" + counter).position;
+            playerPrefab.name = "Collector " + collectorCounter;
+            collectorCounter++;
         }
 
         counter++;
