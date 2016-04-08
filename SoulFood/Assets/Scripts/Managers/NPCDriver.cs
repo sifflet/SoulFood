@@ -2,9 +2,10 @@
 using System.Collections;
 using System;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 [Serializable]
-public abstract class NPCDriver : MonoBehaviour
+public abstract class NPCDriver : NetworkBehaviour
 {
     protected GameObject instance;
     protected bool controlledByAI;
@@ -22,6 +23,14 @@ public abstract class NPCDriver : MonoBehaviour
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
     public NPCStateMachine StateMachine { get { return this.stateMachine; } }
+
+    void Start()
+    {
+        if (isLocalPlayer)
+        {
+            cameraDriver.SetEnabled(true);
+        }
+    }
 
     public Collider[] CollisionArray
     {

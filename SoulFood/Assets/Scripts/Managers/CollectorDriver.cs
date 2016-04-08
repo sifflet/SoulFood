@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 public class CollectorDriver : NPCDriver
 {
-	private const float MAX_SPEED = 15f;
+    private const float MAX_SPEED = 15f;
     private int soulsStored = 0;
     private bool isImmortal = false;
     private float immortalityTimer = 0f;
 
-	public int SoulsStored { get { return this.soulsStored; } }
+    public int SoulsStored { get { return this.soulsStored; } }
 
     public bool IsImmortal
     {
@@ -89,7 +89,7 @@ public class CollectorDriver : NPCDriver
     {
         this.soulPrefab = soulPrefab;
     }
-        
+
     public void AddSoul()
     {
         ++this.soulsStored;
@@ -112,7 +112,7 @@ public class CollectorDriver : NPCDriver
 
         for (int i = 0; i < numberOfSouls; ++i)
         {
-            GameObject soul = (GameObject) Instantiate(soulPrefab, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
+            GameObject soul = (GameObject)Instantiate(soulPrefab, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
             soul.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVector, explosionRadius);
         }
     }
