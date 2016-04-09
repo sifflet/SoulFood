@@ -9,9 +9,10 @@ public class CollectorStateMachine : NPCStateMachine
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
 	public const float TIME_SPENT_SINGLE_TREE_SEARCHING = 15.0f;
 	public const float TIME_SPENT_MULTIPLE_TREE_SEARCHING = 15.0f;
+	public const float TIME_SPENT_WAITING_FOR_TREE_HELP = 15.0f;
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
-	public const float SOUL_COLLECTIBLE_RANGE_FOR_STATE_TRIGGER = 2f;
+	public const float SOUL_COLLECTIBLE_RANGE_FOR_STATE_TRIGGER = 2.5f;
 	public enum FleeRangeType { Default, Emergency };
 	public const float IMMORTALITY_TIME = 3.0f;
 
@@ -37,5 +38,11 @@ public class CollectorStateMachine : NPCStateMachine
 	{
 		this.hasReceivedHelpCall = true;
 		this.targetTree = targetTree;
+	}
+
+	public void CancelTreeHelpCall() 
+	{
+		this.hasReceivedHelpCall = false;
+		this.targetTree = null;
 	}
 }

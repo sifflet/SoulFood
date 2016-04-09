@@ -153,6 +153,8 @@ public static class CollectorStateHelper {
 		List<GameObject> visibleTrees = FindVisibleTrees(npc);
 		List<SoulTree> filteredTrees = new List<SoulTree>();
 		List<GameObject> filteredTreeObjects = new List<GameObject>();
+		SoulTree targetTree = null;	// Default just to assign variable
+		GameObject targetbuttonObject;
 
 		// Filter tree list by desired tree type and whether or not it has souls
 		foreach (GameObject tree in visibleTrees) 
@@ -164,20 +166,29 @@ public static class CollectorStateHelper {
 				filteredTreeObjects.Add(tree);
 			}
 		}
-
+		// If there is more than one tree, find the closest tree
 		if (filteredTrees.Count > 1)
 		{
 			GameObject closestTreeObj = NPCStateHelper.FindClosestGameObjectByPath(npc.gameObject, filteredTreeObjects);
-			// Get closest button
-			GameObject firstButtonOfTree = closestTreeObj.GetComponent<SoulTree>().TreeButtons[0];
-			if (firstButtonOfTree)
-				return firstButtonOfTree;
+			targetTree = closestTreeObj.GetComponent<SoulTree>();
 		}
-		else if  (filteredTrees.Count == 1) {
-			GameObject firstButtonOfTree = filteredTrees[0].TreeButtons[0];
-			if (firstButtonOfTree)
-				return firstButtonOfTree;
+		else if  (filteredTrees.Count == 1) { 	// There is only one tree
+			targetTree = filteredTrees[0];
 		}
+
+		// If the tree is multibutton, get closest button of tree
+		if (targetTree) {
+			List<GameObject> treeButtons = targetTree.TreeButtons;
+			if (treeButtons.Count > 1) {
+				GameObject closestButtonOfTree = NPCStateHelper.FindClosestGameObject(npc.gameObject, treeButtons);
+				if (closestButtonOfTree)
+					return closestButtonOfTree;
+			}
+			else {	// Tree has only one button, return it
+				return targetTree.TreeButtons[0];
+			}
+		}
+
 		return null;
 	}
 }
