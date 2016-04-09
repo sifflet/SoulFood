@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class GuardPursueState : NPCState
 {
-    protected NPCDriver otherGuard;
     protected float pursueNewTargetTimer = 0f;
 
     public GuardPursueState(NPCStateMachine stateMachine)
@@ -16,20 +16,19 @@ public abstract class GuardPursueState : NPCState
         NPCMovementDriver thisNPCMovementDriver = this.stateMachine.NPC.MovementDriver;
         thisNPCMovementDriver.enabled = true; // quick fix
         GuardDriver guardDriver = this.stateMachine.NPC as GuardDriver;
-        this.otherGuard = FindOtherGuard();
         this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
         if (guardDriver.IsLeader)
         {
             (stateMachine as GuardStateMachine).TargetNPC = GetClosestVisibleCollector();
 
-            NPCState otherGuardTransitionState = new GuardFlankPursueState(otherGuard.StateMachine);
+            NPCState otherGuardTransitionState = new GuardFlankPursueState((stateMachine as GuardStateMachine).OtherGuard.StateMachine);
             otherGuardTransitionState.Entry();
-            (otherGuard.StateMachine as GuardStateMachine).ChangeCurrentState(otherGuardTransitionState);
+            ((stateMachine as GuardStateMachine).OtherGuard.StateMachine as GuardStateMachine).ChangeCurrentState(otherGuardTransitionState);
         }
         else
         {
-            (stateMachine as GuardStateMachine).TargetNPC = (otherGuard.StateMachine as GuardStateMachine).TargetNPC;
+            (stateMachine as GuardStateMachine).TargetNPC = ((stateMachine as GuardStateMachine).OtherGuard.StateMachine as GuardStateMachine).TargetNPC;
         }
 
         NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 1f);
@@ -63,10 +62,12 @@ public abstract class GuardPursueState : NPCState
 
             if (pursueNewTargetTimer <= 0)
             {
-                (stateMachine as GuardStateMachine).TargetNPC = (otherGuard.StateMachine as GuardStateMachine).TargetNPC;
+                (stateMachine as GuardStateMachine).TargetNPC = ((stateMachine as GuardStateMachine).OtherGuard.StateMachine as GuardStateMachine).TargetNPC;
                 pursueNewTargetTimer = 0.0f;
             }
         }
+
+        AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
 
         return this.stateMachine.CurrentState;
     }
@@ -123,5 +124,16 @@ public abstract class GuardPursueState : NPCState
         }
 
         return null;
+    }
+
+    protected void AddVisibleTrees(List<GameObject> newTrees)
+    {
+        foreach (GameObject tree in newTrees)
+        {
+            if (!(stateMachine as GuardStateMachine).TreesFound.Contains(tree))
+            {
+                (stateMachine as GuardStateMachine).TreesFound.Add(tree);
+            }
+        }
     }
 }

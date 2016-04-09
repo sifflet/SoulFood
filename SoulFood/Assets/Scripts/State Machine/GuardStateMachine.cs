@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GuardStateMachine : NPCStateMachine
 {
@@ -15,12 +16,22 @@ public class GuardStateMachine : NPCStateMachine
     public const float TIME_BETWEEN_LUNGES = 3.0f;
 
     public float LungeCooldown { get; set; }
+    public List<GameObject> TreesFound { get; set; }
+    public GameObject StrategicSoulTreeTarget { get; set; }
+    public GuardDriver OtherGuard { get; set; }
 
     public override void Setup(NPCDriver npc)
     {
         base.Setup(npc);
         this.TargetNPC = null;
         this.currentState = new GuardSearchState(this);
+        this.TreesFound = new List<GameObject>();
+    }
+
+    public override void EnterFirstState()
+    {
+        this.OtherGuard = FindOtherGuard();
+        base.EnterFirstState();
     }
 
     public override void Reset()
@@ -31,5 +42,17 @@ public class GuardStateMachine : NPCStateMachine
     public void ChangeCurrentState(NPCState newState)
     {
         this.currentState = newState;
+    }
+
+    private GuardDriver FindOtherGuard()
+    {
+        foreach (NPCDriver npc in GameManager.Guards)
+        {
+            if (npc == this.NPC) continue;
+
+            return npc as GuardDriver;
+        }
+
+        return null;
     }
 }
