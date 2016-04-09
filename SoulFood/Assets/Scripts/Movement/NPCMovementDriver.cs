@@ -16,7 +16,6 @@ public class NPCMovementDriver : MonoBehaviour
 
     void Start()
     {
-        nodes = GameManager.AllNodes; //Needed when spawning through network
     }
 
     public Node CurrentTargetNode
@@ -35,6 +34,7 @@ public class NPCMovementDriver : MonoBehaviour
 	
 	public void Setup (NPCMovement movement)
     {
+        nodes = GameManager.AllNodes;
         this.currentNPC = movement;
         this.pathList = new List<Node>();
         this.AttainedFinalNode = false;
@@ -100,7 +100,14 @@ public class NPCMovementDriver : MonoBehaviour
     {
         this.startNode = FindClosestNode();
         this.pathList = Graph.InverseAStar(startNode, terminateDistance, threats);
-        this.endNode = pathList[pathList.Count - 1];
+        if (pathList.Count > 0)
+        {
+            this.endNode = pathList[pathList.Count - 1];
+        }
+        else
+        {
+            this.endNode = startNode;
+        }
         this.AttainedFinalNode = false;
         this.pathCounter = 0;
     }

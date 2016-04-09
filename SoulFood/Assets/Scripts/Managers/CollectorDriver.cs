@@ -20,11 +20,11 @@ public class CollectorDriver : NPCDriver
             if (value)
             {
                 this.isImmortal = true;
-                this.immortalityTimer = GameManager.IMMORTALITY_TIME;
+                this.immortalityTimer = CollectorStateMachine.IMMORTALITY_TIME;
 
                 if (this.controlledByAI)
                 {
-                    this.stateMachine.enabled = false;
+                    SetAIImmortalScripts();
                 }
                 else
                 {
@@ -68,19 +68,20 @@ public class CollectorDriver : NPCDriver
 
             if (immortalityTimer < 0)
             {
+                isImmortal = false;
+
                 if (this.controlledByAI)
                 {
-                    this.stateMachine.enabled = true;
+                    SetAIImmortalScripts();
                 }
                 else
                 {
                     this.keyboardInputs.enabled = true;
                 }
-
-                isImmortal = false;
             }
         }
-    }
+    }
+
 
     /*
      *  Acquire soul prefab from GameManager since cannot set the soul prefab through the inspector on this script
@@ -134,5 +135,11 @@ public class CollectorDriver : NPCDriver
                 this.visibleNPCs.Add(npc);
             }
         }
+    }
+
+    private void SetAIImmortalScripts()
+    {
+        this.stateMachine.enabled = !isImmortal;
+        this.movementDriver.enabled = !isImmortal;
     }
 }

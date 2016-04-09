@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,42 +18,26 @@ public class GameManager : MonoBehaviour
 	/* NPC variables */
 	public const float COLLISION_RANGE = 1.25f;
 
-	/* Collector variables */
-	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
-	public const float FLEE_RANGE = 20.0f;
-	public const float EMERGENCY_FLEE_RANGE = 10.0f;
-	public const float SOUL_COLLECTIBLE_RANGE = 2f;
-	public enum FleeRangeType { Default, Emergency };
-    public const float IMMORTALITY_TIME = 3.0f;
-
-    /* Guards variables */
-    public const float ACTIVATE_LUNGE_DISTANCE = 3.0f;
-    public const float DIRECT_PURSUE_RANGE = 5.0f;
-    public const float LUNGE_TIME = 0.25f;
-    public static float LUNGE_CONE_ANGLE = 30.0f;
-    public const float LUNGE_COLLISION_RANGE = 1f;
-
     private static int livesRemaining;
     private static int soulsConsumed;
     private static int soulLimit;
 
     private static List<Node> nodes;
 
-    private static List<NPCDriver> deathies;
-    private static List<NPCDriver> guards;
-
     private int deathyNum = 3;
     private const int GUARDS_NUM = 2;
+	private static List<GameObject> collectors = new List<GameObject>();
 
+	public static List<GameObject> Collectors { get { return collectors; } }
     public static List<Node> AllNodes { get { return nodes; } }
-    public static List<NPCDriver> Deathies { get { return deathies; } }
-    public static List<NPCDriver> Guards { get { return guards; } }
+    public static List<NPCDriver> Deathies { get; set; }
+    public static List<NPCDriver> Guards { get; set; }
     public static List<NPCDriver> AllNPCs
     {
         get
         {
-            List<NPCDriver> allNPCs = new List<NPCDriver>(deathies);
-            allNPCs.AddRange(guards);
+            List<NPCDriver> allNPCs = new List<NPCDriver>(Deathies);
+            allNPCs.AddRange(Guards);
             return allNPCs;
         }
     }
@@ -63,17 +48,29 @@ public class GameManager : MonoBehaviour
         InitializeGraph();
         SpawnTrees();
         SetGameLimits();
-        deathies = new List<NPCDriver>();
-        guards = new List<NPCDriver>();
 
-        //SpawnAllNpcs();
+        Deathies = new List<NPCDriver>();
+        Guards = new List<NPCDriver>();
+
+        #region without networking
+        /*
+        SpawnAllNpcs();
         SetupNPCStateMachines();
+        
+        (Guards[0] as GuardDriver).IsLeader = true;
+        //Deathies[0].SetControlledByAI(false); // human controlled
+        Guards[0].SetControlledByAI(false);
+        Guards[1].SetControlledByAI(false);
+        */
+        #endregion
 
-        (guards[0] as GuardDriver).IsLeader = true;
-        deathies[0].SetControlledByAI(false); // human controlled
-        //guards[0].SetControlledByAI(false);
-        //guards[1].SetControlledByAI(false);
-	}
+        #region with networking
+        GetNetworkNPCs();
+        SpawnAllNpcs();
+        (Guards[0] as GuardDriver).IsLeader = true;
+        SetupNPCStateMachines();
+        #endregion
+    }
 	
 	void Update ()
     {
@@ -81,6 +78,17 @@ public class GameManager : MonoBehaviour
             UpdateNPCs();
         else
             HandleGameConclusion();
+
+		// TO TEST GAME FLOW
+		if(Input.GetKeyUp(KeyCode.Alpha1)) {
+			livesRemaining = 1;
+		}
+		if(Input.GetKeyUp(KeyCode.Alpha2)) {
+			soulsConsumed = 18;
+			SoulConsumed();
+			soulLimit = 20;
+		}
+
 	}
 
     private void UpdateNPCs()
@@ -95,9 +103,9 @@ public class GameManager : MonoBehaviour
 
     private void SpawnAllNpcs()
     {
-        for (int i = 0; i < deathyNum; i++)
+        for (int i = Deathies.Count; i < deathyNum; i++)
         {
-            Transform spawnPoint = GameObject.Find("DeathySpawn" + (i + 1)).transform;
+            Transform spawnPoint = GameObject.Find("Collect" + (i)).transform;
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = deathyPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
@@ -108,12 +116,13 @@ public class GameManager : MonoBehaviour
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             driver.SetSoulPrefab(soulPrefab);
-            deathies.Add(driver);
+            Deathies.Add(driver);
+			collectors.Add(npcInstance);
         }
 
-        for (int i = 0; i < GUARDS_NUM; i++)
+        for (int i = Guards.Count; i < GUARDS_NUM; i++)
         {
-            Transform spawnPoint = GameObject.Find("GuardSpawn" + (i + 1)).transform;
+            Transform spawnPoint = GameObject.Find("Guard" + (i)).transform;
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = guardPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
@@ -123,7 +132,28 @@ public class GameManager : MonoBehaviour
             npcInstance.AddComponent<GuardDriver>();
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
-            guards.Add(driver);
+            Guards.Add(driver);
+        }
+    }
+
+    private void GetNetworkNPCs()
+    {
+        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
+        {
+            if (obj.name.Contains("Collector"))
+            {
+                NPCDriver driver = obj.GetComponent<CollectorDriver>();
+                Deathies.Add(driver);
+                AllNPCs.Add(driver);
+                driver.Sacrebleu();
+            }
+            else
+            {
+                NPCDriver driver = obj.GetComponent<GuardDriver>();
+                Guards.Add(driver);
+                AllNPCs.Add(driver);
+                driver.Sacrebleu();
+            }
         }
     }
 
@@ -236,16 +266,19 @@ public class GameManager : MonoBehaviour
     private static void HandleGameConclusion()
     {
         //Fancy display here
+		Application.LoadLevel("GameOver");
     }
 
     public static void SoulConsumed()
     {
         soulsConsumed++;
+        GameObject.Find("Canvas").GetComponent<Text>().text = "Souls collected: " + soulsConsumed;
     }
 
     public static void SoulEjected(int soulsEjected)//When players are hit, can remove more then 1
     {
         soulsConsumed -= soulsEjected;
+        GameObject.Find("Canvas").GetComponent<Text>().text = "Souls collected: " + soulsConsumed;
     }
 
     public static void loseLife()

@@ -19,7 +19,7 @@ public class GuardFlankPursueState : GuardPursueState
         NPCState stateFromBase = base.Update();
         if (stateFromBase != this) return stateFromBase;
 
-        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GameManager.DIRECT_PURSUE_RANGE) return new GuardDirectPursueState(stateMachine);
+        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GuardStateMachine.DIRECT_PURSUE_RANGE) return new GuardDirectPursueState(stateMachine);
 
         if ((stateMachine.NPC as GuardDriver).IsLeader)
         {
@@ -27,7 +27,7 @@ public class GuardFlankPursueState : GuardPursueState
         }
         else
         {
-            stateMachine.NPC.MovementDriver.ChangePathToFlank(NPCStateHelper.FindClosestNode((stateMachine as GuardStateMachine).TargetNPC.Instance), otherGuard);
+            stateMachine.NPC.MovementDriver.ChangePathToFlank(NPCStateHelper.FindClosestNode((stateMachine as GuardStateMachine).TargetNPC.Instance), (stateMachine as GuardStateMachine).OtherGuard);
         }
         
         return this;

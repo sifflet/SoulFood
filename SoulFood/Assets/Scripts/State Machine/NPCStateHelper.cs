@@ -132,4 +132,26 @@ public static class NPCStateHelper
 
 		return false;
 	}
+
+    // Note: Can't seem to make this method generic using System.Type as a parameter
+    // Thus, the repetition here
+    public static List<GameObject> FindVisibleTrees(NPCDriver npc)
+    {
+        List<GameObject> visibleTrees = new List<GameObject>();
+        SoulTree[] allTrees = GameObject.FindObjectsOfType(typeof(SoulTree)) as SoulTree[];
+
+        foreach (SoulTree tree in allTrees)
+        {
+            Vector3 viewPortPosition = npc.CameraDriver.Camera.WorldToViewportPoint(tree.gameObject.transform.position);
+
+            if (viewPortPosition.x >= 0.0f && viewPortPosition.x <= 1.0f &&
+                viewPortPosition.y >= 0.0f && viewPortPosition.y <= 1.0f &&
+                viewPortPosition.z >= 0.0f)
+            {
+                visibleTrees.Add(tree.gameObject);
+            }
+        }
+
+        return visibleTrees;
+    }
 }

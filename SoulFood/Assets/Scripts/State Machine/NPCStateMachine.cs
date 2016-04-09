@@ -14,7 +14,7 @@ public abstract class NPCStateMachine : MonoBehaviour
         this.npc = npc;
     }
 
-    public void EnterFirstState()
+    public virtual void EnterFirstState()
     {
         if (this.currentState == null) return;
         this.currentState.Entry();

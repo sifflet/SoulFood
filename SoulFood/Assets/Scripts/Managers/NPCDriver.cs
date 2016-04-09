@@ -17,21 +17,19 @@ public abstract class NPCDriver : NetworkBehaviour
     protected List<NPCDriver> visibleNPCs;
 
     protected NPCStateMachine stateMachine;
-
+	
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
     public NPCStateMachine StateMachine { get { return this.stateMachine; } }
+	public bool ControlledByAI { get { return this.controlledByAI; } }
 
-    void Start()
+    public override void OnStartServer()
     {
-        if (isLocalPlayer)
-        {
-            cameraDriver.SetEnabled(true);
-        }
+        cameraDriver.SetEnabled(true);
     }
-
+    
     public Collider[] CollisionArray
     {
         get
@@ -41,7 +39,7 @@ public abstract class NPCDriver : NetworkBehaviour
             return Physics.OverlapSphere(location, GameManager.COLLISION_RANGE);
         }
     }
-
+    
     public virtual void Update()
     {
         FindVisibleNPCs();
@@ -72,6 +70,11 @@ public abstract class NPCDriver : NetworkBehaviour
     public void StartStateMachine()
     {
         this.stateMachine.EnterFirstState();
+    }
+
+    public void Sacrebleu()
+    {
+        this.movementDriver.Setup(this.GetComponent<NPCMovement>());
     }
 
     protected abstract void FindVisibleNPCs();
