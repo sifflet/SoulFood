@@ -35,15 +35,15 @@ public class Button : MonoBehaviour {
 
 	void OnTriggerStay(Collider col)
 	{
-		NPCDriver npcDriver = col.GetComponent<NPCDriver>();
-		if(npcDriver)
+		CollectorDriver collectorDriver = col.GetComponent<CollectorDriver>();
+		if(collectorDriver)
 			isTriggered = true;
 	}
 
 	void OnTriggerExit(Collider col)
 	{
-		NPCDriver npcDriver = col.GetComponent<NPCDriver>();
-		if(npcDriver)
+		CollectorDriver collectorDriver = col.GetComponent<CollectorDriver>();
+		if(collectorDriver)
 			isTriggered = false;
 	}
 }
