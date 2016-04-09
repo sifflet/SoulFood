@@ -78,6 +78,17 @@ public class GameManager : MonoBehaviour
             UpdateNPCs();
         else
             HandleGameConclusion();
+
+		// TO TEST GAME FLOW
+		if(Input.GetKeyUp(KeyCode.Alpha1)) {
+			livesRemaining = 1;
+		}
+		if(Input.GetKeyUp(KeyCode.Alpha2)) {
+			soulsConsumed = 18;
+			SoulConsumed();
+			soulLimit = 20;
+		}
+
 	}
 
     private void UpdateNPCs()
@@ -255,6 +266,7 @@ public class GameManager : MonoBehaviour
     private static void HandleGameConclusion()
     {
         //Fancy display here
+		Application.LoadLevel("GameOver");
     }
 
     public static void SoulConsumed()
