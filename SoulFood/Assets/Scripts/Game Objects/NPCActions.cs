@@ -21,7 +21,7 @@ public static class NPCActions
         if (closestSoul)
 		{
             ConsumeSoul(collector, closestSoul.gameObject);
-        };
+        }
     }
 
 	public static void ConsumeSoul(CollectorDriver collector, GameObject soul)

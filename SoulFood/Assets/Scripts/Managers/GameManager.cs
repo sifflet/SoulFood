@@ -23,15 +23,7 @@ public class GameManager : MonoBehaviour
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
 	public const float SOUL_COLLECTIBLE_RANGE = 2f;
 	public enum FleeRangeType { Default, Emergency };
-    public const float IMMORTALITY_TIME = 3.0f;
-
-    /* Guards variables */
-    public const float ACTIVATE_LUNGE_DISTANCE = 3.0f;
-    public const float DIRECT_PURSUE_RANGE = 5.0f;
-    public const float LUNGE_TIME = 0.25f;
-    public static float LUNGE_CONE_ANGLE = 30.0f;
-    public const float LUNGE_COLLISION_RANGE = 1f;
-    public const float PURSUE_NEW_TARGET_TIME = 5.0f;
+    public const float IMMORTALITY_TIME = 5.0f;
 
     private static int livesRemaining;
     private static int soulsConsumed;
@@ -70,10 +62,10 @@ public class GameManager : MonoBehaviour
         SpawnAllNpcs();
         SetupNPCStateMachines();
         
-        (guards[0] as GuardDriver).IsLeader = true;
-        deathies[0].SetControlledByAI(false); // human controlled
-        //guards[0].SetControlledByAI(false);
-        //guards[1].SetControlledByAI(false);
+        (Guards[0] as GuardDriver).IsLeader = true;
+        //Deathies[0].SetControlledByAI(false); // human controlled
+        Guards[0].SetControlledByAI(false);
+        Guards[1].SetControlledByAI(false);
         */
         #endregion
 

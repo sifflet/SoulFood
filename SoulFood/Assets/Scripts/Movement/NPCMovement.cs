@@ -4,8 +4,8 @@ using System.Collections;
 public class NPCMovement : MonoBehaviour {
 
 	//Fields
-	public float maximumSeekVelocity = 15f, maximumRotationVelocity = 2f, 
-		maximumFleeVelocity = 10f, maximumAcceleration = 0.05f, maxinumRotationAcceleration = 0.01f;
+	public float maximumSeekVelocity = 15f, maximumRotationVelocity = 15f, 
+		maximumFleeVelocity = 10f, maximumAcceleration = 0.05f, maxinumRotationAcceleration = 1f;
 	public float currentVelocity = 0, currentRotationVelocity = 0, currentAcceleration = 0.05f;
 	Vector3 directionVector = new Vector3 (0, 0, 0);
 	Vector3 playerDistance;
@@ -274,7 +274,7 @@ public class NPCMovement : MonoBehaviour {
 		currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
 
 		//Create a goal velocity that is proportional to the distance to the target (interpolated from 0 to max)
-        float goalVelocity = maximumSeekVelocity * ((target - transform.position).magnitude / 15f);
+        float goalVelocity = maximumSeekVelocity * ((target - transform.position).magnitude / maximumSeekVelocity);
 		currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumSeekVelocity);
 
 		//Calculate the current acceleration based on the goal velocity and the current velocity
@@ -438,4 +438,10 @@ public class NPCMovement : MonoBehaviour {
 		}
 	}
 
+    public void Reset()
+    {
+        this.currentAcceleration = 0.05f;
+        this.currentRotationVelocity = 0.0f;
+        this.currentVelocity = 0.0f;
+    }
 }

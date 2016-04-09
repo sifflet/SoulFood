@@ -19,7 +19,7 @@ public class GuardDirectPursueState : GuardPursueState
         NPCState stateFromBase = base.Update();
         if(stateFromBase != this) return stateFromBase;
 
-        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) > GameManager.DIRECT_PURSUE_RANGE) return new GuardFlankPursueState(stateMachine);
+        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) > GuardStateMachine.DIRECT_PURSUE_RANGE) return new GuardFlankPursueState(stateMachine);
 
         NPCStateHelper.MoveTo(stateMachine.NPC, (stateMachine as GuardStateMachine).TargetNPC.Instance, 1f);
 

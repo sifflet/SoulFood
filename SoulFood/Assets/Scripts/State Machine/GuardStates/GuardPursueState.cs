@@ -16,6 +16,7 @@ public abstract class GuardPursueState : NPCState
         NPCMovementDriver thisNPCMovementDriver = this.stateMachine.NPC.MovementDriver;
         GuardDriver guardDriver = this.stateMachine.NPC as GuardDriver;
         this.otherGuard = FindOtherGuard();
+        this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
         if (guardDriver.IsLeader)
         {
@@ -35,8 +36,8 @@ public abstract class GuardPursueState : NPCState
 
     public override NPCState Update()
     {
-        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GameManager.ACTIVATE_LUNGE_DISTANCE &&
-            Vector3.Distance(stateMachine.NPC.Instance.transform.position, (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position) <= GameManager.ACTIVATE_LUNGE_DISTANCE &&
+        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GuardStateMachine.ACTIVATE_LUNGE_DISTANCE &&
+            Vector3.Distance(stateMachine.NPC.Instance.transform.position, (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position) <= GuardStateMachine.ACTIVATE_LUNGE_DISTANCE &&
             TargetInLungeCone())
         {
             return new GuardLungeState(stateMachine);
@@ -45,10 +46,10 @@ public abstract class GuardPursueState : NPCState
         if (stateMachine.NPC.VisibleNPCs.Count == 0) return new GuardSearchState(stateMachine);
 
         // if a collector passes close by
-        NPCDriver newTarget = GetCollectorInLungeRange();
+        NPCDriver newTarget = GetCollectorInChangeTargetRange();
         if (newTarget != null)
         {
-            pursueNewTargetTimer = GameManager.PURSUE_NEW_TARGET_TIME;
+            pursueNewTargetTimer = GuardStateMachine.PURSUE_NEW_TARGET_TIME;
             (stateMachine as GuardStateMachine).TargetNPC = newTarget;
         }
 
@@ -105,16 +106,16 @@ public abstract class GuardPursueState : NPCState
         Vector3 targetDir = (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position - stateMachine.NPC.Instance.transform.position;
         Vector3 forward = stateMachine.NPC.Instance.transform.forward;
 
-        return Vector3.Angle(targetDir, forward) < GameManager.LUNGE_CONE_ANGLE;
+        return Vector3.Angle(targetDir, forward) < GuardStateMachine.LUNGE_CONE_ANGLE;
     }
 
-    protected NPCDriver GetCollectorInLungeRange()
+    protected NPCDriver GetCollectorInChangeTargetRange()
     {
         foreach (NPCDriver npc in GameManager.Deathies)
         {
             if (npc == (stateMachine as GuardStateMachine).TargetNPC) continue;
             if ((npc as CollectorDriver).IsImmortal) continue;
-            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GameManager.LUNGE_COLLISION_RANGE)) return npc;
+            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE)) return npc;
         }
 
         return null;

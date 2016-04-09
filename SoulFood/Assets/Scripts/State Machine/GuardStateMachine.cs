@@ -5,6 +5,14 @@ public class GuardStateMachine : NPCStateMachine
 {
     public NPCDriver TargetNPC { get; set; }
 
+    public const float ACTIVATE_LUNGE_DISTANCE = 4.0f;
+    public const float DIRECT_PURSUE_RANGE = 5.0f;
+    public const float LUNGE_TIME = 0.25f;
+    public static float LUNGE_CONE_ANGLE = 30.0f;
+    public const float LUNGE_COLLISION_RANGE = 1f;
+    public const float PURSUE_NEW_TARGET_TIME = 5.0f;
+    public const float CHANGE_TARGET_RANGE = 8.0f;
+
     public override void Setup(NPCDriver npc)
     {
         base.Setup(npc);

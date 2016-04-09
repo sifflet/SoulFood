@@ -15,7 +15,9 @@ public class GuardLungeState : NPCState
     {
 		Debug.Log (this.stateMachine.NPC.name + ": Lunge entry");
 
-		lungeTimer = GameManager.LUNGE_TIME;
+        stateMachine.NPC.MovementDriver.enabled = false;
+        stateMachine.NPC.MovementDriver.NPCMovement.Reset();
+		lungeTimer = GuardStateMachine.LUNGE_TIME;
         lungeDirection = this.stateMachine.NPC.Instance.transform.forward;
     }
 
@@ -27,7 +29,7 @@ public class GuardLungeState : NPCState
         {
             NPCActions.Lunge(this.stateMachine.NPC, lungeDirection);
 
-            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance, GameManager.LUNGE_COLLISION_RANGE))
+            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
             {
                 ((stateMachine as GuardStateMachine).TargetNPC as CollectorDriver).IsImmortal = true;
             }
@@ -35,6 +37,7 @@ public class GuardLungeState : NPCState
         else
         {
             this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            stateMachine.NPC.MovementDriver.enabled = true;
             return new GuardSearchState(this.stateMachine);
         }
 
