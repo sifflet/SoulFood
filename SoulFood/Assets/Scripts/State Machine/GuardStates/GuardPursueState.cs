@@ -14,6 +14,7 @@ public abstract class GuardPursueState : NPCState
     public override void Entry()
     {
         NPCMovementDriver thisNPCMovementDriver = this.stateMachine.NPC.MovementDriver;
+        thisNPCMovementDriver.enabled = true; // quick fix
         GuardDriver guardDriver = this.stateMachine.NPC as GuardDriver;
         this.otherGuard = FindOtherGuard();
         this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -36,7 +37,10 @@ public abstract class GuardPursueState : NPCState
 
     public override NPCState Update()
     {
-        if (NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GuardStateMachine.ACTIVATE_LUNGE_DISTANCE &&
+        if ((stateMachine as GuardStateMachine).LungeCooldown > 0) (stateMachine as GuardStateMachine).LungeCooldown -= Time.deltaTime;
+
+        if ((stateMachine as GuardStateMachine).LungeCooldown <= 0 &&
+            NPCStateHelper.GetShortestPathDistance(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance) <= GuardStateMachine.ACTIVATE_LUNGE_DISTANCE &&
             Vector3.Distance(stateMachine.NPC.Instance.transform.position, (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position) <= GuardStateMachine.ACTIVATE_LUNGE_DISTANCE &&
             TargetInLungeCone())
         {

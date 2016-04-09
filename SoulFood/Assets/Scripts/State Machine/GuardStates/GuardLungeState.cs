@@ -15,8 +15,8 @@ public class GuardLungeState : NPCState
     {
 		Debug.Log (this.stateMachine.NPC.name + ": Lunge entry");
 
-        stateMachine.NPC.MovementDriver.enabled = false;
-        stateMachine.NPC.MovementDriver.NPCMovement.Reset();
+        this.stateMachine.NPC.MovementDriver.enabled = false;
+        this.stateMachine.NPC.MovementDriver.NPCMovement.Reset();
 		lungeTimer = GuardStateMachine.LUNGE_TIME;
         lungeDirection = this.stateMachine.NPC.Instance.transform.forward;
     }
@@ -29,18 +29,34 @@ public class GuardLungeState : NPCState
         {
             NPCActions.Lunge(this.stateMachine.NPC, lungeDirection);
 
-            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
+            NPCDriver caughtCollector = GetCollectorInLungeRange();
+            if (caughtCollector != null)
             {
-                ((stateMachine as GuardStateMachine).TargetNPC as CollectorDriver).IsImmortal = true;
+                (caughtCollector as CollectorDriver).IsImmortal = true;
+                lungeTimer = 0.0f;
             }
         }
         else
         {
             this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            stateMachine.NPC.MovementDriver.enabled = true;
+            this.stateMachine.NPC.MovementDriver.enabled = true;
+            (this.stateMachine as GuardStateMachine).LungeCooldown = GuardStateMachine.TIME_BETWEEN_LUNGES;
             return new GuardSearchState(this.stateMachine);
         }
 
         return this;
+    }
+
+    private NPCDriver GetCollectorInLungeRange()
+    {
+        foreach (NPCDriver npc in GameManager.Deathies)
+        {
+            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
+            {
+                return npc;
+            }
+        }
+
+        return null;
     }
 }

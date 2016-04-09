@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -260,11 +261,13 @@ public class GameManager : MonoBehaviour
     public static void SoulConsumed()
     {
         soulsConsumed++;
+        GameObject.Find("Canvas").GetComponent<Text>().text = "Souls collected: " + soulsConsumed;
     }
 
     public static void SoulEjected(int soulsEjected)//When players are hit, can remove more then 1
     {
         soulsConsumed -= soulsEjected;
+        GameObject.Find("Canvas").GetComponent<Text>().text = "Souls collected: " + soulsConsumed;
     }
 
     public static void loseLife()
