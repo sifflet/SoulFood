@@ -14,6 +14,7 @@ public abstract class GuardPursueState : NPCState
     public override void Entry()
     {
         NPCMovementDriver thisNPCMovementDriver = this.stateMachine.NPC.MovementDriver;
+        thisNPCMovementDriver.enabled = true; // quick fix
         GuardDriver guardDriver = this.stateMachine.NPC as GuardDriver;
         this.otherGuard = FindOtherGuard();
         this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
