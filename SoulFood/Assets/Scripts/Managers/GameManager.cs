@@ -67,9 +67,8 @@ public class GameManager : MonoBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        SetupNPCStateMachines();
-
         (Guards[0] as GuardDriver).IsLeader = true;
+        SetupNPCStateMachines();
         #endregion
     }
 	

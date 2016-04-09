@@ -27,7 +27,7 @@ public class GuardFlankPursueState : GuardPursueState
         }
         else
         {
-            stateMachine.NPC.MovementDriver.ChangePathToFlank(NPCStateHelper.FindClosestNode((stateMachine as GuardStateMachine).TargetNPC.Instance), otherGuard);
+            stateMachine.NPC.MovementDriver.ChangePathToFlank(NPCStateHelper.FindClosestNode((stateMachine as GuardStateMachine).TargetNPC.Instance), (stateMachine as GuardStateMachine).OtherGuard);
         }
         
         return this;
