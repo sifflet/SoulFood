@@ -12,6 +12,9 @@ public class GuardStateMachine : NPCStateMachine
     public const float LUNGE_COLLISION_RANGE = 1f;
     public const float PURSUE_NEW_TARGET_TIME = 5.0f;
     public const float CHANGE_TARGET_RANGE = 8.0f;
+    public const float TIME_BETWEEN_LUNGES = 3.0f;
+
+    public float LungeCooldown { get; set; }
 
     public override void Setup(NPCDriver npc)
     {

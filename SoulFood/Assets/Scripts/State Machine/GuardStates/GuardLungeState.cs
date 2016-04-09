@@ -15,8 +15,8 @@ public class GuardLungeState : NPCState
     {
 		Debug.Log (this.stateMachine.NPC.name + ": Lunge entry");
 
-        stateMachine.NPC.MovementDriver.enabled = false;
-        stateMachine.NPC.MovementDriver.NPCMovement.Reset();
+        this.stateMachine.NPC.MovementDriver.enabled = false;
+        this.stateMachine.NPC.MovementDriver.NPCMovement.Reset();
 		lungeTimer = GuardStateMachine.LUNGE_TIME;
         lungeDirection = this.stateMachine.NPC.Instance.transform.forward;
     }
@@ -37,7 +37,8 @@ public class GuardLungeState : NPCState
         else
         {
             this.stateMachine.NPC.GetComponent<Rigidbody>().velocity = Vector3.zero;
-            stateMachine.NPC.MovementDriver.enabled = true;
+            this.stateMachine.NPC.MovementDriver.enabled = true;
+            (this.stateMachine as GuardStateMachine).LungeCooldown = GuardStateMachine.TIME_BETWEEN_LUNGES;
             return new GuardSearchState(this.stateMachine);
         }
 
