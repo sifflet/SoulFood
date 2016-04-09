@@ -29,9 +29,11 @@ public class GuardLungeState : NPCState
         {
             NPCActions.Lunge(this.stateMachine.NPC, lungeDirection);
 
-            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, (stateMachine as GuardStateMachine).TargetNPC.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
+            NPCDriver caughtCollector = GetCollectorInLungeRange();
+            if (caughtCollector != null)
             {
-                ((stateMachine as GuardStateMachine).TargetNPC as CollectorDriver).IsImmortal = true;
+                (caughtCollector as CollectorDriver).IsImmortal = true;
+                lungeTimer = 0.0f;
             }
         }
         else
@@ -43,5 +45,18 @@ public class GuardLungeState : NPCState
         }
 
         return this;
+    }
+
+    private NPCDriver GetCollectorInLungeRange()
+    {
+        foreach (NPCDriver npc in GameManager.Deathies)
+        {
+            if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
+            {
+                return npc;
+            }
+        }
+
+        return null;
     }
 }
