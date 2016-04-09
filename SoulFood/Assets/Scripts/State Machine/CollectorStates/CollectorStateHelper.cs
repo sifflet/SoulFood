@@ -5,6 +5,15 @@ using System.Collections.Generic;
 
 public static class CollectorStateHelper {
 
+	public static void GetNewRandomPath(NPCMovementDriver movementDriver) 
+	{
+		if (movementDriver.AttainedFinalNode)
+		{
+			Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
+			movementDriver.ChangePath(newEndNode);
+		}
+	}
+
 	public static List<NPCDriver> FindGuardsInSight(NPCStateMachine npcStateMachine)
 	{
 		List<NPCDriver> result = new List<NPCDriver>();

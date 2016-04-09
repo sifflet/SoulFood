@@ -19,13 +19,15 @@ public class GameManager : MonoBehaviour
 
 	/* Collector variables */
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
+	public const float TIME_SPENT_SINGLE_TREE_SEARCHING = 8.0f;
+	public const float TIME_SPENT_MULTIPLE_TREE_SEARCHING = 6.0f;
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
 	public const float SOUL_COLLECTIBLE_RANGE = 2f;
 	public enum FleeRangeType { Default, Emergency };
     public const float IMMORTALITY_TIME = 3.0f;
 
-    /* Guards variables */
+    /* Guard variables */
     public const float ACTIVATE_LUNGE_DISTANCE = 3.0f;
     public const float DIRECT_PURSUE_RANGE = 5.0f;
     public const float LUNGE_TIME = 0.25f;

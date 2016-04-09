@@ -28,6 +28,11 @@ public class Button : MonoBehaviour {
 			return false;
 	}
 
+	public SoulTree GetSoulTreeForCurrentButton() 
+	{
+		return this.transform.root.GetComponent<SoulTree>();
+	}
+
 	void OnTriggerStay(Collider col)
 	{
 		NPCDriver npcDriver = col.GetComponent<NPCDriver>();

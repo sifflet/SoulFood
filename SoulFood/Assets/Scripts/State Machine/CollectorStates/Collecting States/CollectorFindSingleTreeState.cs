@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 
+	private float singleTreeSearchingTimer = GameManager.TIME_SPENT_SINGLE_TREE_SEARCHING;
 	private NPCMovementDriver movementDriver;
 	
 	public CollectorFindSingleTreeState(NPCStateMachine stateMachine)
@@ -27,6 +28,7 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 			return stateFromBase;
 		}
 
+		singleTreeSearchingTimer -= Time.deltaTime;
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		
 		GameObject buttonTargetForClosestSingleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 1); 
@@ -44,14 +46,13 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		}
 		else 
 		{
-			// If we're at the end of our path having found no souls, find a new random one
-			if (movementDriver.AttainedFinalNode)
-			{
-				Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
-				movementDriver.ChangePath(newEndNode);
+			if (singleTreeSearchingTimer > 0) {
+				// If we're at the end of our path having found no souls, find a new random one
+				CollectorStateHelper.GetNewRandomPath(movementDriver);
 			}
-			// TODO: Add timer to stop wandering and
-			// return FindMultiplayerTreeState
+			else {
+				return new CollectorFindMultipleTreeState(this.stateMachine);
+			}
 		}
 
 		return this;

@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CollectorCallForHelpState : CollectorCollectingSuperState {
-	
+
+	private int numOfHelpCallsNeeded;
 	private NPCMovementDriver movementDriver;
 	
 	public CollectorCallForHelpState(NPCStateMachine stateMachine)

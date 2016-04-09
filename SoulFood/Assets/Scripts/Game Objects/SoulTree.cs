@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class SoulTree : MonoBehaviour {
 
-	private int triggeredCount;
+	private int triggeredCount;		// How many buttons are being stepped on by players
 	private bool isFull = true;
 	private int treeType;
 	private List<GameObject> treeButtons = new List<GameObject>();
