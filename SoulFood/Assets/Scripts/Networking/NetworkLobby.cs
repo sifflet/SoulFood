@@ -18,30 +18,28 @@ public class NetworkLobby : NetworkLobbyManager {
         GameObject playerPrefab = null;
         NPCDriver driver = null;
 
-        if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Guard") //Currently NPC
+        if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Guard")
         {
             playerPrefab = (GameObject)Instantiate(Guard);
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
             playerPrefab.AddComponent<GuardDriver>();
             driver = playerPrefab.GetComponent<GuardDriver>();
             driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform);
-            playerPrefab.transform.position = spawns.transform.FindChild("Guard0").position;
+            playerPrefab.transform.position = spawns.transform.Find("Guard0").position;
             playerPrefab.name = "Guard " + guardCounter;
             guardCounter++;
         }
             
-        if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Collector") //Currently NPC
+        if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Collector")
         {
             playerPrefab = (GameObject)Instantiate(Collector);
-            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
             playerPrefab.AddComponent<CollectorDriver>();
             driver = playerPrefab.GetComponent<CollectorDriver>();
-            driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform);
-            playerPrefab.transform.position = spawns.transform.FindChild("Collect" + counter).position;
+            driver.Setup(playerPrefab.transform.Find("Collector").gameObject, playerPrefab.transform.Find("CameraRig").gameObject, playerPrefab.transform);
+            playerPrefab.transform.position = spawns.transform.Find("Collect" + counter).position;
             playerPrefab.name = "Collector " + collectorCounter;
             collectorCounter++;
         }
-
         counter++;
         return playerPrefab;
     }
