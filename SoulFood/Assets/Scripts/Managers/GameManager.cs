@@ -17,16 +17,6 @@ public class GameManager : MonoBehaviour
 	/* NPC variables */
 	public const float COLLISION_RANGE = 1.25f;
 
-	/* Collector variables */
-	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
-	public const float TIME_SPENT_SINGLE_TREE_SEARCHING = 8.0f;
-	public const float TIME_SPENT_MULTIPLE_TREE_SEARCHING = 6.0f;
-	public const float FLEE_RANGE = 20.0f;
-	public const float EMERGENCY_FLEE_RANGE = 10.0f;
-	public const float SOUL_COLLECTIBLE_RANGE = 2f;
-	public enum FleeRangeType { Default, Emergency };
-    public const float IMMORTALITY_TIME = 3.0f;
-
     private static int livesRemaining;
     private static int soulsConsumed;
     private static int soulLimit;
@@ -35,7 +25,9 @@ public class GameManager : MonoBehaviour
 
     private int deathyNum = 3;
     private const int GUARDS_NUM = 2;
+	private static List<GameObject> collectors = new List<GameObject>();
 
+	public static List<GameObject> Collectors { get { return collectors; } }
     public static List<Node> AllNodes { get { return nodes; } }
     public static List<NPCDriver> Deathies { get; set; }
     public static List<NPCDriver> Guards { get; set; }
@@ -114,6 +106,7 @@ public class GameManager : MonoBehaviour
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             driver.SetSoulPrefab(soulPrefab);
             Deathies.Add(driver);
+			collectors.Add(npcInstance);
         }
 
         for (int i = Guards.Count; i < GUARDS_NUM; i++)

@@ -6,6 +6,8 @@ public class Button : MonoBehaviour {
 	float timer = 2f; //Amount of time needed on the pad
 	bool isTriggered = false;
 
+	public bool IsTriggered { get { return this.isTriggered; } }
+
 	// Update is called once per frame
 	void FixedUpdate () {
 		if (isTriggered) {

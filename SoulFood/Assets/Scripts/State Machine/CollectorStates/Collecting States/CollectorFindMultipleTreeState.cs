@@ -4,8 +4,10 @@ using System.Collections.Generic;
 
 public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 
-	private float multipleTreeSearchingTimer = GameManager.TIME_SPENT_MULTIPLE_TREE_SEARCHING;
+	private float multipleTreeSearchingTimer = CollectorStateMachine.TIME_SPENT_MULTIPLE_TREE_SEARCHING;
 	private NPCMovementDriver movementDriver;
+	private GameObject buttonTargetForClosestDoubleTree;
+	private GameObject buttonTargetForClosestTripleTree;
 
 	public CollectorFindMultipleTreeState(NPCStateMachine stateMachine)
 		: base(stateMachine)
@@ -16,6 +18,8 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 	{
 		Debug.Log (this.stateMachine.NPC.name + ": Find Multiple Tree State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
+		buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
+		buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3); 
 
 	}
 	
@@ -32,32 +36,34 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 		multipleTreeSearchingTimer -= Time.deltaTime;
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		
-		GameObject buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
-		GameObject buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3); 
-		
-		if (buttonTargetForClosestDoubleTree) 
+		if (buttonTargetForClosestDoubleTree) 	// See if a double tree is found first
 		{
 			
-			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestDoubleTree, GameManager.COLLISION_RANGE)) {
-				
-				return new CollectorCallForHelpState(this.stateMachine);
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, buttonTargetForClosestDoubleTree, CollectorStateMachine.TREE_COLLISION_RANGE)) {
+				SoulTree targetTree = buttonTargetForClosestDoubleTree.GetComponent<Button>().GetSoulTreeForCurrentButton(); 
+				return new CollectorCallForHelpState(this.stateMachine, targetTree);
 			}
 			
 			NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestDoubleTree, 5f);
 			
 		}
-		else if (buttonTargetForClosestTripleTree) 
+		else if (buttonTargetForClosestTripleTree) 	// If no double tree, see if a triple tree is found
 		{
-
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, buttonTargetForClosestTripleTree, CollectorStateMachine.TREE_COLLISION_RANGE)) {
+				SoulTree targetTree = buttonTargetForClosestDoubleTree.GetComponent<Button>().GetSoulTreeForCurrentButton(); 
+				return new CollectorCallForHelpState(this.stateMachine, targetTree);
+			}
+			
+			NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestDoubleTree, 5f);
 		}
-		else 
+		else 	// No double or triple trees were found
 		{
 			if (multipleTreeSearchingTimer > 0) {
 				// If we're at the end of our path having found no souls, find a new random one
 				CollectorStateHelper.GetNewRandomPath(movementDriver); 
 			}
 			else {
-				//return new CollectorFindMultipleTreeState(this.stateMachine);
+				return new CollectorSearchSoulsState(this.stateMachine);
 			}
 		}
 		

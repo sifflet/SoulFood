@@ -4,8 +4,9 @@ using System.Collections.Generic;
 
 public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 
-	private float singleTreeSearchingTimer = GameManager.TIME_SPENT_SINGLE_TREE_SEARCHING;
+	private float singleTreeSearchingTimer = CollectorStateMachine.TIME_SPENT_SINGLE_TREE_SEARCHING;
 	private NPCMovementDriver movementDriver;
+	private GameObject buttonTargetForClosestSingleTree;
 	
 	public CollectorFindSingleTreeState(NPCStateMachine stateMachine)
 		: base(stateMachine)
@@ -16,6 +17,7 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 	{
 		Debug.Log (this.stateMachine.NPC.name + ": Find Single Tree State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
+		buttonTargetForClosestSingleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 1); 
 	}
 	
 	public override NPCState Update()
@@ -31,12 +33,12 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		singleTreeSearchingTimer -= Time.deltaTime;
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		
-		GameObject buttonTargetForClosestSingleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 1); 
+
 
 		if (buttonTargetForClosestSingleTree) 
 		{
 			
-			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree, GameManager.COLLISION_RANGE)) {
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree, CollectorStateMachine.TREE_COLLISION_RANGE)) {
 
 				return this;
 			}

@@ -3,12 +3,25 @@ using System.Collections;
 
 public class CollectorStateMachine : NPCStateMachine
 {
-	private float fleeRange = GameManager.FLEE_RANGE;
-    private float emergencyFleeRange = GameManager.EMERGENCY_FLEE_RANGE;
+	/* Collector variables */
+	public const float SOUL_COLLISION_RANGE = 1f;
+	public const float TREE_COLLISION_RANGE = 0.25f;
+	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
+	public const float TIME_SPENT_SINGLE_TREE_SEARCHING = 15.0f;
+	public const float TIME_SPENT_MULTIPLE_TREE_SEARCHING = 15.0f;
+	public const float FLEE_RANGE = 20.0f;
+	public const float EMERGENCY_FLEE_RANGE = 10.0f;
+	public const float SOUL_COLLECTIBLE_RANGE_FOR_STATE_TRIGGER = 2f;
+	public enum FleeRangeType { Default, Emergency };
+	public const float IMMORTALITY_TIME = 3.0f;
 
-    public float FleeRange { get { return this.fleeRange; } }
-    public float EmergencyFleeRange { get { return this.emergencyFleeRange; } }
-
+	// Variables for handling help calls
+	private bool hasReceivedHelpCall = false;
+	private SoulTree targetTree;
+	
+	public bool HasReceivedHelpCall { get { return this.hasReceivedHelpCall; } }
+	public SoulTree TargetTree { get { return this.targetTree; } }
+	
     public override void Setup(NPCDriver npc)
     {
         base.Setup(npc);
@@ -19,4 +32,10 @@ public class CollectorStateMachine : NPCStateMachine
     {
         this.currentState = new CollectorSearchSoulsState(this);
     }
+
+	public void ReceiveTreeHelpCall(SoulTree targetTree) 
+	{
+		this.hasReceivedHelpCall = true;
+		this.targetTree = targetTree;
+	}
 }

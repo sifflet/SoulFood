@@ -20,7 +20,7 @@ public class CollectorDriver : NPCDriver
             if (value)
             {
                 this.isImmortal = true;
-                this.immortalityTimer = GameManager.IMMORTALITY_TIME;
+                this.immortalityTimer = CollectorStateMachine.IMMORTALITY_TIME;
 
                 if (this.controlledByAI)
                 {
@@ -80,7 +80,8 @@ public class CollectorDriver : NPCDriver
                 }
             }
         }
-    }
+    }
+
 
     /*
      *  Acquire soul prefab from GameManager since cannot set the soul prefab through the inspector on this script

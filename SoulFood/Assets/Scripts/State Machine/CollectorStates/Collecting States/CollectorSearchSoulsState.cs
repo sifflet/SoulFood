@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CollectorSearchSoulsState : CollectorCollectingSuperState
 {
-	private float soulSearchingTimer = GameManager.TIME_SPENT_SOUL_SEARCHING;
+	private float soulSearchingTimer = CollectorStateMachine.TIME_SPENT_SOUL_SEARCHING;
 	private List<GameObject> visibleSouls = new List<GameObject>();
 
 	private NPCMovementDriver movementDriver;
@@ -39,7 +39,7 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 		if (visibleSouls.Count > 0) { 		// If there are visible souls
 			GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
 
-			if (!NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, closestSoul, GameManager.COLLISION_RANGE))
+			if (!NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, closestSoul, CollectorStateMachine.SOUL_COLLISION_RANGE))
 			{
 				NPCStateHelper.MoveTo(this.stateMachine.NPC, closestSoul, 1f);
 			}			

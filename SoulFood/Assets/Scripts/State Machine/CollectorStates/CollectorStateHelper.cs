@@ -38,7 +38,7 @@ public static class CollectorStateHelper {
 
 		foreach (NPCDriver guard in guardsInSight)
 		{
-			if (NPCStateHelper.GetShortestPathDistance(thisNPC, guard.Instance) <= (npcStateMachine as CollectorStateMachine).FleeRange)
+			if (NPCStateHelper.GetShortestPathDistance(thisNPC, guard.Instance) <= CollectorStateMachine.FLEE_RANGE)
 			{
 				result.Add(guard);
 			}
@@ -48,16 +48,16 @@ public static class CollectorStateHelper {
 	}
 
 
-	public static bool GuardsInFleeRange(NPCStateMachine npcStateMachine, GameManager.FleeRangeType range) // Range should be "default" for default flee range or "emergency" for emergency flee range
+	public static bool GuardsInFleeRange(NPCStateMachine npcStateMachine, CollectorStateMachine.FleeRangeType range) // Range should be "default" for default flee range or "emergency" for emergency flee range
 	{
         GameObject thisNPC = npcStateMachine.NPC.Instance;
-		float fleeRange = (npcStateMachine as CollectorStateMachine).FleeRange; // Default flee range
+		float fleeRange = CollectorStateMachine.FLEE_RANGE; // Default flee range
 		List<NPCDriver> guardsInSight = FindGuardsInSight(npcStateMachine);
 
 		// Get emergency range based on inputted string
-		if (range == GameManager.FleeRangeType.Emergency)
+		if (range == CollectorStateMachine.FleeRangeType.Emergency)
 		{
-			fleeRange = (npcStateMachine as CollectorStateMachine).EmergencyFleeRange;
+			fleeRange = CollectorStateMachine.EMERGENCY_FLEE_RANGE;
 		}
 
 
@@ -75,7 +75,7 @@ public static class CollectorStateHelper {
 	public static bool SoulsInCollectibleRange(NPCStateMachine npcStateMachine)
 	{
 		GameObject thisNPC = npcStateMachine.NPC.Instance;
-		float collectibleRange = GameManager.SOUL_COLLECTIBLE_RANGE;
+		float collectibleRange = CollectorStateMachine.SOUL_COLLECTIBLE_RANGE_FOR_STATE_TRIGGER;
 		List<GameObject> soulsInSight = FindVisibleSouls(npcStateMachine.NPC);
 
 		Vector3 npcGroundLevelPos = thisNPC.transform.position;
@@ -168,6 +168,7 @@ public static class CollectorStateHelper {
 		if (filteredTrees.Count > 1)
 		{
 			GameObject closestTreeObj = NPCStateHelper.FindClosestGameObjectByPath(npc.gameObject, filteredTreeObjects);
+			// Get closest button
 			GameObject firstButtonOfTree = closestTreeObj.GetComponent<SoulTree>().TreeButtons[0];
 			if (firstButtonOfTree)
 				return firstButtonOfTree;

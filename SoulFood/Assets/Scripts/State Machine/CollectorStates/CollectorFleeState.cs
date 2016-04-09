@@ -15,7 +15,7 @@ public class CollectorFleeState : NPCState
     {
 		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
 		List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this.stateMachine);
-        this.stateMachine.NPC.MovementDriver.ChangePathToFlee((this.stateMachine as CollectorStateMachine).FleeRange, guardsInFleeRange);
+		this.stateMachine.NPC.MovementDriver.ChangePathToFlee(CollectorStateMachine.FLEE_RANGE, guardsInFleeRange);
     }
 
     public override NPCState Update()
@@ -25,11 +25,11 @@ public class CollectorFleeState : NPCState
 
         if (guardsInSight.Count == 0) return new CollectorSearchSoulsState(this.stateMachine);
         if (guardsInFleeRange.Count == 0) return new CollectorSearchSoulsState(this.stateMachine);
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, GameManager.FleeRangeType.Emergency)) ; // return emergency flee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Emergency)) ; // return emergency flee state
 
         if (this.stateMachine.NPC.MovementDriver.AttainedFinalNode)
         {
-            this.stateMachine.NPC.MovementDriver.ChangePathToFlee((this.stateMachine as CollectorStateMachine).FleeRange, guardsInFleeRange);
+            this.stateMachine.NPC.MovementDriver.ChangePathToFlee(CollectorStateMachine.FLEE_RANGE, guardsInFleeRange);
         }
 
         return this;

@@ -17,12 +17,13 @@ public abstract class NPCDriver : NetworkBehaviour
     protected List<NPCDriver> visibleNPCs;
 
     protected NPCStateMachine stateMachine;
-
+	
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
     public NPCMovementDriver MovementDriver { get { return this.movementDriver; } }
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
     public NPCStateMachine StateMachine { get { return this.stateMachine; } }
+	public bool ControlledByAI { get { return this.controlledByAI; } }
 
     public override void OnStartServer()
     {

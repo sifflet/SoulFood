@@ -33,7 +33,7 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 		if (visibleSouls.Count > 0) {
 			GameObject closestSoul = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.gameObject, visibleSouls);
 
-			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, closestSoul, GameManager.COLLISION_RANGE))
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, closestSoul, CollectorStateMachine.SOUL_COLLISION_RANGE))
 			{
 			    NPCActions.ConsumeSoul((CollectorDriver)this.stateMachine.NPC, closestSoul);
 			}
