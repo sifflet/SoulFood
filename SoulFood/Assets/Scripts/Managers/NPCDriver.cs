@@ -29,7 +29,7 @@ public abstract class NPCDriver : NetworkBehaviour
     {
         cameraDriver.SetEnabled(true);
     }
-
+    
     public Collider[] CollisionArray
     {
         get
@@ -39,7 +39,7 @@ public abstract class NPCDriver : NetworkBehaviour
             return Physics.OverlapSphere(location, GameManager.COLLISION_RANGE);
         }
     }
-
+    
     public virtual void Update()
     {
         FindVisibleNPCs();

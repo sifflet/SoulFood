@@ -100,7 +100,14 @@ public class NPCMovementDriver : MonoBehaviour
     {
         this.startNode = FindClosestNode();
         this.pathList = Graph.InverseAStar(startNode, terminateDistance, threats);
-        this.endNode = pathList[pathList.Count - 1];
+        if (pathList.Count > 0)
+        {
+            this.endNode = pathList[pathList.Count - 1];
+        }
+        else
+        {
+            this.endNode = startNode;
+        }
         this.AttainedFinalNode = false;
         this.pathCounter = 0;
     }
