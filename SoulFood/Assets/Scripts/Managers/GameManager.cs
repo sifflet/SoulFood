@@ -44,6 +44,7 @@ public class GameManager : NetworkBehaviour
 
 	void Start ()
     {
+          
         InitializeNodes();
         InitializeGraph();
         SpawnTrees();
@@ -207,20 +208,22 @@ public class GameManager : NetworkBehaviour
                 break;
         }
         MixArray(treeSizes);
+        GameObject tree;
         for(int i = 0; i < treeLocations.Count(); i++)
         {
             switch (treeSizes[i])
             {
                 case 1:
-                    Instantiate(treeOneButton, treeLocations[i], Quaternion.identity);
+                    tree = (GameObject) Instantiate(treeOneButton, treeLocations[i], Quaternion.identity);
                     break;
                 case 2:
-                    Instantiate(treeTwoButton, treeLocations[i], Quaternion.identity);
+                    tree = (GameObject) Instantiate(treeTwoButton, treeLocations[i], Quaternion.identity);
                     break;
                 default:
-                    Instantiate(treeThreeButton, treeLocations[i], Quaternion.identity);
+                    tree = (GameObject) Instantiate(treeThreeButton, treeLocations[i], Quaternion.identity);
                     break;
             }
+            NetworkServer.Spawn(tree);
         }
     }
 
