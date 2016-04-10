@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class KeyboardInputs : MonoBehaviour
+public class KeyboardInputs : NetworkBehaviour
 {
     public static float maximumSpeed = 5f;
     public static float minimumSpeed = 3.0f;
@@ -19,6 +20,11 @@ public class KeyboardInputs : MonoBehaviour
 
 	void Update ()
     {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
         HandleInputs();
 	}
 
