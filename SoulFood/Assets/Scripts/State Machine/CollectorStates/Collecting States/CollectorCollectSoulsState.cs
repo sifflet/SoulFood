@@ -35,7 +35,7 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 
 			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, closestSoul, CollectorStateMachine.SOUL_COLLISION_RANGE))
 			{
-			    NPCActions.ConsumeSoul((CollectorDriver)this.stateMachine.NPC, closestSoul);
+			    NPCActions.CmdConsumeSoul((CollectorDriver)this.stateMachine.NPC, closestSoul);
 			}
 			else 
 			{

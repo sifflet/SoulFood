@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
 public static class NPCActions
 {
-    public static void ConsumeSoul(CollectorDriver collector)
+	[Command]
+    public static void CmdConsumeSoul(CollectorDriver collector)
     {
 		Soul closestSoul = null;
 		Vector3 collectorPos = collector.Instance.transform.position;
@@ -20,11 +22,12 @@ public static class NPCActions
 
         if (closestSoul)
 		{
-            ConsumeSoul(collector, closestSoul.gameObject);
+            CmdConsumeSoul(collector, closestSoul.gameObject);
         }
     }
 
-	public static void ConsumeSoul(CollectorDriver collector, GameObject soul)
+	[Command]
+	public static void CmdConsumeSoul(CollectorDriver collector, GameObject soul)
 	{
 		Vector3 collectorPos = collector.Instance.transform.position;
 			
@@ -33,15 +36,17 @@ public static class NPCActions
 		GameManager.SoulConsumed();
     }
 
-    public static void EjectSoul(CollectorDriver collector, int numberOfSoulsEjected)
+	[Command]
+    public static void CmdEjectSoul(CollectorDriver collector, int numberOfSoulsEjected)
     {
         collector.DropSoul(numberOfSoulsEjected);
         GameManager.SoulEjected(numberOfSoulsEjected);
     }
 
 	// Should be used through the GuardLungeState only, as it implements a required timer
-	public static void Lunge(NPCDriver guard, Vector3 direction)
+	[Command]
+	public static void CmdLunge(NPCDriver guard, Vector3 direction)
 	{
 		guard.Instance.GetComponent<Rigidbody>().AddForce(direction * 100f * Time.deltaTime, ForceMode.Impulse);
-	}
+    }
 }

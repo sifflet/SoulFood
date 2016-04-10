@@ -27,13 +27,14 @@ public class GuardLungeState : NPCState
 
         if (lungeTimer > 0)
         {
-            NPCActions.Lunge(this.stateMachine.NPC, lungeDirection);
+            NPCActions.CmdLunge(this.stateMachine.NPC, lungeDirection);
 
             NPCDriver caughtCollector = GetCollectorInLungeRange();
             if (caughtCollector != null)
             {
                 (caughtCollector as CollectorDriver).IsImmortal = true;
                 lungeTimer = 0.0f;
+                GameManager.loseLife();
             }
         }
         else

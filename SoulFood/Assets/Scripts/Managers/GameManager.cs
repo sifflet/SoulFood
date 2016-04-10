@@ -3,8 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Networking;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public GameObject deathyPrefab;
     public GameObject guardPrefab;
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour
 	/* NPC variables */
 	public const float COLLISION_RANGE = 1.25f;
 
+    private static float gameTimer = 5.0f * 60.0f; // [minutes] * 60 seconds/minute. Only modify minutes.
     private static int livesRemaining;
     private static int soulsConsumed;
     private static int soulLimit;
@@ -67,10 +69,11 @@ public class GameManager : MonoBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        SetupNPCStateMachines();
-
         (Guards[0] as GuardDriver).IsLeader = true;
+        SetupNPCStateMachines();
         #endregion
+
+        HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
     }
 	
 	void Update ()
@@ -79,6 +82,19 @@ public class GameManager : MonoBehaviour
             UpdateNPCs();
         else
             HandleGameConclusion();
+
+        gameTimer -= Time.deltaTime;
+        HeadsUpDisplay.UpdateHUDGameTimer(gameTimer);
+
+        // TO TEST GAME FLOW
+        if (Input.GetKeyUp(KeyCode.Alpha1)) {
+			livesRemaining = 1;
+		}
+		if(Input.GetKeyUp(KeyCode.Alpha2)) {
+			soulsConsumed = 18;
+			SoulConsumed();
+			soulLimit = 20;
+		}
 	}
 
     private void UpdateNPCs()
@@ -247,7 +263,7 @@ public class GameManager : MonoBehaviour
 
     private bool GameState()
     {
-        if (soulsConsumed >= soulLimit || livesRemaining <= 0)
+        if (soulsConsumed >= soulLimit || livesRemaining <= 0 || gameTimerEnded())
             return false;
         else
             return true;
@@ -256,22 +272,29 @@ public class GameManager : MonoBehaviour
     private static void HandleGameConclusion()
     {
         //Fancy display here
+		Application.LoadLevel("GameOver");
     }
 
     public static void SoulConsumed()
     {
-        soulsConsumed++;
-        GameObject.Find("Canvas").GetComponent<Text>().text = "Souls collected: " + soulsConsumed;
+        ++soulsConsumed;
+        HeadsUpDisplay.UpdateHUDSoulsCollected(soulsConsumed, soulLimit);
     }
 
-    public static void SoulEjected(int soulsEjected)//When players are hit, can remove more then 1
+    public static void SoulEjected(int soulsEjected) //When players are hit, can remove more then 1
     {
         soulsConsumed -= soulsEjected;
-        GameObject.Find("Canvas").GetComponent<Text>().text = "Souls collected: " + soulsConsumed;
+        HeadsUpDisplay.UpdateHUDSoulsCollected(soulsConsumed, soulLimit);
     }
 
     public static void loseLife()
     {
-        livesRemaining--;
+        --livesRemaining;
+        HeadsUpDisplay.UpdateHUDCollectorRemainingLives(livesRemaining);
+    }
+
+    public bool gameTimerEnded()
+    {
+        return gameTimer <= 0.0f;
     }
 }

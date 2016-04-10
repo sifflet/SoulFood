@@ -17,12 +17,12 @@ public class CollectorKeyboardInputs : KeyboardInputs
     {
         if (Input.GetKeyDown(ejectSoulKey))
         {
-            NPCActions.EjectSoul(this.npc as CollectorDriver, 1);
+            NPCActions.CmdEjectSoul(this.npc as CollectorDriver, 1);
         }
         
         if (Input.GetKeyDown(consumeSoulKey))
         {
-            NPCActions.ConsumeSoul(this.npc as CollectorDriver);
+            NPCActions.CmdConsumeSoul(this.npc as CollectorDriver);
         }
     }   
 }
