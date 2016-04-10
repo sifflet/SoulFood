@@ -26,19 +26,17 @@ public class GameManager : NetworkBehaviour
 
     private static List<Node> nodes;
 
-    private int deathyNum = 4;
-    private const int GUARDS_NUM = 2;
-	private static List<GameObject> collectors = new List<GameObject>();
+    private int collectorNum = 4;
+    private const int GUARDS_NUM = 0;
 
-	public static List<GameObject> Collectors { get { return collectors; } }
     public static List<Node> AllNodes { get { return nodes; } }
-    public static List<NPCDriver> Deathies { get; set; }
+    public static List<NPCDriver> Collectors { get; set; }
     public static List<NPCDriver> Guards { get; set; }
     public static List<NPCDriver> AllNPCs
     {
         get
         {
-            List<NPCDriver> allNPCs = new List<NPCDriver>(Deathies);
+            List<NPCDriver> allNPCs = new List<NPCDriver>(Collectors);
             allNPCs.AddRange(Guards);
             return allNPCs;
         }
@@ -51,7 +49,7 @@ public class GameManager : NetworkBehaviour
         SpawnTrees();
         SetGameLimits();
 
-        Deathies = new List<NPCDriver>();
+        Collectors = new List<NPCDriver>();
         Guards = new List<NPCDriver>();
 
         #region without networking
@@ -69,7 +67,7 @@ public class GameManager : NetworkBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        (Guards[0] as GuardDriver).IsLeader = true;
+        //(Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
 
@@ -109,7 +107,7 @@ public class GameManager : NetworkBehaviour
 
     private void SpawnAllNpcs()
     {
-        for (int i = Deathies.Count; i < deathyNum; i++)
+        for (int i = Collectors.Count; i < collectorNum; i++)
         {
             Transform spawnPoint = GameObject.Find("Collect" + (i)).transform;
             Vector3 spawnPosition = spawnPoint.position;
@@ -122,8 +120,7 @@ public class GameManager : NetworkBehaviour
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             driver.SetSoulPrefab(soulPrefab);
-            Deathies.Add(driver);
-			collectors.Add(npcInstance);
+            Collectors.Add(driver);
         }
 
         for (int i = Guards.Count; i < GUARDS_NUM; i++)
@@ -149,7 +146,7 @@ public class GameManager : NetworkBehaviour
             if (obj.name.Contains("Collector"))
             {
                 NPCDriver driver = obj.GetComponent<CollectorDriver>();
-                Deathies.Add(driver);
+                Collectors.Add(driver);
                 AllNPCs.Add(driver);
                 driver.Sacrebleu();
             }
@@ -194,7 +191,7 @@ public class GameManager : NetworkBehaviour
         Vector3[] treeLocations = { new Vector3(-25f, 2f, -23.35f), new Vector3(-32f, 2f, -0.18f),  new Vector3(20f, 2f, -28.2f),   new Vector3(7f, 2f, -12.1f),
                                     new Vector3(29f, 2f, 12.3f),    new Vector3(-19.5f, 2f, 21.8f), new Vector3(-13f, 2f, 37.4f),   new Vector3(30f, 2f, 37.4f)};
         int[] treeSizes;
-        switch (deathyNum)
+        switch (collectorNum)
         {
             case 4:
                 treeSizes = new int[] { 1, 1, 2, 2, 2, 3, 3, 3 };
@@ -240,7 +237,7 @@ public class GameManager : NetworkBehaviour
 
     private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I believe the souls ammount should adjust
     {
-        switch (deathyNum)
+        switch (collectorNum)
         {
             case 4:
                 livesRemaining = 3;

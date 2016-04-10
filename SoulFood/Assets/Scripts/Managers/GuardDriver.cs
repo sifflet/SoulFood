@@ -48,7 +48,7 @@ public class GuardDriver : NPCDriver
     {
         this.visibleNPCs.Clear();
 
-        List<NPCDriver> allNPCs = new List<NPCDriver>(GameManager.Deathies);
+        List<NPCDriver> allNPCs = new List<NPCDriver>(GameManager.Collectors);
         allNPCs.AddRange(GameManager.Guards);
 
         foreach (NPCDriver npc in allNPCs)
