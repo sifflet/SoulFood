@@ -7,10 +7,10 @@ public class CollectorStateMachine : NPCStateMachine
 	/* Collector variables */
 	public const float SOUL_COLLISION_RANGE = 1f;
 	public const float TREE_MOVEMENT_COLLISION_RANGE = 0.25f; // Used for NPC to move onto the button
-	public const float TREE_COLLISION_RANGE = 1f;			  // Used for NPC to inform caller of tree help call they have arrived at the tree
+	public const float TREE_COLLISION_RANGE = 2f;			  // Used for NPC to inform caller of tree help call they have arrived at the tree
 	public const float TIME_SPENT_SOUL_SEARCHING = 10.0f;
-	public const float TIME_SPENT_SINGLE_TREE_SEARCHING = 1.0f;
-	public const float TIME_SPENT_MULTIPLE_TREE_SEARCHING = 120.0f;
+	public const float TIME_SPENT_SINGLE_TREE_SEARCHING = 15.0f;
+	public const float TIME_SPENT_MULTIPLE_TREE_SEARCHING = 15.0f;
 	public const float TIME_SPENT_WAITING_FOR_TREE_HELP = 15.0f;
 	public const float FLEE_RANGE = 20.0f;
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
