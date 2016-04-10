@@ -6,33 +6,8 @@ public class CollectorDriver : NPCDriver
 {
     private const float MAX_SPEED = 15f;
     private int soulsStored = 0;
-    private bool isImmortal = false;
-    private float immortalityTimer = 0f;
 
     public int SoulsStored { get { return this.soulsStored; } }
-
-    public bool IsImmortal
-    {
-        get { return this.isImmortal; }
-
-        set
-        {
-            if (value)
-            {
-                this.isImmortal = true;
-                this.immortalityTimer = CollectorStateMachine.IMMORTALITY_TIME;
-
-                if (this.controlledByAI)
-                {
-                    SetAIImmortalScripts();
-                }
-                else
-                {
-                    this.keyboardInputs.enabled = false;
-                }
-            }
-        }
-    }
 
     public GameObject soulPrefab;
 
@@ -61,25 +36,6 @@ public class CollectorDriver : NPCDriver
     public override void Update()
     {
         base.Update();
-
-        if (isImmortal)
-        {
-            immortalityTimer -= Time.deltaTime;
-
-            if (immortalityTimer < 0)
-            {
-                isImmortal = false;
-
-                if (this.controlledByAI)
-                {
-                    SetAIImmortalScripts();
-                }
-                else
-                {
-                    this.keyboardInputs.enabled = true;
-                }
-            }
-        }
     }
 
 
@@ -135,11 +91,5 @@ public class CollectorDriver : NPCDriver
                 this.visibleNPCs.Add(npc);
             }
         }
-    }
-
-    private void SetAIImmortalScripts()
-    {
-        this.stateMachine.enabled = !isImmortal;
-        this.movementDriver.enabled = !isImmortal;
     }
 }

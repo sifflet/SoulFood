@@ -27,7 +27,7 @@ public class GameManager : NetworkBehaviour
     private static List<Node> nodes;
 
     private int deathyNum = 4;
-    private const int GUARDS_NUM = 0;
+    private const int GUARDS_NUM = 2;
 	private static List<GameObject> collectors = new List<GameObject>();
 
 	public static List<GameObject> Collectors { get { return collectors; } }

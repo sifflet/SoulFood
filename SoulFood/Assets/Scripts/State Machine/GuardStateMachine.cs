@@ -39,11 +39,6 @@ public class GuardStateMachine : NPCStateMachine
         this.currentState = new GuardSearchState(this);
     }
 
-    public void ChangeCurrentState(NPCState newState)
-    {
-        this.currentState = newState;
-    }
-
     private GuardDriver FindOtherGuard()
     {
         foreach (NPCDriver npc in GameManager.Guards)
