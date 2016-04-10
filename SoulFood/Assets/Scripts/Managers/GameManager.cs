@@ -10,14 +10,16 @@ public class GameManager : NetworkBehaviour
     public GameObject deathyPrefab;
     public GameObject guardPrefab;
     public GameObject cameraRigPrefab;
-	public GameObject soulPrefab;
+    public GameObject soulPrefab;
 
     public GameObject treeOneButton;
     public GameObject treeTwoButton;
     public GameObject treeThreeButton;
 
-	/* NPC variables */
-	public const float COLLISION_RANGE = 1.25f;
+    SyncListInt finalTreeSizes = new SyncListInt();
+
+    /* NPC variables */
+    public const float COLLISION_RANGE = 1.25f;
 
     private static float gameTimer = 5.0f * 60.0f; // [minutes] * 60 seconds/minute. Only modify minutes.
     private static int livesRemaining;
@@ -25,11 +27,11 @@ public class GameManager : NetworkBehaviour
     private static int soulLimit;
 
     private static List<Node> nodes;
-	
+
     private int collectorNum = 4;
     private const int GUARDS_NUM = 0;
 
-	public static List<Node> AllNodes { get { return nodes; } }
+    public static List<Node> AllNodes { get { return nodes; } }
     public static List<NPCDriver> Collectors { get; set; }
     public static List<NPCDriver> Guards { get; set; }
     public static List<NPCDriver> AllNPCs
@@ -42,9 +44,13 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-	void Start ()
+    void Start()
     {
-          
+        if (isServer)
+        {
+            randomizeTrees();
+        }
+
         InitializeNodes();
         InitializeGraph();
         SpawnTrees();
@@ -74,8 +80,8 @@ public class GameManager : NetworkBehaviour
 
         HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
     }
-	
-	void Update ()
+
+    void Update()
     {
         if (GameState())
             UpdateNPCs();
@@ -86,15 +92,17 @@ public class GameManager : NetworkBehaviour
         HeadsUpDisplay.UpdateHUDGameTimer(gameTimer);
 
         // TO TEST GAME FLOW
-        if (Input.GetKeyUp(KeyCode.Alpha1)) {
-			livesRemaining = 1;
-		}
-		if(Input.GetKeyUp(KeyCode.Alpha2)) {
-			soulsConsumed = 18;
-			SoulConsumed();
-			soulLimit = 20;
-		}
-	}
+        if (Input.GetKeyUp(KeyCode.Alpha1))
+        {
+            livesRemaining = 1;
+        }
+        if (Input.GetKeyUp(KeyCode.Alpha2))
+        {
+            soulsConsumed = 18;
+            SoulConsumed();
+            soulLimit = 20;
+        }
+    }
 
     private void UpdateNPCs()
     {
@@ -114,7 +122,7 @@ public class GameManager : NetworkBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = deathyPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(deathyPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
-			npcInstance.name = "Collector " + i;
+            npcInstance.name = "Collector " + i;
             GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
             npcInstance.AddComponent<CollectorDriver>();
@@ -130,8 +138,8 @@ public class GameManager : NetworkBehaviour
             Vector3 spawnPosition = spawnPoint.position;
             spawnPosition.y = guardPrefab.transform.position.y;
             GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
-			npcInstance.name = "Guard " + i;
-			GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
+            npcInstance.name = "Guard " + i;
+            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
 
             npcInstance.AddComponent<GuardDriver>();
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
@@ -187,10 +195,10 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    private void SpawnTrees()
+    private void randomizeTrees()
     {
-		Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
-			new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
+        Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
+            new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
         int[] treeSizes;
         switch (collectorNum)
         {
@@ -208,19 +216,31 @@ public class GameManager : NetworkBehaviour
                 break;
         }
         MixArray(treeSizes);
-        GameObject tree;
-        for(int i = 0; i < treeLocations.Count(); i++)
+        finalTreeSizes = new SyncListInt();
+        
+        for (int i = 0; i < treeLocations.Count(); i++)
         {
-            switch (treeSizes[i])
+            finalTreeSizes.Add(treeSizes[i]);
+        }
+    }
+
+    private void SpawnTrees()
+    {
+        Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
+            new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
+        GameObject tree;
+        for (int i = 0; i < finalTreeSizes.Count; i++)
+        {
+            switch (finalTreeSizes[i])
             {
                 case 1:
-                    tree = (GameObject) Instantiate(treeOneButton, treeLocations[i], Quaternion.identity);
+                    tree = (GameObject)Instantiate(treeOneButton, treeLocations[i], Quaternion.identity);
                     break;
                 case 2:
-                    tree = (GameObject) Instantiate(treeTwoButton, treeLocations[i], Quaternion.identity);
+                    tree = (GameObject)Instantiate(treeTwoButton, treeLocations[i], Quaternion.identity);
                     break;
                 default:
-                    tree = (GameObject) Instantiate(treeThreeButton, treeLocations[i], Quaternion.identity);
+                    tree = (GameObject)Instantiate(treeThreeButton, treeLocations[i], Quaternion.identity);
                     break;
             }
             NetworkServer.Spawn(tree);
@@ -272,7 +292,7 @@ public class GameManager : NetworkBehaviour
     private static void HandleGameConclusion()
     {
         //Fancy display here
-		Application.LoadLevel("GameOver");
+        Application.LoadLevel("GameOver");
     }
 
     public static void SoulConsumed()
