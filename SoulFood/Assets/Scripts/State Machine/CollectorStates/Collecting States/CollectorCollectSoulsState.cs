@@ -44,7 +44,7 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 
 		}
 		else {	// All visible souls have been collected, return to soul search state
-			return new CollectorSearchSoulsState(this.stateMachine);
+			return new CollectorSearchSoulsState(this.stateMachine); // TODO: Replace this with stack call to previous state
 		}
 		
 		return this;

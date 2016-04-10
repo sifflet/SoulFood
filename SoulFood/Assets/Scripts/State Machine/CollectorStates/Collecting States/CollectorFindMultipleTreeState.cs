@@ -39,27 +39,29 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 		if (buttonTargetForClosestDoubleTree) 	// See if a double tree is found first
 		{
 			
-			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, buttonTargetForClosestDoubleTree, CollectorStateMachine.TREE_COLLISION_RANGE)) {
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, buttonTargetForClosestDoubleTree, CollectorStateMachine.TREE_MOVEMENT_COLLISION_RANGE)) {
 				SoulTree targetTree = buttonTargetForClosestDoubleTree.GetComponent<Button>().GetSoulTreeForCurrentButton(); 
 				return new CollectorCallForHelpState(this.stateMachine, targetTree);
 			}
-			
-			NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestDoubleTree, 5f);
+			else {			
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestDoubleTree, 5f);
+			}
 			
 		}
 		else if (buttonTargetForClosestTripleTree) 	// If no double tree, see if a triple tree is found
 		{
-			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, buttonTargetForClosestTripleTree, CollectorStateMachine.TREE_COLLISION_RANGE)) {
-				SoulTree targetTree = buttonTargetForClosestDoubleTree.GetComponent<Button>().GetSoulTreeForCurrentButton(); 
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, buttonTargetForClosestTripleTree, CollectorStateMachine.TREE_MOVEMENT_COLLISION_RANGE)) {
+				SoulTree targetTree = buttonTargetForClosestTripleTree.GetComponent<Button>().GetSoulTreeForCurrentButton(); 
 				return new CollectorCallForHelpState(this.stateMachine, targetTree);
 			}
-			
-			NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestDoubleTree, 5f);
+			else {
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestTripleTree, 5f);
+			}
 		}
 		else 	// No double or triple trees were found
 		{
 			if (multipleTreeSearchingTimer > 0) {
-				// If we're at the end of our path having found no souls, find a new random one
+				// If we're at the end of our path having found nothing, find a new random one
 				CollectorStateHelper.GetNewRandomPath(movementDriver); 
 			}
 			else {

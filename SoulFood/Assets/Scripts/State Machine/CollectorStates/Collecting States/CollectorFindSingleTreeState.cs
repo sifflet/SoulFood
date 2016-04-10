@@ -38,12 +38,13 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		if (buttonTargetForClosestSingleTree) 
 		{
 			
-			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree, CollectorStateMachine.TREE_COLLISION_RANGE)) {
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree, CollectorStateMachine.TREE_MOVEMENT_COLLISION_RANGE)) {
 
 				return this;
 			}
-
-            NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 5f);
+			else {
+            	NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestSingleTree, 5f);
+			}
            
 		}
 		else 

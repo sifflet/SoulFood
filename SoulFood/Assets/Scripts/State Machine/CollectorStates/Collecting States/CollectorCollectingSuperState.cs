@@ -30,7 +30,7 @@ public abstract class CollectorCollectingSuperState : NPCState
 
 		// If you receive a help call, answer it!
 		if ((this.stateMachine as CollectorStateMachine).HasReceivedHelpCall && stateMachine.CurrentState.GetType() != typeof(CollectorAnswerHelpCallState)) 
-			return new CollectorAnswerHelpCallState(this.stateMachine);
+			return new CollectorAnswerHelpCallState(this.stateMachine, (this.stateMachine as CollectorStateMachine).TargetTree, (this.stateMachine as CollectorStateMachine).CallerStateMachine);
 
 		return this.stateMachine.CurrentState;
     }

@@ -36,6 +36,8 @@ public abstract class GuardPursueState : NPCState
 
     public override NPCState Update()
     {
+        DrawRayToTarget();
+
         if ((stateMachine as GuardStateMachine).LungeCooldown > 0) (stateMachine as GuardStateMachine).LungeCooldown -= Time.deltaTime;
 
         if ((stateMachine as GuardStateMachine).LungeCooldown <= 0 &&
@@ -70,6 +72,12 @@ public abstract class GuardPursueState : NPCState
         AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
 
         return this.stateMachine.CurrentState;
+    }
+
+    private void DrawRayToTarget()
+    {
+        Vector3 toTarget = (stateMachine as GuardStateMachine).TargetNPC.Instance.transform.position - stateMachine.NPC.Instance.transform.position;
+        Debug.DrawRay(stateMachine.NPC.Instance.transform.position, toTarget, Color.red);
     }
 
     protected NPCDriver GetClosestVisibleCollector()
@@ -119,7 +127,7 @@ public abstract class GuardPursueState : NPCState
         foreach (NPCDriver npc in GameManager.Deathies)
         {
             if (npc == (stateMachine as GuardStateMachine).TargetNPC) continue;
-            if ((npc as CollectorDriver).IsImmortal) continue;
+            if ((npc.StateMachine as CollectorStateMachine).CurrentState.GetType() == typeof(CollectorImmortalState)) continue;
             if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE)) return npc;
         }
 

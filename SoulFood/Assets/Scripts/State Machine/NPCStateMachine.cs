@@ -34,4 +34,9 @@ public abstract class NPCStateMachine : MonoBehaviour
             currentState = transitionState;
         }
     }
+
+    public void ChangeCurrentState(NPCState newState)
+    {
+        this.currentState = newState;
+    }
 }
