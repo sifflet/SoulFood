@@ -52,7 +52,7 @@ public class GuardLungeState : NPCState
 
     private NPCDriver GetCollectorInLungeRange()
     {
-        foreach (NPCDriver npc in GameManager.Deathies)
+        foreach (NPCDriver npc in GameManager.Collectors)
         {
             if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
             {

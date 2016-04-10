@@ -84,23 +84,22 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 				this.treeButtonsThatNeedTriggering.Add(button);
 			}
 		}
-		Debug.Log ("Buttons that need triggering: " + treeButtonsThatNeedTriggering.Count);
+		//Debug.Log ("Buttons that need triggering: " + treeButtonsThatNeedTriggering.Count);
 	}
 
 	private void MakeHelpCalls()
 	{
-		List<GameObject> availableCollectors = GameManager.Collectors;
-
+		List<NPCDriver> availableCollectors = new List<NPCDriver>(GameManager.Collectors);
 		// Remove current collector from availableCollectors list
-		availableCollectors.Remove(this.stateMachine.NPC.Instance);
-
+		availableCollectors.Remove(this.stateMachine.NPC);
+		Debug.Log ("Number of buttons that need triggering: " + treeButtonsThatNeedTriggering.Count);
+		Debug.Log ("Here is the available collector count: " + availableCollectors.Count);
 		foreach (GameObject button in treeButtonsThatNeedTriggering) {
 			if (availableCollectors.Count >= 1) {	// If there is at least one collector available
-				GameObject closestCollector = NPCStateHelper.FindClosestGameObject(this.stateMachine.NPC.Instance, availableCollectors);
-				CollectorDriver closestCollectorDriver = closestCollector.GetComponent<CollectorDriver>();
-				if (closestCollectorDriver.ControlledByAI) {	// If the closest Collector is a NPC
-					(closestCollectorDriver.StateMachine as CollectorStateMachine).ReceiveTreeHelpCall(this.targetTree, this.stateMachine as CollectorStateMachine);
-					this.collectorsAskedForHelp.Add (closestCollectorDriver);
+				CollectorDriver closestCollector = NPCStateHelper.FindClosestNPC(this.stateMachine.NPC, availableCollectors) as CollectorDriver;
+				if (closestCollector.ControlledByAI) {	// If the closest Collector is a NPC
+					(closestCollector.StateMachine as CollectorStateMachine).ReceiveTreeHelpCall(this.targetTree, this.stateMachine as CollectorStateMachine);
+					this.collectorsAskedForHelp.Add (closestCollector);
 				}
 				else {	// If the closest Collector is a player
 					// TODO: Handle asking player for help via sounds and UI
