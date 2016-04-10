@@ -39,7 +39,12 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 			return new CollectorSearchSoulsState(this.stateMachine);
 		}
 
-		answerHelpCallTimer -= Time.deltaTime;
+        if (hasNotifiedCallerOfArrival)
+        {
+            answerHelpCallTimer -= Time.deltaTime;
+            if (answerHelpCallTimer < 0) return new CollectorSearchSoulsState(this.stateMachine); // TODO: Replace this with stack call to previous state
+        }
+
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 
 		// Get a button target for the targetTree
@@ -59,12 +64,6 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 			}
 			else {
 				NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTarget, 5f);
-			}
-		}
-		else 
-		{
-			if (answerHelpCallTimer < 0) {
-				return new CollectorSearchSoulsState(this.stateMachine); // TODO: Replace this with stack call to previous state
 			}
 		}
 		
