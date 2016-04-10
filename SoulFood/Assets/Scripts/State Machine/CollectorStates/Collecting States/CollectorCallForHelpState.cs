@@ -89,11 +89,11 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 
 	private void MakeHelpCalls()
 	{
-		List<NPCDriver> availableCollectors = GameManager.Collectors;
-
+		List<NPCDriver> availableCollectors = new List<NPCDriver>(GameManager.Collectors);
 		// Remove current collector from availableCollectors list
 		availableCollectors.Remove(this.stateMachine.NPC);
-
+		Debug.Log ("Number of buttons that need triggering: " + treeButtonsThatNeedTriggering.Count);
+		Debug.Log ("Here is the available collector count: " + availableCollectors.Count);
 		foreach (GameObject button in treeButtonsThatNeedTriggering) {
 			if (availableCollectors.Count >= 1) {	// If there is at least one collector available
 				CollectorDriver closestCollector = NPCStateHelper.FindClosestNPC(this.stateMachine.NPC, availableCollectors) as CollectorDriver;
