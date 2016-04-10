@@ -3,12 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
-
-	private float answerHelpCallTimer = CollectorStateMachine.TIME_SPENT_WAITING_FOR_TREE_HELP;
+	
 	private NPCMovementDriver movementDriver;
 	private SoulTree targetTree;
 	private CollectorStateMachine callerStateMachine;	// State machine of the caller
 	private bool hasNotifiedCallerOfArrival = false;
+	private GameObject buttonTarget;	
 	
 	public CollectorAnswerHelpCallState(NPCStateMachine stateMachine, SoulTree targetTree, CollectorStateMachine callerStateMachine)
 		: base(stateMachine)
@@ -21,6 +21,7 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 	{
 		Debug.Log (this.stateMachine.NPC.name + ": Answer Help Call State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
+		buttonTarget = GetUntriggeredButtonFromTree(targetTree);	// Get a button target for the targetTree
 	}
 	
 	public override NPCState Update()
@@ -33,24 +34,15 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 			return stateFromBase;
 		}
 		
+		movementDriver = this.stateMachine.NPC.MovementDriver;
+		
 		// Check if help call has been cancelled
 		// If so, returned to soul search state
 		if (!(this.stateMachine as CollectorStateMachine).HasReceivedHelpCall) {
-			return new CollectorSearchSoulsState(this.stateMachine);
+			return new CollectorSearchSoulsState(this.stateMachine); // TODO: Replace this with stack call to previous state
 		}
 
-        if (hasNotifiedCallerOfArrival)
-        {
-            answerHelpCallTimer -= Time.deltaTime;
-            if (answerHelpCallTimer < 0) return new CollectorSearchSoulsState(this.stateMachine); // TODO: Replace this with stack call to previous state
-        }
-
-		movementDriver = this.stateMachine.NPC.MovementDriver;
-
-		// Get a button target for the targetTree
-		GameObject buttonTarget = GetUntriggeredButtonFromTree(targetTree);
-
-		if (buttonTarget) {
+		if (buttonTarget) {	
 			// This collision range is set to handle the collision of the NPC and the tree button for the purpsoe of notifiying help calls
 			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTarget, CollectorStateMachine.TREE_COLLISION_RANGE)) {
 				if (!hasNotifiedCallerOfArrival) {
@@ -76,8 +68,13 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 		GameObject targetButton = null;
 
 		foreach (GameObject buttonObj in treeButtons) {
-			if (!buttonObj.GetComponent<Button>().IsTriggered)
+			Button buttonScript = buttonObj.GetComponent<Button>();
+			if (!buttonScript.IsTargettedForTriggering)
+			{
+				buttonScript.IsTargettedForTriggering = true;
 				targetButton = buttonObj;
+				return targetButton;
+			}
 		}
 
 		return targetButton;

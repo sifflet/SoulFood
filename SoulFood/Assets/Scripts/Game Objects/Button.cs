@@ -8,6 +8,7 @@ public class Button : MonoBehaviour {
 	bool isTriggered = false;
 
 	public bool IsTriggered { get { return this.isTriggered; } }
+	public bool IsTargettedForTriggering { get; set; }
 
     private Slider slider;
     private Image fillImage;
@@ -19,6 +20,7 @@ public class Button : MonoBehaviour {
         this.slider = this.GetComponentInChildren<Slider>();
         this.fillImage = this.GetComponentsInChildren<Image>()[1];
         this.timer = this.totalTime;
+		this.IsTargettedForTriggering = false;
     }
 
     void FixedUpdate () {

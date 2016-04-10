@@ -244,7 +244,7 @@ public class GameManager : NetworkBehaviour
         {
             case 4:
                 livesRemaining = 3;
-                soulLimit = 30;
+                soulLimit = 50;
                 break;
             case 3:
                 livesRemaining = 3;
