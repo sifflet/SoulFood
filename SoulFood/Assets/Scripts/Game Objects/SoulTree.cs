@@ -7,6 +7,7 @@ public class SoulTree : MonoBehaviour {
 	private int triggeredCount;		// How many buttons are being stepped on by players
 	private bool isFull = true;
 	private int treeType;
+	private Transform buttons;
 	private List<GameObject> treeButtons = new List<GameObject>();
 
 	public int TreeType { get { return this.treeType; } }
@@ -15,8 +16,9 @@ public class SoulTree : MonoBehaviour {
 	public GameObject soulObject;
 
 	void Awake () {
-		treeType = transform.childCount;
-		foreach (Transform child in transform) 
+		buttons = transform.Find("Buttons");
+		treeType = buttons.childCount;
+		foreach (Transform child in buttons) 
 		{
 			Button childButton = child.GetComponent<Button>();
 			if (childButton)	// Child is a button
@@ -28,11 +30,11 @@ public class SoulTree : MonoBehaviour {
 
 	void Update () {
 		triggeredCount = 0;
-		foreach (Transform button in transform) {
+		foreach (Transform button in buttons) {
 			if(button.gameObject.GetComponent<Button>().GetButtonStatus())
 				triggeredCount++;
 		}
-		if (triggeredCount++ == transform.childCount) {
+		if (triggeredCount++ == buttons.childCount) {
 			DropItems();
 		}
 	}

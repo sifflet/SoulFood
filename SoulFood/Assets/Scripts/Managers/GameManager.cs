@@ -27,7 +27,7 @@ public class GameManager : NetworkBehaviour
     private static List<Node> nodes;
 
     private int deathyNum = 4;
-    private const int GUARDS_NUM = 2;
+    private const int GUARDS_NUM = 0;
 	private static List<GameObject> collectors = new List<GameObject>();
 
 	public static List<GameObject> Collectors { get { return collectors; } }
@@ -69,7 +69,7 @@ public class GameManager : NetworkBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        (Guards[0] as GuardDriver).IsLeader = true;
+//        (Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
 
@@ -191,8 +191,8 @@ public class GameManager : NetworkBehaviour
 
     private void SpawnTrees()
     {
-        Vector3[] treeLocations = { new Vector3(-25f, 2f, -23.35f), new Vector3(-32f, 2f, -0.18f),  new Vector3(20f, 2f, -28.2f),   new Vector3(7f, 2f, -12.1f),
-                                    new Vector3(29f, 2f, 12.3f),    new Vector3(-19.5f, 2f, 21.8f), new Vector3(-13f, 2f, 37.4f),   new Vector3(30f, 2f, 37.4f)};
+		Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
+			new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
         int[] treeSizes;
         switch (deathyNum)
         {
