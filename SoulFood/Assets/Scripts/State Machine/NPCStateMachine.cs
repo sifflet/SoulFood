@@ -14,6 +14,7 @@ public abstract class NPCStateMachine : MonoBehaviour
     public virtual void Setup(NPCDriver npc)
     {
         this.npc = npc;
+		this.stateStack = new Stack<NPCState>();
     }
 
     public virtual void EnterFirstState()
@@ -50,5 +51,10 @@ public abstract class NPCStateMachine : MonoBehaviour
 	public NPCState PopStateOffStack()
 	{
 		return this.stateStack.Pop();
+	}
+
+	public NPCState PeekAtTopStateInStack()
+	{
+		return this.stateStack.Peek();
 	}
 }

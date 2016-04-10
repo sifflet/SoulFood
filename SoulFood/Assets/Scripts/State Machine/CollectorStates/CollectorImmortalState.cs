@@ -14,6 +14,9 @@ public class CollectorImmortalState : NPCState
 
     public override void Entry()
     {
+		// Add state on to stack
+		this.stateMachine.PushStateOnStack(this);
+
         Debug.Log(this.stateMachine.NPC.name + ": Immortal state entry");
         this.immortalTimer = CollectorStateMachine.IMMORTALITY_TIME;
         this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);

@@ -28,8 +28,8 @@ public class CollectorFleeState : NPCState
 		List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this.stateMachine);
 
 		// If guards are no longer in sight
-		if (guardsInSight.Count == 0) return new CollectorSearchSoulsState(this.stateMachine); // TODO: Replace this with stack call to previous state
-		if (guardsInFleeRange.Count == 0) return new CollectorSearchSoulsState(this.stateMachine); // TODO: Replace this with stack call to previous state
+		if (guardsInSight.Count == 0) return this.GetPreviousStateInStack();
+		if (guardsInFleeRange.Count == 0) return this.GetPreviousStateInStack();
 
 		// If guards are getting too close, emergency flee required
 		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Emergency)) ; // TODO: return emergency flee state
