@@ -32,6 +32,9 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 		{
 			return stateFromBase;
 		}
+
+        buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
+        buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3); 
 		
 		multipleTreeSearchingTimer -= Time.deltaTime;
 		movementDriver = this.stateMachine.NPC.MovementDriver;
