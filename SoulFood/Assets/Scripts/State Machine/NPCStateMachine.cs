@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class NPCStateMachine : MonoBehaviour
 {
     protected NPCDriver npc;
     protected NPCState currentState;
+	protected Stack<NPCState> stateStack;
 
     public NPCDriver NPC { get { return this.npc; } }
     public NPCState CurrentState { get { return this.currentState; } }
@@ -39,4 +41,14 @@ public abstract class NPCStateMachine : MonoBehaviour
     {
         this.currentState = newState;
     }
+
+	public void PushStateOnStack(NPCState state)
+	{
+		this.stateStack.Push(state);
+	}
+
+	public NPCState PopStateOffStack()
+	{
+		return this.stateStack.Pop();
+	}
 }

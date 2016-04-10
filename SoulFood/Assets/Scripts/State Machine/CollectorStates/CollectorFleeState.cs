@@ -13,6 +13,9 @@ public class CollectorFleeState : NPCState
 
     public override void Entry()
     {
+		// Add state on to stack
+		this.stateMachine.PushStateOnStack(this);
+
 		Debug.Log (this.stateMachine.NPC.name + ": Flee State Entry");
 		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
 		List<NPCDriver> guardsInFleeRange = CollectorStateHelper.FindGuardsInFleeRange(this.stateMachine);

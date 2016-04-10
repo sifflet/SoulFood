@@ -14,7 +14,9 @@ public abstract class CollectorCollectingSuperState : NPCState
 
     public override void Entry()
     {
-    }
+		// Add state on to stack
+		this.stateMachine.PushStateOnStack(this);
+	}
 
     public override NPCState Update()
     {
