@@ -34,6 +34,7 @@ public class GuardLungeState : NPCState
             {
                 (caughtCollector as CollectorDriver).IsImmortal = true;
                 lungeTimer = 0.0f;
+                GameManager.loseLife();
             }
         }
         else

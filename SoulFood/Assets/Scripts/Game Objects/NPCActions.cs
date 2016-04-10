@@ -48,5 +48,5 @@ public static class NPCActions
 	public static void CmdLunge(NPCDriver guard, Vector3 direction)
 	{
 		guard.Instance.GetComponent<Rigidbody>().AddForce(direction * 100f * Time.deltaTime, ForceMode.Impulse);
-	}
+    }
 }
