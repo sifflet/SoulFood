@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
-public class SoulTree : MonoBehaviour {
+public class SoulTree : NetworkBehaviour {
 
 	private int triggeredCount;		// How many buttons are being stepped on by players
 	private bool isFull = true;
@@ -65,6 +66,15 @@ public class SoulTree : MonoBehaviour {
                     soul7.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
                     soul8.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
                     soul9.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
+                    NetworkServer.Spawn(soul1);
+                    NetworkServer.Spawn(soul2);
+                    NetworkServer.Spawn(soul3);
+                    NetworkServer.Spawn(soul4);
+                    NetworkServer.Spawn(soul5);
+                    NetworkServer.Spawn(soul6);
+                    NetworkServer.Spawn(soul7);
+                    NetworkServer.Spawn(soul8);
+                    NetworkServer.Spawn(soul9);
                     break;
                 case 2:
                     soul6 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x, transform.position.y + 4, transform.position.z), Quaternion.identity);
@@ -79,6 +89,12 @@ public class SoulTree : MonoBehaviour {
                     soul4.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
                     soul5.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
                     soul6.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
+                    NetworkServer.Spawn(soul1);
+                    NetworkServer.Spawn(soul2);
+                    NetworkServer.Spawn(soul3);
+                    NetworkServer.Spawn(soul4);
+                    NetworkServer.Spawn(soul5);
+                    NetworkServer.Spawn(soul6);
                     break;
                 default:
                     soul3 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), Quaternion.identity);
@@ -87,6 +103,9 @@ public class SoulTree : MonoBehaviour {
                     soul1.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
                     soul2.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
                     soul3.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
+                    NetworkServer.Spawn(soul1);
+                    NetworkServer.Spawn(soul2);
+                    NetworkServer.Spawn(soul3);
                     break;
             }
             isFull = false;
