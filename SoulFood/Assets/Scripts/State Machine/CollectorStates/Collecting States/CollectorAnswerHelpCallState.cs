@@ -7,11 +7,14 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 	private float answerHelpCallTimer = CollectorStateMachine.TIME_SPENT_WAITING_FOR_TREE_HELP;
 	private NPCMovementDriver movementDriver;
 	private SoulTree targetTree;
+	private CollectorStateMachine callerStateMachine;	// State machine of the caller
+	private bool hasNotifiedCallerOfArrival = false;
 	
-	public CollectorAnswerHelpCallState(NPCStateMachine stateMachine, SoulTree targetTree)
+	public CollectorAnswerHelpCallState(NPCStateMachine stateMachine, SoulTree targetTree, CollectorStateMachine callerStateMachine)
 		: base(stateMachine)
 	{
 		this.targetTree = targetTree;
+		this.callerStateMachine = callerStateMachine;
 	}
 	
 	public override void Entry()
@@ -43,12 +46,20 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 		GameObject buttonTarget = GetUntriggeredButtonFromTree(targetTree);
 
 		if (buttonTarget) {
+			// This collision range is set to handle the collision of the NPC and the tree button for the purpsoe of notifiying help calls
 			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTarget, CollectorStateMachine.TREE_COLLISION_RANGE)) {
-				(this.stateMachine as CollectorStateMachine).CancelTreeHelpCall();
+				if (!hasNotifiedCallerOfArrival) {
+					this.callerStateMachine.NotifyCallerOfHelpArrival(this.stateMachine.NPC as CollectorDriver); 	// Inform the caller of your arrival
+					hasNotifiedCallerOfArrival = true;
+				}
+			}
+			// This collision range is set to move the NPC directly onto the tree button
+			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTarget, CollectorStateMachine.TREE_MOVEMENT_COLLISION_RANGE)) {
 				return this;
 			}
-			
-			NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTarget, 5f);
+			else {
+				NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTarget, 5f);
+			}
 		}
 		else 
 		{

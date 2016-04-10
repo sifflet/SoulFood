@@ -16,9 +16,6 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 	{
 		Debug.Log (this.stateMachine.NPC.name + ": Collect Soul State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
-
-		// Cancel any help calls that may have been active so we can continue to pick up souls
-		(this.stateMachine as CollectorStateMachine).CancelTreeHelpCall();
 	}
 	
 	public override NPCState Update()

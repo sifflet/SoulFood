@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     private static List<Node> nodes;
 
-    private int deathyNum = 3;
+    private int deathyNum = 4;
     private const int GUARDS_NUM = 0;
 	private static List<GameObject> collectors = new List<GameObject>();
 

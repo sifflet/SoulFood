@@ -88,7 +88,7 @@ public class SoulTree : MonoBehaviour {
                     break;
             }
             isFull = false;
-            Invoke("resetTree", 60);//time in seconds
+            //Invoke("ResetTree", 60);//time in seconds
 		}
 	}
 
