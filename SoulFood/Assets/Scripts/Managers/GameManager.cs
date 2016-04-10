@@ -3,8 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.Networking;
 
-public class GameManager : MonoBehaviour
+public class GameManager : NetworkBehaviour
 {
     public GameObject deathyPrefab;
     public GameObject guardPrefab;
@@ -42,6 +43,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Server]
 	void Start ()
     {
         InitializeNodes();
@@ -71,7 +73,8 @@ public class GameManager : MonoBehaviour
         SetupNPCStateMachines();
         #endregion
     }
-	
+
+    [Server]
 	void Update ()
     {
         if (GameState())
@@ -101,6 +104,7 @@ public class GameManager : MonoBehaviour
          * */
     }
 
+    [Server]
     private void SpawnAllNpcs()
     {
         for (int i = Deathies.Count; i < deathyNum; i++)
@@ -118,6 +122,9 @@ public class GameManager : MonoBehaviour
             driver.SetSoulPrefab(soulPrefab);
             Deathies.Add(driver);
 			collectors.Add(npcInstance);
+
+            NetworkServer.Spawn(npcInstance);
+            NetworkServer.Spawn(cameraInstance);
         }
 
         for (int i = Guards.Count; i < GUARDS_NUM; i++)
@@ -133,9 +140,13 @@ public class GameManager : MonoBehaviour
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             Guards.Add(driver);
+
+            NetworkServer.Spawn(npcInstance);
+            NetworkServer.Spawn(cameraInstance);
         }
     }
 
+    [Server]
     private void GetNetworkNPCs()
     {
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
@@ -157,6 +168,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Server]
     private void SetupNPCStateMachines()
     {
         foreach (NPCDriver npc in AllNPCs)
@@ -165,6 +177,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Server]
     private void InitializeNodes()
     {
         nodes = new List<Node>();
@@ -175,6 +188,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Server]
     private void InitializeGraph()
     {
         foreach (Node node in nodes)
@@ -183,6 +197,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Server]
     private void SpawnTrees()
     {
         Vector3[] treeLocations = { new Vector3(-25f, 2f, -23.35f), new Vector3(-32f, 2f, -0.18f),  new Vector3(20f, 2f, -28.2f),   new Vector3(7f, 2f, -12.1f),
@@ -232,6 +247,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    [Server]
     private void SetGameLimits()//Game limits added based on Deathy Number, can remove the life factor but I believe the souls ammount should adjust
     {
         switch (deathyNum)

@@ -29,13 +29,14 @@ public class NetworkLobby : NetworkLobbyManager {
             playerPrefab.name = "Guard " + guardCounter;
             guardCounter++;
         }
-            
+
         if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Collector")
         {
             playerPrefab = (GameObject)Instantiate(Collector);
+            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
             playerPrefab.AddComponent<CollectorDriver>();
             driver = playerPrefab.GetComponent<CollectorDriver>();
-            driver.Setup(playerPrefab.transform.Find("Collector").gameObject, playerPrefab.transform.Find("CameraRig").gameObject, playerPrefab.transform);
+            driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform);
             playerPrefab.transform.position = spawns.transform.Find("Collect" + counter).position;
             playerPrefab.name = "Collector " + collectorCounter;
             collectorCounter++;
