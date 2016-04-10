@@ -124,7 +124,7 @@ public abstract class GuardPursueState : NPCState
 
     protected NPCDriver GetCollectorInChangeTargetRange()
     {
-        foreach (NPCDriver npc in GameManager.Deathies)
+        foreach (NPCDriver npc in GameManager.Collectors)
         {
             if (npc == (stateMachine as GuardStateMachine).TargetNPC) continue;
             if ((npc.StateMachine as CollectorStateMachine).CurrentState.GetType() == typeof(CollectorImmortalState)) continue;

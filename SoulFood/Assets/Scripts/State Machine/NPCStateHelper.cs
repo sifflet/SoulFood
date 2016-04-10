@@ -85,6 +85,25 @@ public static class NPCStateHelper
 		return result;
 	}
 
+    public static NPCDriver FindClosestNPC(NPCDriver mainNPC, List<NPCDriver> npcs)
+    {
+        NPCDriver result = null;
+
+        for (int i = 0; i < npcs.Count; i++)
+        {
+            if (i == 0)
+            {
+                result = npcs[i];
+            }
+            if (Vector3.Distance(mainNPC.transform.position, npcs[i].transform.position) < Vector3.Distance(mainNPC.transform.position, result.transform.position))
+            {
+                result = npcs[i];
+            }
+        }
+
+        return result;
+    }
+
 	public static GameObject FindClosestGameObjectByPath(GameObject mainObj, List<GameObject> gameObjects)
 	{
 		GameObject result = null;
