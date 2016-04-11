@@ -9,6 +9,7 @@ public abstract class NPCStateMachine : MonoBehaviour
 	protected Stack<NPCState> stateStack;
 	
 	public List<GameObject> TreesFound { get; set; }
+    public GameObject StrategicSoulTreeTarget { get; set; }
 
     public NPCDriver NPC { get { return this.npc; } }
     public NPCState CurrentState { get { return this.currentState; } }
