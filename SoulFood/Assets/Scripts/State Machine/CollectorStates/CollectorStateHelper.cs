@@ -189,6 +189,7 @@ public static class CollectorStateHelper {
 		if (treePosition == null)
 			return GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
 
-		return NPCStateHelper.FindClosestNode(treePosition);
+		NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]).gameObject.GetComponent<MeshRenderer>().enabled = true;
+		return NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]);
 	}
 }
