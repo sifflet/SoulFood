@@ -7,6 +7,10 @@ public class NPCMovementDriver : MonoBehaviour
 {
 	private NPCMovement currentNPC;
 
+	// Used for calculation of soul speed adjustment
+	private float minimumSpeed = 3f; 	
+	private int hypotheticalMaximumSoulCapacity = 40;
+
 	// Pathfinding variables
 	private Node startNode, endNode;
 	private List<Node> pathList;
@@ -139,6 +143,30 @@ public class NPCMovementDriver : MonoBehaviour
 
         return result;
     }
+
+	/**
+	 * Methods for speed adjustment based on number of consumed souls
+	 */	
+	public void RecalculateSpeedBasedOnSoulConsumption() 
+	{
+		CollectorDriver collectorDriver = this.currentNPC.gameObject.GetComponent<CollectorDriver>();
+		float speedDeboost = 0; // Variable is broguht of the if for printing purposes
+		currentNPC.MaxSpeed = collectorDriver.MaxSpeed;	// Reset to max speed
+		float startSpeed = currentNPC.MaxSpeed; // For printing purposes
+		if (collectorDriver) {
+			float speedDecreaseFactor = (currentNPC.MaxSpeed - this.minimumSpeed) / this.hypotheticalMaximumSoulCapacity;
+			speedDeboost = speedDecreaseFactor * collectorDriver.SoulsStored;
+			if (currentNPC.MaxSpeed - speedDeboost >= this.minimumSpeed)
+				currentNPC.MaxSpeed -= speedDeboost;
+			else
+				currentNPC.MaxSpeed = this.minimumSpeed;
+		}
+
+		Debug.Log (collectorDriver.name + ": Souls -> " + collectorDriver.SoulsStored 
+		           + ". Deboost -> " + speedDeboost
+		           + ". Start Speed -> " + startSpeed
+		           + ". Current Speed -> " + currentNPC.MaxSpeed);
+	}
 
 	/**
 	 * Methods for pathfinding graph
