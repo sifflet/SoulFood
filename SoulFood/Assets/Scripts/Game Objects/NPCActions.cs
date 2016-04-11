@@ -33,14 +33,14 @@ public static class NPCActions
 			
 		soul.GetComponent<Soul>().IsConsumed(collectorPos);
 		collector.AddSoul();
-		GameManager.SoulConsumed();
+		GameObject.FindGameObjectWithTag("GameController").SendMessage("SoulConsumed");
     }
 
 	[Command]
     public static void CmdEjectSoul(CollectorDriver collector, int numberOfSoulsEjected)
     {
         collector.DropSoul(numberOfSoulsEjected);
-        GameManager.SoulEjected(numberOfSoulsEjected);
+        GameObject.FindGameObjectWithTag("GameController").SendMessage("SoulEjected",numberOfSoulsEjected);
     }
 
 	// Should be used through the GuardLungeState only, as it implements a required timer
