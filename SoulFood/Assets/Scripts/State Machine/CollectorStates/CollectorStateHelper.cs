@@ -172,10 +172,13 @@ public static class CollectorStateHelper {
 	{
 		GameObject treePosition = null;
 
-		if (npcStateMachine.TreesFound.Count > 0) {
-			int randomIndex = UnityEngine.Random.Range(0, npcStateMachine.TreesFound.Count - 1);
-			treePosition = npcStateMachine.TreesFound[0];
-		}
+        foreach (GameObject tree in npcStateMachine.TreesFound)
+        {
+            if (tree == npcStateMachine.StrategicSoulTreeTarget) continue;
+            treePosition = tree;
+        }
+
+        npcStateMachine.StrategicSoulTreeTarget = treePosition;
 
 		if (treePosition == null)
 			return GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];

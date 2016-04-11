@@ -31,7 +31,6 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 		} 
 		
 		multipleTreeSearchingTimer -= Time.deltaTime;
-		movementDriver = this.stateMachine.NPC.MovementDriver;
 
 		// Add trees seen to strategic tree memory system
 		this.stateMachine.AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
@@ -68,12 +67,12 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 					return new CollectorCallForHelpState(this.stateMachine, targetTree);
 				}
 				else {
-					NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestTripleTree, 2f);
+					NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestTripleTree, 5f);
 				}
 			}
 			else {
 				// If we're at the end of our path having found no trees, find a new path based on the trees we've remembered
-				//CollectorStateHelper.GetNewPath(movementDriver, GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)]; 
+				//CollectorStateHelper.GetNewPath(movementDriver, GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
 				CollectorStateHelper.GetNewPath(movementDriver, CollectorStateHelper.FindNodeForRememberedTreePosition(this.stateMachine)); 
 			}
 		}

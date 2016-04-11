@@ -36,9 +36,10 @@ public static class NPCStateHelper
         float distanceToTarget = GetShortestPathDistance(npc.Instance, target);
 		Node endNode = FindClosestNode(target);
 
+        /*
 		if (npc.MovementDriver.AttainedFinalNode) {
 			Debug.Log (npc.name + ": HEYYYYYY I'M AT THE FINAL NODE!");
-		}
+		}*/
 
 		if (distanceToTarget > directMoveDistance)
         {
