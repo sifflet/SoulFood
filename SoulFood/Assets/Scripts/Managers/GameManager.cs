@@ -21,7 +21,7 @@ public class GameManager : NetworkBehaviour
     /* NPC variables */
     public const float COLLISION_RANGE = 1.25f;
 
-    private static float gameTimer = 5.0f * 60.0f; // [minutes] * 60 seconds/minute. Only modify minutes.
+    private static float gameTimer = 1f; // [minutes] * 60 seconds/minute. Only modify minutes.
     [SyncVar (hook = "updateLifeHUD")] private int livesRemaining;
     [SyncVar(hook = "updateSoulHUD")] private int soulsConsumed;
     private int soulLimit;
@@ -88,7 +88,7 @@ public class GameManager : NetworkBehaviour
         else
             HandleGameConclusion();
 
-        gameTimer -= Time.deltaTime;
+        gameTimer += Time.deltaTime;
         HeadsUpDisplay.UpdateHUDGameTimer(gameTimer);
 
         // TO TEST GAME FLOW
