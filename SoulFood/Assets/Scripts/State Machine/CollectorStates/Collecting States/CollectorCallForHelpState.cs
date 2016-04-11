@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CollectorCallForHelpState : CollectorCollectingSuperState {
 
 	private float waitForHelpTimer = CollectorStateMachine.TIME_SPENT_WAITING_FOR_TREE_HELP;
-	private float delayBeforeCancellingHelpCallsTimer = 3f;
+	private float delayBeforeCancellingHelpCallsTimer = 2f;
 	private NPCMovementDriver movementDriver;
 	private SoulTree targetTree;
 
@@ -30,7 +30,7 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 
 		// Add more wait delay to a triple tree
 		if (targetTree.TreeButtons.Count == 3) {
-			delayBeforeCancellingHelpCallsTimer += 5f;
+			waitForHelpTimer += 2f;
 		}
 	}
 	
@@ -64,6 +64,10 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 		// If help callees have arrived, cancel the help calls
 		if ((this.stateMachine as CollectorStateMachine).CheckIfHelpCalleesHaveArrived() && !this.hasCancelledHelpCalls) {
 			everyoneIsOnTheTree = true;
+
+			// Since it is likely souls will now be released from the tree and caller is transitioned into collect soul state
+			// We reset the stack history so that after the collect soul state, the caller returns to search for souls and not call for help again
+			this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine));
 		}
 
 		if (delayBeforeCancellingHelpCallsTimer <= 0 && !this.hasCancelledHelpCalls)	{// If set delay for remaining on the tree passes, cancel everyone's help calls
@@ -76,7 +80,7 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 		// Return to search soul state if help took too long to show up
 		if (waitForHelpTimer <= 0 ) {
 			CancelHelpCalls();
-			return new CollectorSearchSoulsState(this.stateMachine);
+			return this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine));
 		}
 
 		return this;

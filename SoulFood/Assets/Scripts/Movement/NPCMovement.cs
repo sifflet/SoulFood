@@ -270,6 +270,7 @@ public class NPCMovement : MonoBehaviour {
 		//Find the direction vector based on the target's position
 		directionVector = (target - transform.position);
 		directionVector.Normalize ();
+
 		//Find the current rotation velocity
 		currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
 
@@ -283,6 +284,7 @@ public class NPCMovement : MonoBehaviour {
 		//Interpolate the orientation of the NPC object
 		Quaternion targetRotation = Quaternion.LookRotation (directionVector);
 		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, currentRotationVelocity * Time.deltaTime);
+
 		//Update the position
 		Vector3 newPosition = transform.position + (currentVelocity * Time.deltaTime) * transform.forward.normalized;
 		transform.position = newPosition;

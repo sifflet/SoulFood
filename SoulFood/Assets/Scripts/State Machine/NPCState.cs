@@ -29,4 +29,9 @@ public abstract class NPCState
 
 		return this.stateMachine.PeekAtTopStateInStack();
 	}
+
+	public void InsertStateAsPreviousStateInStack(NPCState insertedState)
+	{
+		this.stateMachine.InsertStateAsPreviousStateInStack(insertedState);
+	}
 }

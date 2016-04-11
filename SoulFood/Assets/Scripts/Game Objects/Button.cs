@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class Button : MonoBehaviour {
+public class Button : NetworkBehaviour {
 
     float totalTime = 2.0f; //Amount of time needed on the pad
-    private float timer; 
+    [SyncVar (hook = "SetTimerUI")] private float timer; 
 	bool isTriggered = false;
 
 	public bool IsTriggered { get { return this.isTriggered; } }
@@ -35,8 +36,6 @@ public class Button : MonoBehaviour {
 			else
 				timer += Time.deltaTime; //timer recharged slowly
 		}
-
-        SetTimerUI();
     }
 
     public bool GetButtonStatus()
@@ -70,9 +69,9 @@ public class Button : MonoBehaviour {
 			isTriggered = false;
 	}
 
-    private void SetTimerUI()
+    private void SetTimerUI(float time)
     {
-        this.slider.value = this.timer;
+        this.slider.value = time;
         this.fillImage.color = Color.Lerp(this.emptyTimerColor, this.fullTimerColor, this.timer / this.totalTime);
     }
 }

@@ -4,13 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 public static class CollectorStateHelper {
-
-	public static void GetNewRandomPath(NPCMovementDriver movementDriver) 
+	
+	public static void GetNewPath(NPCMovementDriver movementDriver, Node endNode) 
 	{
 		if (movementDriver.AttainedFinalNode)
 		{
-			Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
-			movementDriver.ChangePath(newEndNode);
+			movementDriver.ChangePath(endNode);
 		}
 	}
 
@@ -167,5 +166,24 @@ public static class CollectorStateHelper {
 		}
 
 		return null;
+	}
+
+	public static Node FindNodeForRememberedTreePosition(NPCStateMachine npcStateMachine)
+	{
+		GameObject treePosition = null;
+
+        foreach (GameObject tree in npcStateMachine.TreesFound)
+        {
+            if (tree == npcStateMachine.StrategicSoulTreeTarget) continue;
+            treePosition = tree;
+        }
+
+        npcStateMachine.StrategicSoulTreeTarget = treePosition;
+
+		if (treePosition == null)
+			return GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
+
+		NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]).gameObject.GetComponent<MeshRenderer>().enabled = true;
+		return NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]);
 	}
 }

@@ -29,30 +29,20 @@ public class GuardSearchState : NPCState
             movementDriver.ChangePath(newEndNode);
         }
 
-        AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
+        this.stateMachine.AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
 
         return this;
-    }
-
-    protected void AddVisibleTrees(List<GameObject> newTrees)
-    {
-        foreach (GameObject tree in newTrees)
-        {
-            if (!(stateMachine as GuardStateMachine).TreesFound.Contains(tree))
-            {
-                (stateMachine as GuardStateMachine).TreesFound.Add(tree);
-            }
-        }
     }
 
     protected Node ChooseStrategicPosition()
     {
         GameObject result = null;
-        GuardStateMachine otherGuardFSM = (stateMachine as GuardStateMachine).OtherGuard.StateMachine as GuardStateMachine;
+        NPCStateMachine otherGuardFSM = (stateMachine as GuardStateMachine).OtherGuard.StateMachine;
 
         foreach (GameObject tree in (stateMachine as GuardStateMachine).TreesFound)
         {
             if (otherGuardFSM.StrategicSoulTreeTarget == tree) continue;
+            if (stateMachine.StrategicSoulTreeTarget == tree) continue;
             if (result == null)
             {
                 result = tree;
@@ -64,6 +54,8 @@ public class GuardSearchState : NPCState
                 result = tree;
             }
         }
+
+        stateMachine.StrategicSoulTreeTarget = result;
 
         if (result == null) return GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
         return NPCStateHelper.FindClosestNode(result);

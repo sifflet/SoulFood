@@ -39,6 +39,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
     public static void UpdateHUDGameTimer(float gameTimeRemaining)
     {
+        /*
         if (gameTimeRemaining <= 30.0f)
         {
             GameTimerText.color = Color.red;
@@ -54,8 +55,9 @@ public class HeadsUpDisplay : MonoBehaviour {
         }
         else
         {
+       */
             GameTimerText.text = timeFormat(gameTimeRemaining);
-        }
+       // }
     }
 
     private static string timeFormat(float time)

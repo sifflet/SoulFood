@@ -6,7 +6,7 @@ using UnityEngine.Networking;
 public class SoulTree : NetworkBehaviour {
 
 	private int triggeredCount;		// How many buttons are being stepped on by players
-	private bool isFull = true;
+	[SyncVar (hook = "stopGhosts")] private bool isFull = true;
 	private int treeType;
 	private Transform buttons;
 	private List<GameObject> treeButtons = new List<GameObject>();
@@ -56,7 +56,7 @@ public class SoulTree : NetworkBehaviour {
             GameObject soul1, soul2, soul3, soul4, soul5, soul6, soul7, soul8, soul9;
             Vector3 explosionVec = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z + 2f);
             float explosionMagnitude = 350f;
-            switch (transform.childCount) //General Idea, to be tweaked
+            switch (treeButtons.Count) //General Idea, to be tweaked
             {
                 case 3:
                     soul9 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
@@ -68,15 +68,15 @@ public class SoulTree : NetworkBehaviour {
                     soul3 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), Quaternion.identity);
                     soul2 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x + 1.5f, transform.position.y + 3, transform.position.z), Quaternion.identity);
                     soul1 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x - 1.5f, transform.position.y + 3, transform.position.z), Quaternion.identity);
-                    soul1.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul2.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul3.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul4.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul5.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul6.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul7.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul8.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul9.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
+                    soul1.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul2.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul3.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul4.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul5.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul6.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul7.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul8.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul9.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
                     NetworkServer.Spawn(soul1);
                     NetworkServer.Spawn(soul2);
                     NetworkServer.Spawn(soul3);
@@ -94,12 +94,12 @@ public class SoulTree : NetworkBehaviour {
                     soul3 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), Quaternion.identity);
                     soul2 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x + 1.5f, transform.position.y + 3, transform.position.z), Quaternion.identity);
                     soul1 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x - 1.5f, transform.position.y + 3, transform.position.z), Quaternion.identity);
-                    soul1.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul2.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul3.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul4.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul5.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul6.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
+                    soul1.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul2.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul3.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul4.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul5.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul6.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
                     NetworkServer.Spawn(soul1);
                     NetworkServer.Spawn(soul2);
                     NetworkServer.Spawn(soul3);
@@ -111,18 +111,24 @@ public class SoulTree : NetworkBehaviour {
                     soul3 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x, transform.position.y + 3, transform.position.z), Quaternion.identity);
                     soul2 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x + 1.5f, transform.position.y + 3, transform.position.z), Quaternion.identity);
                     soul1 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x - 1.5f, transform.position.y + 3, transform.position.z), Quaternion.identity);
-                    soul1.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul2.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
-                    soul3.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 5f);
+                    soul1.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul2.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
+                    soul3.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVec, 7f);
                     NetworkServer.Spawn(soul1);
                     NetworkServer.Spawn(soul2);
                     NetworkServer.Spawn(soul3);
                     break;
             }
             isFull = false;
+
             //Invoke("ResetTree", 60);//time in seconds
 		}
 	}
+
+    void stopGhosts(bool status)
+    {
+        transform.Find("Tomb").GetComponent<ParticleSystem>().loop = status;
+    }
 
     void ResetTree()
     {

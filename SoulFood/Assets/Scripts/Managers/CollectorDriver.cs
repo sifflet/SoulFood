@@ -8,6 +8,7 @@ public class CollectorDriver : NPCDriver
     private int soulsStored = 0;
 
     public int SoulsStored { get { return this.soulsStored; } }
+	public float MaxSpeed { get { return MAX_SPEED; } }
 
     public GameObject soulPrefab;
 
