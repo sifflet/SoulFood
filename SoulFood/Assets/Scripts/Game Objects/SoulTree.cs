@@ -56,7 +56,7 @@ public class SoulTree : NetworkBehaviour {
             GameObject soul1, soul2, soul3, soul4, soul5, soul6, soul7, soul8, soul9;
             Vector3 explosionVec = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z + 2f);
             float explosionMagnitude = 350f;
-            switch (transform.childCount) //General Idea, to be tweaked
+            switch (treeButtons.Count) //General Idea, to be tweaked
             {
                 case 3:
                     soul9 = (GameObject) Instantiate(soulObject, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
