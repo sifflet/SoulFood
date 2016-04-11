@@ -130,6 +130,7 @@ public class GameManager : NetworkBehaviour
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             driver.SetSoulPrefab(soulPrefab);
             Collectors.Add(driver);
+            NetworkServer.Spawn(npcInstance);
         }
 
         for (int i = Guards.Count; i < GUARDS_NUM; i++)
@@ -145,6 +146,7 @@ public class GameManager : NetworkBehaviour
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             Guards.Add(driver);
+            //NetworkServer.Spawn(npcInstance);
         }
     }
 
