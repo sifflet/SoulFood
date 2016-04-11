@@ -40,7 +40,7 @@ public class NetworkLobby : NetworkLobbyManager {
             playerPrefab.transform.position = spawns.transform.Find("Collect" + counter).position;
             playerPrefab.name = "Collector " + collectorCounter;
             collectorCounter++;
-            driver.SetControlledByAI(false);
+            //driver.SetControlledByAI(false);
         }
         counter++;
         return playerPrefab;
