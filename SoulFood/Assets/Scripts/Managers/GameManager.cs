@@ -22,9 +22,9 @@ public class GameManager : NetworkBehaviour
     public const float COLLISION_RANGE = 1.25f;
 
     private static float gameTimer = 5.0f * 60.0f; // [minutes] * 60 seconds/minute. Only modify minutes.
-    private static int livesRemaining;
-    private static int soulsConsumed;
-    private static int soulLimit;
+    [SyncVar (hook = "updateLifeHUD")] private int livesRemaining;
+    [SyncVar(hook = "updateSoulHUD")] private int soulsConsumed;
+    private int soulLimit;
 
     private static List<Node> nodes;
 
@@ -297,22 +297,30 @@ public class GameManager : NetworkBehaviour
         Application.LoadLevel("GameOver");
     }
 
-    public static void SoulConsumed()
+    public void SoulConsumed()
     {
         ++soulsConsumed;
-        HeadsUpDisplay.UpdateHUDSoulsCollected(soulsConsumed, soulLimit);
     }
 
-    public static void SoulEjected(int soulsEjected) //When players are hit, can remove more then 1
+    public void SoulEjected(int soulsEjected) //When players are hit, can remove more then 1
     {
         soulsConsumed -= soulsEjected;
-        HeadsUpDisplay.UpdateHUDSoulsCollected(soulsConsumed, soulLimit);
     }
 
-    public static void loseLife()
+    public void loseLife()
     {
         --livesRemaining;
-        HeadsUpDisplay.UpdateHUDCollectorRemainingLives(livesRemaining);
+        
+    }
+
+    private void updateSoulHUD(int souls)
+    {
+        HeadsUpDisplay.UpdateHUDSoulsCollected(souls, soulLimit);
+    }
+
+    private void updateLifeHUD(int lives)
+    {
+        HeadsUpDisplay.UpdateHUDCollectorRemainingLives(lives);
     }
 
     public bool gameTimerEnded()

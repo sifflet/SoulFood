@@ -36,7 +36,7 @@ public class GuardLungeState : NPCState
                 caughtCollectorTransition.Entry();
                 caughtCollector.StateMachine.ChangeCurrentState(caughtCollectorTransition);
                 lungeTimer = 0.0f;
-                GameManager.loseLife();
+                GameObject.FindGameObjectWithTag("GameController").SendMessage("loseLife");
             }
         }
         else
