@@ -27,7 +27,7 @@ public class CollectorImmortalState : NPCState
     {
         immortalTimer -= Time.deltaTime;
 
-        if (immortalTimer <= 0) return new CollectorSearchSoulsState(this.stateMachine);
+		if (immortalTimer <= 0) return this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine)); // return new CollectorSearchSoulsState(this.stateMachine);
 
         if (this.stateMachine.NPC.MovementDriver.AttainedFinalNode)
         {

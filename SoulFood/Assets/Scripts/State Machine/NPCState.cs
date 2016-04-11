@@ -22,4 +22,11 @@ public abstract class NPCState
 
 		return this.stateMachine.PeekAtTopStateInStack();
 	}
+
+	public NPCState ResetStackToDefaultState(NPCState defaultState) 
+	{
+		this.stateMachine.ResetStackToDefaultState(defaultState);
+
+		return this.stateMachine.PeekAtTopStateInStack();
+	}
 }

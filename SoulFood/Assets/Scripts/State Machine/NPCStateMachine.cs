@@ -57,4 +57,22 @@ public abstract class NPCStateMachine : MonoBehaviour
 	{
 		return this.stateStack.Peek();
 	}
+
+	public void ResetStackToDefaultState(NPCState defaultState) 
+	{
+		this.stateStack.Clear();
+		this.stateStack.Push(defaultState);
+	}
+
+	public string PrintStackContents() 
+	{
+		NPCState[] statesInStack = this.stateStack.ToArray();
+		string output = "";
+
+		for (int i = statesInStack.Length - 1; i >= 0; i--) {
+			output += " " + statesInStack[i].GetType();
+		}
+
+		return output;
+	}	
 }
