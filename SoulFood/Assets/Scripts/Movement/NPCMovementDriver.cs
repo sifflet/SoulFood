@@ -152,7 +152,7 @@ public class NPCMovementDriver : MonoBehaviour
 		CollectorDriver collectorDriver = this.currentNPC.gameObject.GetComponent<CollectorDriver>();
 		float speedDeboost = 0; // Variable is broguht of the if for printing purposes
 		currentNPC.MaxSpeed = collectorDriver.MaxSpeed;	// Reset to max speed
-		float startSpeed = currentNPC.MaxSpeed; // For printing purposes
+		//float startSpeed = currentNPC.MaxSpeed; // For printing purposes
 		if (collectorDriver) {
 			float speedDecreaseFactor = (currentNPC.MaxSpeed - this.minimumSpeed) / this.hypotheticalMaximumSoulCapacity;
 			speedDeboost = speedDecreaseFactor * collectorDriver.SoulsStored;
@@ -161,11 +161,12 @@ public class NPCMovementDriver : MonoBehaviour
 			else
 				currentNPC.MaxSpeed = this.minimumSpeed;
 		}
-
+		/*
 		Debug.Log (collectorDriver.name + ": Souls -> " + collectorDriver.SoulsStored 
 		           + ". Deboost -> " + speedDeboost
 		           + ". Start Speed -> " + startSpeed
 		           + ". Current Speed -> " + currentNPC.MaxSpeed);
+		*/
 	}
 
 	/**

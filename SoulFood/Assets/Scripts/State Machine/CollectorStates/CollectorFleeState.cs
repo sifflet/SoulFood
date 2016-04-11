@@ -32,7 +32,12 @@ public class CollectorFleeState : NPCState
 		if (guardsInFleeRange.Count == 0) return this.GetPreviousStateInStack(); 
 
 		// If guards are getting too close, emergency flee required
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Emergency)) ; // TODO: return emergency flee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Emergency)) {
+			// Pop current flee state off the stack so when the emergency flee state concludes, it does not transition back into flee
+			this.GetPreviousStateInStack();
+			// Transition to emergency flee state
+			return new CollectorEmergencyFleeState(this.stateMachine);
+		} 
 
         if (this.stateMachine.NPC.MovementDriver.AttainedFinalNode)
         {

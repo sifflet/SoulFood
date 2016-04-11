@@ -24,8 +24,9 @@ public abstract class CollectorCollectingSuperState : NPCState
 		this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
 
 		// If you're close to a guard, you need to move to flee state (quick change)
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Emergency)) ; // return emergencyFlee state
-		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Default)) return new CollectorFleeState(this.stateMachine); // return flee state
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Emergency)) return new CollectorEmergencyFleeState(this.stateMachine);
+		if (CollectorStateHelper.GuardsInFleeRange(this.stateMachine, CollectorStateMachine.FleeRangeType.Default) 
+		    && stateMachine.CurrentState.GetType() != typeof(CollectorEmergencyFleeState)) return new CollectorFleeState(this.stateMachine); // return flee state
 
 		// If you're near a soul, pick it up!
 		if (CollectorStateHelper.SoulsInCollectibleRange(this.stateMachine) && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState)) 

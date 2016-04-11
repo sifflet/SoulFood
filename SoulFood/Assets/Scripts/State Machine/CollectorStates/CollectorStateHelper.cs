@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 public static class CollectorStateHelper {
+
+	private const float DELAY_IN_DROPPING_SOULS = 0.5f;
 	
 	public static void GetNewPath(NPCMovementDriver movementDriver, Node endNode) 
 	{
@@ -182,5 +184,20 @@ public static class CollectorStateHelper {
 
 		NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]).gameObject.GetComponent<MeshRenderer>().enabled = true;
 		return NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]);
+	}
+
+	public static void DropSouls(CollectorDriver collectorDriver, int numSoulsToDrop)
+	{
+		float delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
+		while (numSoulsToDrop > 0) {
+			delayInDroppingSoulsTimer -= Time.deltaTime;
+			
+			if (delayInDroppingSoulsTimer <= 0) {
+				collectorDriver.DropSoul(1);
+				delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
+			}
+			
+			numSoulsToDrop--;
+		}
 	}
 }
