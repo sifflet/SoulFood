@@ -9,12 +9,15 @@ public abstract class CollectorCollectingSuperState : NPCState
     public CollectorCollectingSuperState(NPCStateMachine stateMachine)
         : base(stateMachine)
     {
-        this.guardsInSight = new List<NPCDriver>();
+		// Add state on to stack
+		this.stateMachine.PushStateOnStack(this);
+
+		this.guardsInSight = new List<NPCDriver>();
     }
 
     public override void Entry()
     {
-    }
+	}
 
     public override NPCState Update()
     {

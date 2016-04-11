@@ -1,10 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public abstract class NPCStateMachine : MonoBehaviour
 {
     protected NPCDriver npc;
     protected NPCState currentState;
+	protected Stack<NPCState> stateStack;
 
     public NPCDriver NPC { get { return this.npc; } }
     public NPCState CurrentState { get { return this.currentState; } }
@@ -12,6 +14,7 @@ public abstract class NPCStateMachine : MonoBehaviour
     public virtual void Setup(NPCDriver npc)
     {
         this.npc = npc;
+		this.stateStack = new Stack<NPCState>();
     }
 
     public virtual void EnterFirstState()
@@ -39,4 +42,37 @@ public abstract class NPCStateMachine : MonoBehaviour
     {
         this.currentState = newState;
     }
+
+	public void PushStateOnStack(NPCState state)
+	{
+		this.stateStack.Push(state);
+	}
+
+	public NPCState PopStateOffStack()
+	{
+		return this.stateStack.Pop();
+	}
+
+	public NPCState PeekAtTopStateInStack()
+	{
+		return this.stateStack.Peek();
+	}
+
+	public void ResetStackToDefaultState(NPCState defaultState) 
+	{
+		this.stateStack.Clear();
+		this.stateStack.Push(defaultState);
+	}
+
+	public string PrintStackContents() 
+	{
+		NPCState[] statesInStack = this.stateStack.ToArray();
+		string output = "";
+
+		for (int i = statesInStack.Length - 1; i >= 0; i--) {
+			output += " " + statesInStack[i].GetType();
+		}
+
+		return output;
+	}	
 }

@@ -12,4 +12,21 @@ public abstract class NPCState
 
     public abstract void Entry();
     public abstract NPCState Update();
+
+	public NPCState GetPreviousStateInStack() 
+	{
+		NPCState currentState = this.stateMachine.PopStateOffStack();
+
+		if (currentState != this)
+			return new CollectorSearchSoulsState(this.stateMachine);	// Default state returned in case something went wrong
+
+		return this.stateMachine.PeekAtTopStateInStack();
+	}
+
+	public NPCState ResetStackToDefaultState(NPCState defaultState) 
+	{
+		this.stateMachine.ResetStackToDefaultState(defaultState);
+
+		return this.stateMachine.PeekAtTopStateInStack();
+	}
 }

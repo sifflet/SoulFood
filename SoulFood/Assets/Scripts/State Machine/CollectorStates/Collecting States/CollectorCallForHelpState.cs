@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CollectorCallForHelpState : CollectorCollectingSuperState {
 
 	private float waitForHelpTimer = CollectorStateMachine.TIME_SPENT_WAITING_FOR_TREE_HELP;
-	private float delayBeforeCancellingHelpCallsTimer = 2f;
+	private float delayBeforeCancellingHelpCallsTimer = 3f;
 	private NPCMovementDriver movementDriver;
 	private SoulTree targetTree;
 
@@ -27,6 +27,11 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 		Debug.Log (this.stateMachine.NPC.name + ": Call For Help State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		GetButtonTriggeringInfoFromTargetTree();
+
+		// Add more wait delay to a triple tree
+		if (targetTree.TreeButtons.Count == 3) {
+			delayBeforeCancellingHelpCallsTimer += 5f;
+		}
 	}
 	
 	public override NPCState Update()
@@ -36,6 +41,10 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 		NPCState stateFromBase = base.Update();
 		if (stateFromBase != this)
 		{
+			// Cancell help calls before transitioning out of this state
+			if (!this.hasCancelledHelpCalls) 
+				CancelHelpCalls();
+
 			return stateFromBase;
 		}
 
@@ -84,7 +93,6 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 				this.treeButtonsThatNeedTriggering.Add(button);
 			}
 		}
-		//Debug.Log ("Buttons that need triggering: " + treeButtonsThatNeedTriggering.Count);
 	}
 
 	private void MakeHelpCalls()
@@ -120,6 +128,15 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 			(collectorDriver.StateMachine as CollectorStateMachine).CancelTreeHelpCall();
 		}
 		collectorsAskedForHelp.Clear();
+		CancelTargettingOfTreeButtons(); 
 		this.hasCancelledHelpCalls = true;
-	}	
+	}
+
+	private void CancelTargettingOfTreeButtons() 
+	{
+		foreach (GameObject buttonObj in this.targetTree.TreeButtons) {
+			Button buttonScript = buttonObj.GetComponent<Button>();
+			buttonScript.IsTargettedForTriggering = false;
+		}
+	}
 }

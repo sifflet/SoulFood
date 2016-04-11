@@ -137,7 +137,7 @@ public static class CollectorStateHelper {
 		foreach (GameObject tree in visibleTrees) 
 		{
 			SoulTree treeScript = tree.GetComponent<SoulTree>();
-			if (treeScript.TreeType == treeType && treeScript.IsFull)
+			if (treeScript.TreeType == treeType && treeScript.IsFull && !treeScript.CheckIfTreeIsTargetted())
 			{
 				filteredTrees.Add(treeScript);
 				filteredTreeObjects.Add(tree);

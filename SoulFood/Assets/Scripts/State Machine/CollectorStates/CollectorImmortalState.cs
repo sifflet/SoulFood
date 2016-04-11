@@ -14,6 +14,9 @@ public class CollectorImmortalState : NPCState
 
     public override void Entry()
     {
+		// Add state on to stack
+		this.stateMachine.PushStateOnStack(this);
+
         Debug.Log(this.stateMachine.NPC.name + ": Immortal state entry");
         this.immortalTimer = CollectorStateMachine.IMMORTALITY_TIME;
         this.guardsInSight = CollectorStateHelper.FindGuardsInSight(this.stateMachine);
@@ -24,7 +27,7 @@ public class CollectorImmortalState : NPCState
     {
         immortalTimer -= Time.deltaTime;
 
-        if (immortalTimer <= 0) return new CollectorSearchSoulsState(this.stateMachine);
+		if (immortalTimer <= 0) return this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine)); // return new CollectorSearchSoulsState(this.stateMachine);
 
         if (this.stateMachine.NPC.MovementDriver.AttainedFinalNode)
         {
