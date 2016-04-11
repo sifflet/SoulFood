@@ -39,6 +39,13 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		{
 			
 			if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree, CollectorStateMachine.TREE_MOVEMENT_COLLISION_RANGE)) {
+				// Indicate that the button has been targetted
+				Button buttonScript = buttonTargetForClosestSingleTree.GetComponent<Button>();
+				buttonScript.IsTargettedForTriggering = true;
+
+				// Since it is likely souls will now be released from the tree and caller is transitioned into collect soul state
+				// We reset the stack history so that after the collect soul state, the caller returns to search for souls and not search for single tree again
+				this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine));
 
 				return this;
 			}
@@ -50,7 +57,7 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		else 
 		{
 			if (singleTreeSearchingTimer > 0) {
-				// If we're at the end of our path having found no souls, find a new random one
+				// If we're at the end of our path having found no trees, find a new random path
 				CollectorStateHelper.GetNewRandomPath(movementDriver);
 			}
 			else {

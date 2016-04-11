@@ -58,6 +58,13 @@ public abstract class NPCStateMachine : MonoBehaviour
 		return this.stateStack.Peek();
 	}
 
+	public void InsertStateAsPreviousStateInStack(NPCState insertedState)
+	{
+		NPCState currentState = this.stateStack.Pop();
+		this.stateStack.Push(insertedState);
+		this.stateStack.Push (currentState);
+	}
+
 	public void ResetStackToDefaultState(NPCState defaultState) 
 	{
 		this.stateStack.Clear();

@@ -29,7 +29,7 @@ public class GameManager : NetworkBehaviour
     private static List<Node> nodes;
 
     private int collectorNum = 4;
-    private const int GUARDS_NUM = 2;
+    private const int GUARDS_NUM = 0;
 
     public static List<Node> AllNodes { get { return nodes; } }
     public static List<NPCDriver> Collectors { get; set; }
@@ -74,7 +74,7 @@ public class GameManager : NetworkBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        (Guards[0] as GuardDriver).IsLeader = true;
+        //(Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
 

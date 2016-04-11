@@ -71,6 +71,10 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 					NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestTripleTree, 5f);
 				}
 			}
+			else {
+				// If we're at the end of our path having found no trees, find a new random path
+				CollectorStateHelper.GetNewRandomPath(movementDriver);
+			}
 		}
 		else {
 			return new CollectorSearchSoulsState(this.stateMachine);
