@@ -48,7 +48,7 @@ public class CollectorSearchSoulsState : CollectorCollectingSuperState
 			if (soulSearchingTimer > 0) // If the time period for soul searching is not over
 			{
 				// If we're at the end of our path having found no souls, find a new random one
-				CollectorStateHelper.GetNewRandomPath(movementDriver);
+				CollectorStateHelper.GetNewPath(movementDriver, GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)]); 
 			}
 			else {	// If the time period for soul searching is over
 				return new CollectorFindSingleTreeState(this.stateMachine);

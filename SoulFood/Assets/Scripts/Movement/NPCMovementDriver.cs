@@ -70,7 +70,7 @@ public class NPCMovementDriver : MonoBehaviour
 			}
 
 			bool nodeAttained = false;
-			Collider[] collisionArray = Physics.OverlapSphere (currentNPC.transform.position, 2.0f);
+			Collider[] collisionArray = Physics.OverlapSphere (currentNPC.transform.position, 2f);
 			for (int i = 0; i < collisionArray.Length; i++)
             {
 				if (collisionArray[i].GetComponent (typeof(Node)) == pathList[pathCounter])

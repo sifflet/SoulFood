@@ -40,7 +40,6 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		if (singleTreeSearchingTimer > 0) {
 			if (buttonTargetForClosestSingleTree) 
 			{
-				Debug.Log (this.stateMachine.NPC.name + ": I HAVE A BUTTTTTONNNNN!");
 				if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, buttonTargetForClosestSingleTree, CollectorStateMachine.TREE_MOVEMENT_COLLISION_RANGE)) {
 
 					// Since it is likely souls will now be released from the tree and caller is transitioned into collect soul state
@@ -57,12 +56,8 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 			else 
 			{
 				// If we're at the end of our path having found no trees, find a new path based on the trees we've remembered
-				//CollectorStateHelper.GetNewRandomPath(movementDriver);
-				if (movementDriver.AttainedFinalNode)
-				{
-					Node newEndNode = CollectorStateHelper.FindNodeForRememberedTreePosition(this.stateMachine);
-					movementDriver.ChangePath(newEndNode);
-				}
+				//CollectorStateHelper.GetNewPath(movementDriver, GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)]; 
+				CollectorStateHelper.GetNewPath(movementDriver, CollectorStateHelper.FindNodeForRememberedTreePosition(this.stateMachine)); 
 			}
 		}
 		else {
