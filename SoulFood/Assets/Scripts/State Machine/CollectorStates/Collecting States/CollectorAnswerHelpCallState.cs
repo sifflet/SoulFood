@@ -39,7 +39,7 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 		// Check if help call has been cancelled
 		// If so, returned to soul search state
 		if (!(this.stateMachine as CollectorStateMachine).HasReceivedHelpCall) {
-			return this.GetPreviousStateInStack(); //new CollectorSearchSoulsState(this.stateMachine); 
+			return this.GetPreviousStateInStack(); 
 		}
 
 		if (buttonTarget) {	

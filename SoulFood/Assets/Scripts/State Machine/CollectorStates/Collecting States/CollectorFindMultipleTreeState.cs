@@ -18,9 +18,6 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 	{
 		Debug.Log (this.stateMachine.NPC.name + ": Find Multiple Tree State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
-		//buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
-		//buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3); 
-
 	}
 	
 	public override NPCState Update()
@@ -31,13 +28,17 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 		if (stateFromBase != this)
 		{
 			return stateFromBase;
-		}
-
-        buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
-        buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3); 
+		} 
 		
 		multipleTreeSearchingTimer -= Time.deltaTime;
 		movementDriver = this.stateMachine.NPC.MovementDriver;
+
+		// Add trees seen to strategic tree memory system
+		this.stateMachine.AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
+
+		// Find buttons for multiple that are visible
+		buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
+		buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3);
 
 		if (multipleTreeSearchingTimer > 0) {
 
@@ -72,8 +73,8 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 				}
 			}
 			else {
-				// If we're at the end of our path having found no trees, find a new random path
-				CollectorStateHelper.GetNewRandomPath(movementDriver);
+				// If we're at the end of our path having found no trees, find a new path based on the trees we've remembered
+				CollectorStateHelper.GetNewPathToGivenNode(movementDriver, CollectorStateHelper.FindNodeForRememberedTreePosition(this.stateMachine)); 
 			}
 		}
 		else {

@@ -270,6 +270,7 @@ public class NPCMovement : MonoBehaviour {
 		//Find the direction vector based on the target's position
 		directionVector = (target - transform.position);
 		directionVector.Normalize ();
+
 		//Find the current rotation velocity
 		currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
 

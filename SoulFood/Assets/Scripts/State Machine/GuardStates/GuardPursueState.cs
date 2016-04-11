@@ -69,7 +69,7 @@ public abstract class GuardPursueState : NPCState
             }
         }
 
-        AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
+        this.stateMachine.AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
 
         return this.stateMachine.CurrentState;
     }
@@ -133,7 +133,7 @@ public abstract class GuardPursueState : NPCState
 
         return null;
     }
-
+	/*
     protected void AddVisibleTrees(List<GameObject> newTrees)
     {
         foreach (GameObject tree in newTrees)
@@ -144,4 +144,5 @@ public abstract class GuardPursueState : NPCState
             }
         }
     }
+    */
 }

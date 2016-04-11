@@ -29,11 +29,11 @@ public class GuardSearchState : NPCState
             movementDriver.ChangePath(newEndNode);
         }
 
-        AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
+        this.stateMachine.AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
 
         return this;
     }
-
+	/*
     protected void AddVisibleTrees(List<GameObject> newTrees)
     {
         foreach (GameObject tree in newTrees)
@@ -44,6 +44,7 @@ public class GuardSearchState : NPCState
             }
         }
     }
+    */
 
     protected Node ChooseStrategicPosition()
     {

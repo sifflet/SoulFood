@@ -32,8 +32,9 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 
 		singleTreeSearchingTimer -= Time.deltaTime;
 		movementDriver = this.stateMachine.NPC.MovementDriver;
-		
 
+		// Add trees seen to strategic tree memory system
+		this.stateMachine.AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
 
 		if (buttonTargetForClosestSingleTree) 
 		{
@@ -57,8 +58,8 @@ public class CollectorFindSingleTreeState : CollectorCollectingSuperState {
 		else 
 		{
 			if (singleTreeSearchingTimer > 0) {
-				// If we're at the end of our path having found no trees, find a new random path
-				CollectorStateHelper.GetNewRandomPath(movementDriver);
+				// If we're at the end of our path having found no trees, find a new path based on the trees we've remembered
+				CollectorStateHelper.GetNewPathToGivenNode(movementDriver, CollectorStateHelper.FindNodeForRememberedTreePosition(this.stateMachine)); 
 			}
 			else {
 				return new CollectorFindMultipleTreeState(this.stateMachine);

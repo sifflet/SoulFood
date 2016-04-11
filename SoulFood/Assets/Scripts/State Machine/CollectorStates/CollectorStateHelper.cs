@@ -14,6 +14,14 @@ public static class CollectorStateHelper {
 		}
 	}
 
+	public static void GetNewPathToGivenNode(NPCMovementDriver movementDriver, Node endNode) 
+	{
+		if (movementDriver.AttainedFinalNode)
+		{
+			movementDriver.ChangePath(endNode);
+		}
+	}
+
 	public static List<NPCDriver> FindGuardsInSight(NPCStateMachine npcStateMachine)
 	{
 		List<NPCDriver> result = new List<NPCDriver>();
@@ -167,5 +175,20 @@ public static class CollectorStateHelper {
 		}
 
 		return null;
+	}
+
+	public static Node FindNodeForRememberedTreePosition(NPCStateMachine npcStateMachine)
+	{
+		GameObject treePosition = null;
+
+		if (npcStateMachine.TreesFound.Count > 0) {
+			int randomIndex = UnityEngine.Random.Range(0, npcStateMachine.TreesFound.Count - 1);
+			treePosition = npcStateMachine.TreesFound[0];
+		}
+
+		if (treePosition == null)
+			return GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
+
+		return NPCStateHelper.FindClosestNode(treePosition);
 	}
 }

@@ -46,6 +46,16 @@ public abstract class CollectorCollectingSuperState : NPCState
 			                                                                        (this.stateMachine as CollectorStateMachine).TargetTree, 
 			                                                                        (this.stateMachine as CollectorStateMachine).CallerStateMachine));
 
+		// If you receive a help call while calling for help on a multitree, clear your stack history and then answer the call
+		if ((this.stateMachine as CollectorStateMachine).HasReceivedHelpCall 
+		    && stateMachine.CurrentState.GetType() == typeof(CollectorCallForHelpState)) 
+		{
+			this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine));
+			return new CollectorAnswerHelpCallState(this.stateMachine, 
+			                                        (this.stateMachine as CollectorStateMachine).TargetTree, 
+			                                        (this.stateMachine as CollectorStateMachine).CallerStateMachine);
+		}
+
 		return this.stateMachine.CurrentState;
     }
 

@@ -16,7 +16,7 @@ public class GuardStateMachine : NPCStateMachine
     public const float TIME_BETWEEN_LUNGES = 3.0f;
 
     public float LungeCooldown { get; set; }
-    public List<GameObject> TreesFound { get; set; }
+    //public List<GameObject> TreesFound { get; set; }
     public GameObject StrategicSoulTreeTarget { get; set; }
     public GuardDriver OtherGuard { get; set; }
 
@@ -25,7 +25,7 @@ public class GuardStateMachine : NPCStateMachine
         base.Setup(npc);
         this.TargetNPC = null;
         this.currentState = new GuardSearchState(this);
-        this.TreesFound = new List<GameObject>();
+        //this.TreesFound = new List<GameObject>();
     }
 
     public override void EnterFirstState()

@@ -30,7 +30,7 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 
 		// Add more wait delay to a triple tree
 		if (targetTree.TreeButtons.Count == 3) {
-			delayBeforeCancellingHelpCallsTimer += 5f;
+			waitForHelpTimer += 2f;
 		}
 	}
 	
@@ -80,7 +80,7 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 		// Return to search soul state if help took too long to show up
 		if (waitForHelpTimer <= 0 ) {
 			CancelHelpCalls();
-			return new CollectorSearchSoulsState(this.stateMachine);
+			return this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine));
 		}
 
 		return this;
