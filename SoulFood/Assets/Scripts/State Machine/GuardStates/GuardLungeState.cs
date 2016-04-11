@@ -54,6 +54,8 @@ public class GuardLungeState : NPCState
     {
         foreach (NPCDriver npc in GameManager.Collectors)
         {
+            if ((npc as CollectorDriver).StateMachine.CurrentState.GetType() == typeof(CollectorImmortalState)) continue;
+
             if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
             {
                 return npc;

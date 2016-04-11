@@ -133,16 +133,4 @@ public abstract class GuardPursueState : NPCState
 
         return null;
     }
-	/*
-    protected void AddVisibleTrees(List<GameObject> newTrees)
-    {
-        foreach (GameObject tree in newTrees)
-        {
-            if (!(stateMachine as GuardStateMachine).TreesFound.Contains(tree))
-            {
-                (stateMachine as GuardStateMachine).TreesFound.Add(tree);
-            }
-        }
-    }
-    */
 }
