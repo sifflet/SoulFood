@@ -116,6 +116,8 @@ public class GameManager : NetworkBehaviour
 
     private void SpawnAllNpcs()
     {
+        bool networkedGuardExists = Guards.Count > 0;
+
         for (int i = Collectors.Count; i < collectorNum; i++)
         {
             Transform spawnPoint = GameObject.Find("Collect" + (i)).transform;
@@ -146,7 +148,12 @@ public class GameManager : NetworkBehaviour
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             Guards.Add(driver);
-            //NetworkServer.Spawn(npcInstance);
+            NetworkServer.Spawn(npcInstance);
+        }
+
+        if (networkedGuardExists)
+        {
+            Guards[1].SetControlledByAI(false);
         }
     }
 
