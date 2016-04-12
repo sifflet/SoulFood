@@ -54,7 +54,8 @@ public class SoulTree : NetworkBehaviour {
 	void DropItems(){
 		if (isFull) {
             GameObject soul1, soul2, soul3, soul4, soul5, soul6, soul7, soul8, soul9;
-            Vector3 explosionVec = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z + 2f);
+			Vector3 explosionVec = -transform.forward + transform.up; // minus because the prefab is kinda inverted... // new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z + 2f);
+
             float explosionMagnitude = 350f;
             switch (treeButtons.Count) //General Idea, to be tweaked
             {
