@@ -74,14 +74,6 @@ public class CollectorDriver : NPCDriver
         }
     }
 
-    /*
-     *  Acquire soul prefab from GameManager since cannot set the soul prefab through the inspector on this script
-     */
-    public void SetSoulPrefab(GameObject soulPrefab)
-    {
-        this.soulPrefab = soulPrefab;
-    }
-
     public void AddSoul()
     {
         ++this.soulsStored;
@@ -104,7 +96,7 @@ public class CollectorDriver : NPCDriver
 
         for (int i = 0; i < numberOfSouls; ++i)
         {
-            GameObject soul = (GameObject)Instantiate(GameManager.soulPrefabInstance, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
+            GameObject soul = (GameObject)Instantiate(this.soulPrefab, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
             soul.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVector, explosionRadius);
 			NetworkServer.Spawn(soul);
         }

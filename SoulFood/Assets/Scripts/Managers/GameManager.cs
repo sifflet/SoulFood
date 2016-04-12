@@ -12,7 +12,6 @@ public class GameManager : NetworkBehaviour
     public GameObject cameraRigPrefab;
     public GameObject soulPrefab;
     public GameObject guardsPrefab;
-    public static GameObject soulPrefabInstance;
 
     public GameObject treeOneButton;
     public GameObject treeTwoButton;
@@ -96,8 +95,6 @@ public class GameManager : NetworkBehaviour
         HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
 
 		AllButtons = FindObjectsOfType(typeof(Button)) as Button[];
-
-        soulPrefabInstance = soulPrefab;
     }
 
     void Update()
@@ -147,7 +144,6 @@ public class GameManager : NetworkBehaviour
             npcInstance.AddComponent<CollectorDriver>();
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
 			driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
-			driver.SetSoulPrefab(soulPrefab);
             Collectors.Add(driver);
             NetworkServer.Spawn(npcInstance);
         }
