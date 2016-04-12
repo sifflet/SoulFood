@@ -37,7 +37,7 @@ public abstract class NPCDriver : NetworkBehaviour
     
     public virtual void Update()
     {
-        FindVisibleNPCs();
+        if(controlledByAI) FindVisibleNPCs();
     }
 
     public virtual void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
