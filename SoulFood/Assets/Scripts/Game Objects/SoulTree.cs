@@ -85,6 +85,8 @@ public class SoulTree : NetworkBehaviour {
 
             isFull = false;
 
+            this.GetComponentInChildren<ParticleSystem>().enableEmission = false;
+
             //Invoke("ResetTree", 60);//time in seconds
 		}
 	}
@@ -97,6 +99,8 @@ public class SoulTree : NetworkBehaviour {
     void ResetTree()
     {
         isFull = true;
-        //Animator things here to show its full again
+
+        this.GetComponentInChildren<ParticleSystem>().enableEmission = true;
+
     }
 }
