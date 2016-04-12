@@ -43,6 +43,7 @@ public class GuardsCameraDriver : CameraDriver
     {
         Vector3 averagePos = new Vector3();
 
+		Debug.Log ("HEEEEEEEEEEEEY" + GameManager.Guards.Count);
         // Go through all the targets and add their positions together.
         foreach(NPCDriver target in GameManager.Guards)
         {
