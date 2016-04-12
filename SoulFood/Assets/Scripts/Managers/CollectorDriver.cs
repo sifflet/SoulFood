@@ -7,11 +7,35 @@ public class CollectorDriver : NPCDriver
 {
     private const float MAX_SPEED = 15f;
     private int soulsStored = 0;
+    private float immortalTimer = 0f;
+    private bool isImmortal;
+
+    private Material transparentMaterial = Resources.Load("Transparent", typeof(Material)) as Material;
+    private Material[] knightMaterials = new Material[2];
+    private Material swordMaterial;
 
     public int SoulsStored { get { return this.soulsStored; } }
-	public float MaxSpeed { get { return MAX_SPEED; } }
+    public float MaxSpeed { get { return MAX_SPEED; } }
 
-    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint, GameObject soulPrefab)
+    public GameObject soulPrefab;
+
+    public bool IsImmortal
+    {
+        get { return this.isImmortal; }
+        set
+        {
+            this.isImmortal = value;
+
+            if (isImmortal)
+            {
+                immortalTimer = CollectorStateMachine.IMMORTALITY_TIME;
+                this.KeyBoardInputs.speed += 3f;
+                SetCollectorOpacity();
+            }
+        }
+    }
+
+    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
     {
 		base.Setup(instance, cameraInstance, spawnPoint, soulPrefab);
 
@@ -31,13 +55,26 @@ public class CollectorDriver : NPCDriver
         this.instance.AddComponent<CollectorStateMachine>();
         this.stateMachine = this.instance.GetComponent<CollectorStateMachine>();
         this.stateMachine.Setup(this);
+
+        this.isImmortal = false;
     }
 
     public override void Update()
     {
         base.Update();
-    }
 
+        if (isImmortal)
+        {
+            immortalTimer -= Time.deltaTime;
+
+            if (immortalTimer <= 0)
+            {
+                RemoveCollectorOpacity();
+                isImmortal = false;
+                this.KeyBoardInputs.speed -= 3f;
+            }
+        }
+    }
 
     /*
      *  Acquire soul prefab from GameManager since cannot set the soul prefab through the inspector on this script
@@ -92,5 +129,28 @@ public class CollectorDriver : NPCDriver
                 this.visibleNPCs.Add(npc);
             }
         }
+    }
+
+    private void SetCollectorOpacity()
+    {
+        Transform knightTransform = this.Instance.transform.GetChild(0).GetChild(0);
+        knightMaterials = knightTransform.gameObject.GetComponent<Renderer>().materials;
+        Material[] transparentMaterials = new Material[2];
+        transparentMaterials[0] = transparentMaterial;
+        transparentMaterials[1] = transparentMaterial;
+        knightTransform.gameObject.GetComponent<Renderer>().materials = transparentMaterials;
+
+        Transform swordTransform = this.Instance.transform.GetChild(0).GetChild(4);
+        swordMaterial = swordTransform.gameObject.GetComponent<Renderer>().material;
+        swordTransform.gameObject.GetComponent<Renderer>().material = transparentMaterial;
+    }
+
+    private void RemoveCollectorOpacity()
+    {
+        Transform knightTransform = this.Instance.transform.GetChild(0).GetChild(0);
+        knightTransform.gameObject.GetComponent<Renderer>().materials = knightMaterials;
+
+        Transform swordTransform = this.Instance.transform.GetChild(0).GetChild(4);
+        swordTransform.gameObject.GetComponent<Renderer>().material = swordMaterial;
     }
 }

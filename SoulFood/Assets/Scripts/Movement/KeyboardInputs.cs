@@ -9,7 +9,7 @@ public class KeyboardInputs : NetworkBehaviour
 
     protected Vector3 movement;
     protected float rotationSpeed = 3.0f;
-    protected float speed = maximumSpeed;
+    public float speed = maximumSpeed;
 
     protected NPCDriver npc;
 
