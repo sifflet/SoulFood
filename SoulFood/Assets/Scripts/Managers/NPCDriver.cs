@@ -24,6 +24,7 @@ public abstract class NPCDriver : NetworkBehaviour
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
     public NPCStateMachine StateMachine { get { return this.stateMachine; } }
 	public bool ControlledByAI { get { return this.controlledByAI; } }
+    public KeyboardInputs KeyBoardInputs { get { return this.keyboardInputs; } }
     
     public Collider[] CollisionArray
     {
