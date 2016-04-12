@@ -144,7 +144,6 @@ public class GameManager : NetworkBehaviour
             npcInstance.AddComponent<CollectorDriver>();
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
 			driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
-			driver.SetSoulPrefab(soulPrefab);
             Collectors.Add(driver);
             NetworkServer.Spawn(npcInstance);
         }

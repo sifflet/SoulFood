@@ -17,8 +17,6 @@ public class CollectorDriver : NPCDriver
     public int SoulsStored { get { return this.soulsStored; } }
     public float MaxSpeed { get { return MAX_SPEED; } }
 
-    public GameObject soulPrefab;
-
     public bool IsImmortal
     {
         get { return this.isImmortal; }
@@ -74,14 +72,6 @@ public class CollectorDriver : NPCDriver
                 this.KeyBoardInputs.speed -= 3f;
             }
         }
-    }
-
-    /*
-     *  Acquire soul prefab from GameManager since cannot set the soul prefab through the inspector on this script
-     */
-    public void SetSoulPrefab(GameObject soulPrefab)
-    {
-        this.soulPrefab = soulPrefab;
     }
 
     public void AddSoul()
