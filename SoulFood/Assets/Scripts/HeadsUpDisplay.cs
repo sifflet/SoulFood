@@ -2,12 +2,18 @@
 using System.Collections;
 using UnityEngine.UI;
 
-public class HeadsUpDisplay : MonoBehaviour {
+public class HeadsUpDisplay : MonoBehaviour
+{
 
     private Text[] headsUpDisplay;
     private static Text SoulsCollectedText;
     private static Text CollectorRemainingLivesText;
     private static Text GameTimerText;
+
+    public GameObject indicator;
+    private static GameObject indicatorInstance;
+    private float indicatorLifeTime = 5.0f;
+    private float indicatorTimer = 5.0f;
 
     /**
      *  Acquiring handle on text components.
@@ -18,13 +24,32 @@ public class HeadsUpDisplay : MonoBehaviour {
         SoulsCollectedText = this.headsUpDisplay[0];
         CollectorRemainingLivesText = this.headsUpDisplay[1];
         GameTimerText = this.headsUpDisplay[2];
+
+        indicatorInstance = (GameObject)Instantiate(indicator);
+        indicatorInstance.transform.SetParent(this.transform);
+        indicatorInstance.transform.localScale = Vector2.one;
+        indicatorInstance.SetActive(false);
+    }
+
+    void Update()
+    {
+        if (indicatorInstance.activeInHierarchy)
+        {
+            indicatorTimer -= Time.deltaTime;
+
+            if (indicatorTimer <= 0.0f)
+            {
+                indicatorInstance.SetActive(false);
+                indicatorTimer = indicatorLifeTime;
+            }
+        }
     }
 
     public static void Initialize(int soulsCollected, int soulLimit, int collectorRemainingLives, float gameTimeRemaining)
     {
-        SoulsCollectedText.text = "Souls Collected: " + soulsCollected + " / " + soulLimit;
-        CollectorRemainingLivesText.text = "Collector Lives: " + collectorRemainingLives;
-        GameTimerText.text = timeFormat(gameTimeRemaining);
+        UpdateHUDSoulsCollected(soulsCollected, soulLimit);
+        UpdateHUDCollectorRemainingLives(collectorRemainingLives);
+        UpdateHUDGameTimer(gameTimeRemaining);
     }
 
     public static void UpdateHUDSoulsCollected(int soulsCollected, int soulLimit)
@@ -39,25 +64,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
     public static void UpdateHUDGameTimer(float gameTimeRemaining)
     {
-        /*
-        if (gameTimeRemaining <= 30.0f)
-        {
-            GameTimerText.color = Color.red;
-        }
-        else if (gameTimeRemaining <= 60.0f)
-        {
-            GameTimerText.color = Color.yellow;
-        }
-
-        if (gameTimeRemaining <= 0.0f)
-        {
-            GameTimerText.text = "Time's Up!";
-        }
-        else
-        {
-       */
-            GameTimerText.text = timeFormat(gameTimeRemaining);
-       // }
+        GameTimerText.text = timeFormat(gameTimeRemaining);
     }
 
     private static string timeFormat(float time)
@@ -65,5 +72,10 @@ public class HeadsUpDisplay : MonoBehaviour {
         string minutes = Mathf.Floor(time / 60.0f).ToString("00");
         string seconds = (time % 60.0f).ToString("00");
         return minutes + ":" + seconds;
+    }
+
+    public static void CreateIndicator(Vector2 targetLocation)
+    {
+        indicatorInstance.SetActive(true);
     }
 }
