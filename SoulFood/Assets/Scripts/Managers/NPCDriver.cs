@@ -12,6 +12,7 @@ public abstract class NPCDriver : NetworkBehaviour
     protected Transform spawnPoint;
     protected NPCMovementDriver movementDriver;
     protected KeyboardInputs keyboardInputs;
+	protected GameObject soulPrefab;
 
     protected CameraDriver cameraDriver;
     protected List<NPCDriver> visibleNPCs;
@@ -40,11 +41,12 @@ public abstract class NPCDriver : NetworkBehaviour
         FindVisibleNPCs();
     }
 
-    public virtual void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
+    public virtual void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint, GameObject soulPrefab)
     {
         this.instance = instance;
         this.controlledByAI = true;
         this.spawnPoint = spawnPoint;
+		this.soulPrefab = soulPrefab;
 
         this.visibleNPCs = new List<NPCDriver>();
 

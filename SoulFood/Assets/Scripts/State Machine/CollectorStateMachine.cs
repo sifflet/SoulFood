@@ -16,7 +16,7 @@ public class CollectorStateMachine : NPCStateMachine
 	public const float EMERGENCY_FLEE_RANGE = 10.0f;
 	public const float SOUL_COLLECTIBLE_RANGE_FOR_STATE_TRIGGER = 2.5f;
 	public enum FleeRangeType { Default, Emergency };
-	public const float IMMORTALITY_TIME = 3.0f;
+	public const float IMMORTALITY_TIME = 8.0f;
 
 	// Variables for handling help calls as caller
 	public List<CollectorDriver> collectorsAskedForHelp = new List<CollectorDriver>();		// This a list of Collectors that were asked for help

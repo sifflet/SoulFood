@@ -4,6 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 public static class CollectorStateHelper {
+
+	private const float DELAY_IN_DROPPING_SOULS = 0.5f;
+	private static float delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
 	
 	public static void GetNewPath(NPCMovementDriver movementDriver, Node endNode) 
 	{
@@ -183,7 +186,16 @@ public static class CollectorStateHelper {
 		if (treePosition == null)
 			return GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
 
-		NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]).gameObject.GetComponent<MeshRenderer>().enabled = true;
 		return NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]);
+	}
+
+	public static void DropSouls(CollectorDriver collectorDriver, int numSoulsToDrop)
+	{
+		delayInDroppingSoulsTimer -= Time.deltaTime;
+		while (numSoulsToDrop > 0 && delayInDroppingSoulsTimer <= 0) {
+			collectorDriver.DropSoul(1);
+			delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
+			numSoulsToDrop--;
+		}
 	}
 }

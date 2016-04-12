@@ -32,6 +32,10 @@ public class GuardLungeState : NPCState
             NPCDriver caughtCollector = GetCollectorInLungeRange();
             if (caughtCollector != null)
             {
+				// Force collector to drop all souls
+				Debug.Log (caughtCollector.name + ": Caught! Souls -> " + (caughtCollector as CollectorDriver).SoulsStored);
+				CollectorStateHelper.DropSouls((caughtCollector as CollectorDriver), (caughtCollector as CollectorDriver).SoulsStored);
+
                 NPCState caughtCollectorTransition = new CollectorImmortalState(caughtCollector.StateMachine);
                 caughtCollectorTransition.Entry();
                 caughtCollector.StateMachine.ChangeCurrentState(caughtCollectorTransition);

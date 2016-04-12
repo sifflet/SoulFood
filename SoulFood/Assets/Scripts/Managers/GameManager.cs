@@ -44,16 +44,22 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    [Command]
+    void CmdGetOtherGuardAuthority()
+    {
+        //Guards[1].Instance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+    }
+
     void Start()
     {
         if (isServer)
         {
-            randomizeTrees();
+            randomizeTombs();
         }
 
         InitializeNodes();
         InitializeGraph();
-        SpawnTrees();
+        SpawnTombs();
         SetGameLimits();
 
         Collectors = new List<NPCDriver>();
@@ -78,6 +84,14 @@ public class GameManager : NetworkBehaviour
         SetupNPCStateMachines();
         #endregion
 
+        if (isLocalPlayer)
+        {
+            if (Guards[0].hasAuthority)
+            {
+                CmdGetOtherGuardAuthority();
+            }
+        }
+
         HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
     }
 
@@ -85,8 +99,8 @@ public class GameManager : NetworkBehaviour
     {
         if (GameState())
             UpdateNPCs();
-        else
-            HandleGameConclusion();
+//        else
+//            HandleGameConclusion();
 
         gameTimer += Time.deltaTime;
         HeadsUpDisplay.UpdateHUDGameTimer(gameTimer);
@@ -129,8 +143,8 @@ public class GameManager : NetworkBehaviour
 
             npcInstance.AddComponent<CollectorDriver>();
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
-            driver.Setup(npcInstance, cameraInstance, spawnPoint);
-            driver.SetSoulPrefab(soulPrefab);
+			driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
+			driver.SetSoulPrefab(soulPrefab);
             Collectors.Add(driver);
             NetworkServer.Spawn(npcInstance);
         }
@@ -146,8 +160,8 @@ public class GameManager : NetworkBehaviour
 
             npcInstance.AddComponent<GuardDriver>();
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
-            driver.Setup(npcInstance, cameraInstance, spawnPoint);
-            Guards.Add(driver);
+			driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
+			Guards.Add(driver);
             NetworkServer.Spawn(npcInstance);
         }
 
@@ -156,7 +170,7 @@ public class GameManager : NetworkBehaviour
             Guards[1].SetControlledByAI(false);
         }
     }
-
+    
     private void GetNetworkNPCs()
     {
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
@@ -204,55 +218,57 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    private void randomizeTrees()
+    private void randomizeTombs()
     {
-        Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
-            new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
-        int[] treeSizes;
+        int[] tombSizes;
+
         switch (collectorNum)
         {
             case 4:
-                treeSizes = new int[] { 1, 1, 2, 2, 2, 3, 3, 3 };
+				tombSizes = new int[] { 1, 1, 2, 2, 2, 3, 3, 3 };
                 break;
             case 3:
-                treeSizes = new int[] { 1, 1, 1, 2, 2, 2, 3, 3 };
+				tombSizes = new int[] { 1, 1, 1, 2, 2, 2, 3, 3 };
                 break;
             case 2:
-                treeSizes = new int[] { 1, 1, 1, 1, 2, 2, 2, 2 };
+				tombSizes = new int[] { 1, 1, 1, 1, 2, 2, 2, 2 };
                 break;
             default:
-                treeSizes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1 };
+				tombSizes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1 };
                 break;
         }
-        MixArray(treeSizes);
+		MixArray(tombSizes);
         finalTreeSizes = new SyncListInt();
-        
-        for (int i = 0; i < treeLocations.Count(); i++)
+
+		GameObject tombSpawnPoints = GameObject.FindGameObjectWithTag("TombsSpawnPoints");
+		for (int i = 0; i < tombSpawnPoints.transform.childCount; ++i)
         {
-            finalTreeSizes.Add(treeSizes[i]);
+			finalTreeSizes.Add(tombSizes[i]);
         }
     }
 
-    private void SpawnTrees()
+    private void SpawnTombs()
     {
-        Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
-            new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
-        GameObject tree;
-        for (int i = 0; i < finalTreeSizes.Count; i++)
+		GameObject tombSpawnPoints = GameObject.FindGameObjectWithTag("TombsSpawnPoints");
+        GameObject tomb;
+        for (int i = 0; i < finalTreeSizes.Count; ++i)
         {
+
+			Transform childTransform = tombSpawnPoints.transform.GetChild(i);
+
             switch (finalTreeSizes[i])
             {
                 case 1:
-                    tree = (GameObject)Instantiate(treeOneButton, treeLocations[i], Quaternion.identity);
+				tomb = (GameObject)Instantiate(treeOneButton, childTransform.position, childTransform.rotation);
                     break;
                 case 2:
-                    tree = (GameObject)Instantiate(treeTwoButton, treeLocations[i], Quaternion.identity);
+				tomb = (GameObject)Instantiate(treeTwoButton, childTransform.position, childTransform.rotation);
                     break;
                 default:
-                    tree = (GameObject)Instantiate(treeThreeButton, treeLocations[i], Quaternion.identity);
+				tomb = (GameObject)Instantiate(treeThreeButton, childTransform.position, childTransform.rotation);
                     break;
             }
-            NetworkServer.Spawn(tree);
+			NetworkServer.Spawn(tomb);
         }
     }
 
@@ -272,7 +288,7 @@ public class GameManager : NetworkBehaviour
         switch (collectorNum)
         {
             case 4:
-                livesRemaining = 3;
+                livesRemaining = 13;
                 soulLimit = 50;
                 break;
             case 3:
