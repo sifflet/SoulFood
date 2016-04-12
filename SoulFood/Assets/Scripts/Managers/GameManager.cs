@@ -143,8 +143,8 @@ public class GameManager : NetworkBehaviour
 
             npcInstance.AddComponent<CollectorDriver>();
             CollectorDriver driver = npcInstance.GetComponent<CollectorDriver>();
-            driver.Setup(npcInstance, cameraInstance, spawnPoint);
-            driver.SetSoulPrefab(soulPrefab);
+			driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
+			driver.SetSoulPrefab(soulPrefab);
             Collectors.Add(driver);
             NetworkServer.Spawn(npcInstance);
         }
@@ -160,8 +160,8 @@ public class GameManager : NetworkBehaviour
 
             npcInstance.AddComponent<GuardDriver>();
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
-            driver.Setup(npcInstance, cameraInstance, spawnPoint);
-            Guards.Add(driver);
+			driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
+			Guards.Add(driver);
             NetworkServer.Spawn(npcInstance);
         }
 
@@ -286,7 +286,7 @@ public class GameManager : NetworkBehaviour
         switch (collectorNum)
         {
             case 4:
-                livesRemaining = 3;
+                livesRemaining = 13;
                 soulLimit = 50;
                 break;
             case 3:
