@@ -35,7 +35,7 @@ public class CollectorDriver : NPCDriver
         }
     }
 
-    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
+    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint, GameObject soulPrefab)
     {
 		base.Setup(instance, cameraInstance, spawnPoint, soulPrefab);
 
