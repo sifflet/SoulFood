@@ -32,14 +32,23 @@ public class GuardLungeState : NPCState
             NPCDriver caughtCollector = GetCollectorInLungeRange();
             if (caughtCollector != null)
             {
-				// Force collector to drop all souls
-				CollectorStateHelper.DropSouls((caughtCollector as CollectorDriver), (caughtCollector as CollectorDriver).SoulsStored);
-				Debug.Log (caughtCollector.name + ": Caught! Souls -> " + (caughtCollector as CollectorDriver).SoulsStored);
+                if (caughtCollector.ControlledByAI)
+                {
+                    NPCState caughtCollectorTransition = new CollectorImmortalState(caughtCollector.StateMachine);
+                    caughtCollectorTransition.Entry();
+                    caughtCollector.StateMachine.ChangeCurrentState(caughtCollectorTransition);
+                    lungeTimer = 0.0f;
+                }
+                else
+                {
+                    (caughtCollector as CollectorDriver).IsImmortal = true;
+                    CollectorStateHelper.DropSouls((caughtCollector as CollectorDriver), (caughtCollector as CollectorDriver).SoulsStored);
+                }
 
-                NPCState caughtCollectorTransition = new CollectorImmortalState(caughtCollector.StateMachine);
-                caughtCollectorTransition.Entry();
-                caughtCollector.StateMachine.ChangeCurrentState(caughtCollectorTransition);
-                lungeTimer = 0.0f;
+                // Force collector to drop all souls
+                CollectorStateHelper.DropSouls((caughtCollector as CollectorDriver), (caughtCollector as CollectorDriver).SoulsStored);
+                Debug.Log(caughtCollector.name + ": Caught! Souls -> " + (caughtCollector as CollectorDriver).SoulsStored);
+
                 GameObject.FindGameObjectWithTag("GameController").SendMessage("loseLife");
             }
         }
@@ -59,6 +68,7 @@ public class GuardLungeState : NPCState
         foreach (NPCDriver npc in GameManager.Collectors)
         {
             if ((npc as CollectorDriver).StateMachine.CurrentState.GetType() == typeof(CollectorImmortalState)) continue;
+            if ((npc as CollectorDriver).IsImmortal) continue;
 
             if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
             {
