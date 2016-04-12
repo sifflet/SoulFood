@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Networking;
 
 public class CollectorDriver : NPCDriver
 {
@@ -10,13 +11,11 @@ public class CollectorDriver : NPCDriver
     public int SoulsStored { get { return this.soulsStored; } }
 	public float MaxSpeed { get { return MAX_SPEED; } }
 
-    public GameObject soulPrefab;
-
-    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
+    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint, GameObject soulPrefab)
     {
-        base.Setup(instance, cameraInstance, spawnPoint);
+		base.Setup(instance, cameraInstance, spawnPoint, soulPrefab);
 
-        this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
+		this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
 
         this.instance.AddComponent<CollectorKeyboardInputs>();
         this.keyboardInputs = this.instance.GetComponent<CollectorKeyboardInputs>();
@@ -55,6 +54,7 @@ public class CollectorDriver : NPCDriver
 
     public void DropSoul(int soulsDropped)
     {
+		Debug.Log (this.name + ": Dropped a soul!");
         if (this.soulsStored > 0)
         {
             this.soulsStored -= soulsDropped;
@@ -64,14 +64,16 @@ public class CollectorDriver : NPCDriver
 
     private void InstantiateSouls(int numberOfSouls)
     {
+		Debug.Log (this.name + ": Instantiated a soul!");
         Vector3 explosionVector = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z + 2f);
-        float explosionMagnitude = 350f;
-        float explosionRadius = 5f;
+        float explosionMagnitude = 200f;
+        float explosionRadius = 2f;
 
         for (int i = 0; i < numberOfSouls; ++i)
         {
-            GameObject soul = (GameObject)Instantiate(soulPrefab, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
+            GameObject soul = (GameObject)Instantiate(this.soulPrefab, new Vector3(transform.position.x, transform.position.y + 5, transform.position.z), Quaternion.identity);
             soul.GetComponent<Rigidbody>().AddExplosionForce(explosionMagnitude, explosionVector, explosionRadius);
+			NetworkServer.Spawn(soul);
         }
     }
 

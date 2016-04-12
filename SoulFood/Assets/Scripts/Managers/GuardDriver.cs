@@ -5,18 +5,18 @@ using System.Collections.Generic;
 public class GuardDriver : NPCDriver
 {
     private bool isLeader;
-    private const float MAX_SPEED = 13f;
+    private const float MAX_SPEED = 12f;
 
     public bool IsLeader {
         get { return this.isLeader; } 
         set { this.isLeader = value; (this.keyboardInputs as GuardKeyboardInputs).IsLeader = true; }
     }
 
-    public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint)
-    {
-        base.Setup(instance, cameraInstance, spawnPoint);
-
-        this.isLeader = false;
+	public override void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint, GameObject soulPrefab)
+	{
+		base.Setup(instance, cameraInstance, spawnPoint, soulPrefab);
+		
+		this.isLeader = false;
 
         this.instance.GetComponent<NPCMovement>().MaxSpeed = MAX_SPEED;
         this.instance.AddComponent<GuardKeyboardInputs>();

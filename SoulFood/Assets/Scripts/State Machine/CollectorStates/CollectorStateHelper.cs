@@ -6,6 +6,7 @@ using System.Collections.Generic;
 public static class CollectorStateHelper {
 
 	private const float DELAY_IN_DROPPING_SOULS = 0.5f;
+	private static float delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
 	
 	public static void GetNewPath(NPCMovementDriver movementDriver, Node endNode) 
 	{
@@ -190,15 +191,10 @@ public static class CollectorStateHelper {
 
 	public static void DropSouls(CollectorDriver collectorDriver, int numSoulsToDrop)
 	{
-		float delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
-		while (numSoulsToDrop > 0) {
-			delayInDroppingSoulsTimer -= Time.deltaTime;
-			
-			if (delayInDroppingSoulsTimer <= 0) {
-				collectorDriver.DropSoul(1);
-				delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
-			}
-			
+		delayInDroppingSoulsTimer -= Time.deltaTime;
+		while (numSoulsToDrop > 0 && delayInDroppingSoulsTimer <= 0) {
+			collectorDriver.DropSoul(1);
+			delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
 			numSoulsToDrop--;
 		}
 	}
