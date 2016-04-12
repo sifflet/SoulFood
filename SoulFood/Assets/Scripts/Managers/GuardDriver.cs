@@ -56,6 +56,7 @@ public class GuardDriver : NPCDriver
             if (npc == this) continue;
             if (npc.GetType() == typeof(GuardDriver)) continue;
             if (npc.GetType() == typeof(CollectorDriver) && (npc.StateMachine as CollectorStateMachine).CurrentState.GetType() == typeof(CollectorImmortalState)) continue;
+            if ((npc as CollectorDriver).IsImmortal) continue;
 
             Vector3 viewPortPosition = this.cameraDriver.Camera.WorldToViewportPoint(npc.Instance.transform.position);
 
