@@ -32,11 +32,15 @@ public class GuardLungeState : NPCState
             NPCDriver caughtCollector = GetCollectorInLungeRange();
             if (caughtCollector != null)
             {
+				// Force collector to drop all souls
+				CollectorStateHelper.DropSouls((caughtCollector as CollectorDriver), (caughtCollector as CollectorDriver).SoulsStored);
+				Debug.Log (caughtCollector.name + ": Caught! Souls -> " + (caughtCollector as CollectorDriver).SoulsStored);
+
                 NPCState caughtCollectorTransition = new CollectorImmortalState(caughtCollector.StateMachine);
                 caughtCollectorTransition.Entry();
                 caughtCollector.StateMachine.ChangeCurrentState(caughtCollectorTransition);
                 lungeTimer = 0.0f;
-                GameManager.loseLife();
+                GameObject.FindGameObjectWithTag("GameController").SendMessage("loseLife");
             }
         }
         else
@@ -54,6 +58,8 @@ public class GuardLungeState : NPCState
     {
         foreach (NPCDriver npc in GameManager.Collectors)
         {
+            if ((npc as CollectorDriver).StateMachine.CurrentState.GetType() == typeof(CollectorImmortalState)) continue;
+
             if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(stateMachine.NPC.Instance, npc.Instance, GuardStateMachine.LUNGE_COLLISION_RANGE))
             {
                 return npc;

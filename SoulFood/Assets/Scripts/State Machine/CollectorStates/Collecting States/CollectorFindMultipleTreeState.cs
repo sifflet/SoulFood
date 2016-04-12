@@ -18,9 +18,6 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 	{
 		Debug.Log (this.stateMachine.NPC.name + ": Find Multiple Tree State Entry");
 		movementDriver = this.stateMachine.NPC.MovementDriver;
-		//buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
-		//buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3); 
-
 	}
 	
 	public override NPCState Update()
@@ -31,19 +28,21 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 		if (stateFromBase != this)
 		{
 			return stateFromBase;
-		}
-
-        buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
-        buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3); 
+		} 
 		
 		multipleTreeSearchingTimer -= Time.deltaTime;
-		movementDriver = this.stateMachine.NPC.MovementDriver;
+
+		// Add trees seen to strategic tree memory system
+		this.stateMachine.AddVisibleTrees(NPCStateHelper.FindVisibleTrees(stateMachine.NPC));
+
+		// Find buttons for multiple that are visible
+		buttonTargetForClosestDoubleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 2);
+		buttonTargetForClosestTripleTree = CollectorStateHelper.FindClosestFullTreeButton(this.stateMachine.NPC, 3);
 
 		if (multipleTreeSearchingTimer > 0) {
 
 			if (buttonTargetForClosestDoubleTree) 	// See if a double tree is found first
 			{
-				
 				if (NPCStateHelper.IsWithinCollisionRangeAtGroundLevel(this.stateMachine.NPC.Instance, buttonTargetForClosestDoubleTree, CollectorStateMachine.TREE_MOVEMENT_COLLISION_RANGE)) {
 					// Indicate that the button has been targetted by the caller
 					Button buttonScript = buttonTargetForClosestDoubleTree.GetComponent<Button>();
@@ -70,6 +69,11 @@ public class CollectorFindMultipleTreeState : CollectorCollectingSuperState {
 				else {
 					NPCStateHelper.MoveTo(this.stateMachine.NPC, buttonTargetForClosestTripleTree, 5f);
 				}
+			}
+			else {
+				// If we're at the end of our path having found no trees, find a new path based on the trees we've remembered
+				//CollectorStateHelper.GetNewPath(movementDriver, GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
+				CollectorStateHelper.GetNewPath(movementDriver, CollectorStateHelper.FindNodeForRememberedTreePosition(this.stateMachine)); 
 			}
 		}
 		else {

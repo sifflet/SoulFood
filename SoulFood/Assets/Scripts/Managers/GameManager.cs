@@ -21,10 +21,10 @@ public class GameManager : NetworkBehaviour
     /* NPC variables */
     public const float COLLISION_RANGE = 1.25f;
 
-    private static float gameTimer = 5.0f * 60.0f; // [minutes] * 60 seconds/minute. Only modify minutes.
-    private static int livesRemaining;
-    private static int soulsConsumed;
-    private static int soulLimit;
+    private static float gameTimer = 1f; // [minutes] * 60 seconds/minute. Only modify minutes.
+    [SyncVar (hook = "updateLifeHUD")] private int livesRemaining;
+    [SyncVar(hook = "updateSoulHUD")] private int soulsConsumed;
+    private int soulLimit;
 
     private static List<Node> nodes;
 
@@ -42,6 +42,12 @@ public class GameManager : NetworkBehaviour
             allNPCs.AddRange(Guards);
             return allNPCs;
         }
+    }
+
+    [Command]
+    void CmdGetOtherGuardAuthority()
+    {
+        //Guards[1].Instance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
     }
 
     void Start()
@@ -78,6 +84,14 @@ public class GameManager : NetworkBehaviour
         SetupNPCStateMachines();
         #endregion
 
+        if (isLocalPlayer)
+        {
+            if (Guards[0].hasAuthority)
+            {
+                CmdGetOtherGuardAuthority();
+            }
+        }
+
         HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
     }
 
@@ -88,7 +102,7 @@ public class GameManager : NetworkBehaviour
 //        else
 //            HandleGameConclusion();
 
-        gameTimer -= Time.deltaTime;
+        gameTimer += Time.deltaTime;
         HeadsUpDisplay.UpdateHUDGameTimer(gameTimer);
 
         // TO TEST GAME FLOW
@@ -116,6 +130,8 @@ public class GameManager : NetworkBehaviour
 
     private void SpawnAllNpcs()
     {
+        bool networkedGuardExists = Guards.Count > 0;
+
         for (int i = Collectors.Count; i < collectorNum; i++)
         {
             Transform spawnPoint = GameObject.Find("Collect" + (i)).transform;
@@ -130,6 +146,7 @@ public class GameManager : NetworkBehaviour
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             driver.SetSoulPrefab(soulPrefab);
             Collectors.Add(driver);
+            NetworkServer.Spawn(npcInstance);
         }
 
         for (int i = Guards.Count; i < GUARDS_NUM; i++)
@@ -145,9 +162,15 @@ public class GameManager : NetworkBehaviour
             GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
             driver.Setup(npcInstance, cameraInstance, spawnPoint);
             Guards.Add(driver);
+            NetworkServer.Spawn(npcInstance);
+        }
+
+        if (networkedGuardExists)
+        {
+            Guards[1].SetControlledByAI(false);
         }
     }
-
+    
     private void GetNetworkNPCs()
     {
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
@@ -295,22 +318,30 @@ public class GameManager : NetworkBehaviour
         Application.LoadLevel("GameOver");
     }
 
-    public static void SoulConsumed()
+    public void SoulConsumed()
     {
         ++soulsConsumed;
-        HeadsUpDisplay.UpdateHUDSoulsCollected(soulsConsumed, soulLimit);
     }
 
-    public static void SoulEjected(int soulsEjected) //When players are hit, can remove more then 1
+    public void SoulEjected(int soulsEjected) //When players are hit, can remove more then 1
     {
         soulsConsumed -= soulsEjected;
-        HeadsUpDisplay.UpdateHUDSoulsCollected(soulsConsumed, soulLimit);
     }
 
-    public static void loseLife()
+    public void loseLife()
     {
         --livesRemaining;
-        HeadsUpDisplay.UpdateHUDCollectorRemainingLives(livesRemaining);
+        
+    }
+
+    private void updateSoulHUD(int souls)
+    {
+        HeadsUpDisplay.UpdateHUDSoulsCollected(souls, soulLimit);
+    }
+
+    private void updateLifeHUD(int lives)
+    {
+        HeadsUpDisplay.UpdateHUDCollectorRemainingLives(lives);
     }
 
     public bool gameTimerEnded()

@@ -43,8 +43,8 @@ public class CollectorCollectSoulsState : CollectorCollectingSuperState {
 			}
 
 		}
-		else {	// All visible souls have been collected, return to soul search state
-			return this.GetPreviousStateInStack(); // new CollectorSearchSoulsState(this.stateMachine);
+		else {	// All visible souls have been collected, return to previous state
+			return this.GetPreviousStateInStack(); 
 		}
 		
 		return this;

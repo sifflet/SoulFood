@@ -34,10 +34,16 @@ public static class NPCStateHelper
     public static void MoveTo(NPCDriver npc, GameObject target, float directMoveDistance)
     {
         float distanceToTarget = GetShortestPathDistance(npc.Instance, target);
+		Node endNode = FindClosestNode(target);
 
-        if (distanceToTarget > directMoveDistance)
+        /*
+		if (npc.MovementDriver.AttainedFinalNode) {
+			Debug.Log (npc.name + ": HEYYYYYY I'M AT THE FINAL NODE!");
+		}*/
+
+		if (distanceToTarget > directMoveDistance)
         {
-            npc.MovementDriver.ChangePath(FindClosestNode(target));
+			npc.MovementDriver.ChangePath(endNode);
         }
         else
         {

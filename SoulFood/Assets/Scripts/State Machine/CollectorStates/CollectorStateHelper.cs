@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 public static class CollectorStateHelper {
 
-	public static void GetNewRandomPath(NPCMovementDriver movementDriver) 
+	private const float DELAY_IN_DROPPING_SOULS = 0.5f;
+	
+	public static void GetNewPath(NPCMovementDriver movementDriver, Node endNode) 
 	{
 		if (movementDriver.AttainedFinalNode)
 		{
-			Node newEndNode = GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
-			movementDriver.ChangePath(newEndNode);
+			movementDriver.ChangePath(endNode);
 		}
 	}
 
@@ -167,5 +168,38 @@ public static class CollectorStateHelper {
 		}
 
 		return null;
+	}
+
+	public static Node FindNodeForRememberedTreePosition(NPCStateMachine npcStateMachine)
+	{
+		GameObject treePosition = null;
+
+        foreach (GameObject tree in npcStateMachine.TreesFound)
+        {
+            if (tree == npcStateMachine.StrategicSoulTreeTarget) continue;
+            treePosition = tree;
+        }
+
+        npcStateMachine.StrategicSoulTreeTarget = treePosition;
+
+		if (treePosition == null)
+			return GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)];
+
+		return NPCStateHelper.FindClosestNode(treePosition.GetComponent<SoulTree>().TreeButtons[0]);
+	}
+
+	public static void DropSouls(CollectorDriver collectorDriver, int numSoulsToDrop)
+	{
+		float delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
+		while (numSoulsToDrop > 0) {
+			delayInDroppingSoulsTimer -= Time.deltaTime;
+			
+			if (delayInDroppingSoulsTimer <= 0) {
+				collectorDriver.DropSoul(1);
+				delayInDroppingSoulsTimer = DELAY_IN_DROPPING_SOULS;
+			}
+			
+			numSoulsToDrop--;
+		}
 	}
 }

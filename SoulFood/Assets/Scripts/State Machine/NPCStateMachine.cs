@@ -7,6 +7,9 @@ public abstract class NPCStateMachine : MonoBehaviour
     protected NPCDriver npc;
     protected NPCState currentState;
 	protected Stack<NPCState> stateStack;
+	
+	public List<GameObject> TreesFound { get; set; }
+    public GameObject StrategicSoulTreeTarget { get; set; }
 
     public NPCDriver NPC { get { return this.npc; } }
     public NPCState CurrentState { get { return this.currentState; } }
@@ -15,6 +18,7 @@ public abstract class NPCStateMachine : MonoBehaviour
     {
         this.npc = npc;
 		this.stateStack = new Stack<NPCState>();
+		this.TreesFound = new List<GameObject>();
     }
 
     public virtual void EnterFirstState()
@@ -58,6 +62,13 @@ public abstract class NPCStateMachine : MonoBehaviour
 		return this.stateStack.Peek();
 	}
 
+	public void InsertStateAsPreviousStateInStack(NPCState insertedState)
+	{
+		NPCState currentState = this.stateStack.Pop();
+		this.stateStack.Push(insertedState);
+		this.stateStack.Push (currentState);
+	}
+
 	public void ResetStackToDefaultState(NPCState defaultState) 
 	{
 		this.stateStack.Clear();
@@ -75,4 +86,15 @@ public abstract class NPCStateMachine : MonoBehaviour
 
 		return output;
 	}	
+
+	public void AddVisibleTrees(List<GameObject> newTrees)
+	{
+		foreach (GameObject tree in newTrees)
+		{
+			if (!this.TreesFound.Contains(tree))
+			{
+				this.TreesFound.Add(tree);
+			}
+		}
+	}
 }
