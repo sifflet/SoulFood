@@ -106,19 +106,24 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 		availableCollectors.Remove(this.stateMachine.NPC);
 		Debug.Log ("Number of buttons that need triggering: " + treeButtonsThatNeedTriggering.Count);
 		Debug.Log ("Here is the available collector count: " + availableCollectors.Count);
-		foreach (GameObject button in treeButtonsThatNeedTriggering) {
+
+        foreach (GameObject button in treeButtonsThatNeedTriggering) {
 			if (availableCollectors.Count >= 1) {	// If there is at least one collector available
 				CollectorDriver closestCollector = NPCStateHelper.FindClosestNPC(this.stateMachine.NPC, availableCollectors) as CollectorDriver;
 				if (closestCollector.ControlledByAI) {	// If the closest Collector is a NPC
 					(closestCollector.StateMachine as CollectorStateMachine).ReceiveTreeHelpCall(this.targetTree, this.stateMachine as CollectorStateMachine);
 					this.collectorsAskedForHelp.Add (closestCollector);
-				}
-				else {	// If the closest Collector is a player
-					// TODO: Handle asking player for help via sounds and UI
+                }
+                else {  // If the closest Collector is a player
+                        // TODO: Handle asking player for help via sounds and UI
+
 				}
 
-				// Remove collector that was just called for help from availableCollectors list
-				availableCollectors.Remove(closestCollector);
+                //HeadsUpDisplay.CreateIndicator(Camera.current.WorldToViewportPoint(this.targetTree.transform.position));
+                HeadsUpDisplay.CreateIndicator(new Vector2(0, 125));
+
+                // Remove collector that was just called for help from availableCollectors list
+                availableCollectors.Remove(closestCollector);
 			}
 		}
 		(this.stateMachine as CollectorStateMachine).collectorsAskedForHelp = this.collectorsAskedForHelp;
