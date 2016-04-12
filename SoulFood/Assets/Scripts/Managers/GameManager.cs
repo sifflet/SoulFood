@@ -44,6 +44,12 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+    [Command]
+    void CmdGetOtherGuardAuthority()
+    {
+        //Guards[1].Instance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+    }
+
     void Start()
     {
         if (isServer)
@@ -77,6 +83,14 @@ public class GameManager : NetworkBehaviour
         (Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
+
+        if (isLocalPlayer)
+        {
+            if (Guards[0].hasAuthority)
+            {
+                CmdGetOtherGuardAuthority();
+            }
+        }
 
         HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
     }
@@ -156,7 +170,7 @@ public class GameManager : NetworkBehaviour
             Guards[1].SetControlledByAI(false);
         }
     }
-
+    
     private void GetNetworkNPCs()
     {
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
