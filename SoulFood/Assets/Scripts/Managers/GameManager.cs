@@ -62,12 +62,12 @@ public class GameManager : NetworkBehaviour
     {
         if (isServer)
         {
-            randomizeTrees();
+            randomizeTombs();
         }
 
         InitializeNodes();
         InitializeGraph();
-        SpawnTrees();
+        SpawnTombs();
         SetGameLimits();
 
         Collectors = new List<NPCDriver>();
@@ -224,57 +224,59 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-    private void randomizeTrees()
-    {
-        Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
-            new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
-        int[] treeSizes;
-        switch (collectorNum)
-        {
-            case 4:
-                treeSizes = new int[] { 1, 1, 2, 2, 2, 3, 3, 3 };
-                break;
-            case 3:
-                treeSizes = new int[] { 1, 1, 1, 2, 2, 2, 3, 3 };
-                break;
-            case 2:
-                treeSizes = new int[] { 1, 1, 1, 1, 2, 2, 2, 2 };
-                break;
-            default:
-                treeSizes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1 };
-                break;
-        }
-        MixArray(treeSizes);
-        finalTreeSizes = new SyncListInt();
-        
-        for (int i = 0; i < treeLocations.Count(); i++)
-        {
-            finalTreeSizes.Add(treeSizes[i]);
-        }
-    }
+	private void randomizeTombs()
+	{
+		int[] tombSizes;
+		
+		switch (collectorNum)
+		{
+		case 4:
+			tombSizes = new int[] { 1, 1, 2, 2, 2, 3, 3, 3 };
+			break;
+		case 3:
+			tombSizes = new int[] { 1, 1, 1, 2, 2, 2, 3, 3 };
+			break;
+		case 2:
+			tombSizes = new int[] { 1, 1, 1, 1, 2, 2, 2, 2 };
+			break;
+		default:
+			tombSizes = new int[] { 1, 1, 1, 1, 1, 1, 1, 1 };
+			break;
+		}
+		MixArray(tombSizes);
+		finalTreeSizes = new SyncListInt();
+		
+		GameObject tombSpawnPoints = GameObject.FindGameObjectWithTag("TombsSpawnPoints");
+		for (int i = 0; i < tombSpawnPoints.transform.childCount; ++i)
+		{
+			finalTreeSizes.Add(tombSizes[i]);
+		}
+	}
 
-    private void SpawnTrees()
-    {
-        Vector3[] treeLocations = { new Vector3(-25f, 0f, -23.35f), new Vector3(-32f, 0f, -0.18f),  new Vector3(20f, 0f, -28.2f),   new Vector3(7f, 0f, -12.1f),
-            new Vector3(29f, 0f, 12.3f),    new Vector3(-19.5f, 0f, 21.8f), new Vector3(-13f, 0f, 37.4f),   new Vector3(30f, 0f, 37.4f)};
-        GameObject tree;
-        for (int i = 0; i < finalTreeSizes.Count; i++)
-        {
-            switch (finalTreeSizes[i])
-            {
-                case 1:
-                    tree = (GameObject)Instantiate(treeOneButton, treeLocations[i], Quaternion.identity);
-                    break;
-                case 2:
-                    tree = (GameObject)Instantiate(treeTwoButton, treeLocations[i], Quaternion.identity);
-                    break;
-                default:
-                    tree = (GameObject)Instantiate(treeThreeButton, treeLocations[i], Quaternion.identity);
-                    break;
-            }
-            NetworkServer.Spawn(tree);
-        }
-    }
+	private void SpawnTombs()
+	{
+		GameObject tombSpawnPoints = GameObject.FindGameObjectWithTag("TombsSpawnPoints");
+		GameObject tomb;
+		for (int i = 0; i < finalTreeSizes.Count; ++i)
+		{
+			
+			Transform childTransform = tombSpawnPoints.transform.GetChild(i);
+			
+			switch (finalTreeSizes[i])
+			{
+			case 1:
+				tomb = (GameObject)Instantiate(treeOneButton, childTransform.position, childTransform.rotation);
+				break;
+			case 2:
+				tomb = (GameObject)Instantiate(treeTwoButton, childTransform.position, childTransform.rotation);
+				break;
+			default:
+				tomb = (GameObject)Instantiate(treeThreeButton, childTransform.position, childTransform.rotation);
+				break;
+			}
+			NetworkServer.Spawn(tomb);
+		}
+	}
 
     private void MixArray(int[] array)
     {
