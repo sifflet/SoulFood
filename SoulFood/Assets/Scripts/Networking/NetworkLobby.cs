@@ -28,6 +28,8 @@ public class NetworkLobby : NetworkLobbyManager {
             playerPrefab.transform.position = spawns.transform.Find("Guard0").position;
             playerPrefab.name = "Guard " + guardCounter;
             guardCounter++;
+            (driver as GuardDriver).IsLeader = true;
+            driver.SetControlledByAI(false);
         }
             
         if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Collector")

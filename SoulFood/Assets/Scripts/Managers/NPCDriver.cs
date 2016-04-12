@@ -24,11 +24,6 @@ public abstract class NPCDriver : NetworkBehaviour
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
     public NPCStateMachine StateMachine { get { return this.stateMachine; } }
 	public bool ControlledByAI { get { return this.controlledByAI; } }
-
-    public override void OnStartServer()
-    {
-        cameraDriver.SetEnabled(true);
-    }
     
     public Collider[] CollisionArray
     {
