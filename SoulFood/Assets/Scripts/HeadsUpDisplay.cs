@@ -22,9 +22,9 @@ public class HeadsUpDisplay : MonoBehaviour {
 
     public static void Initialize(int soulsCollected, int soulLimit, int collectorRemainingLives, float gameTimeRemaining)
     {
-        SoulsCollectedText.text = "Souls Collected: " + soulsCollected + " / " + soulLimit;
-        CollectorRemainingLivesText.text = "Collector Lives: " + collectorRemainingLives;
-        GameTimerText.text = timeFormat(gameTimeRemaining);
+        UpdateHUDSoulsCollected(soulsCollected, soulLimit);
+        UpdateHUDCollectorRemainingLives(collectorRemainingLives);
+        UpdateHUDGameTimer(gameTimeRemaining);
     }
 
     public static void UpdateHUDSoulsCollected(int soulsCollected, int soulLimit)
@@ -39,25 +39,7 @@ public class HeadsUpDisplay : MonoBehaviour {
 
     public static void UpdateHUDGameTimer(float gameTimeRemaining)
     {
-        /*
-        if (gameTimeRemaining <= 30.0f)
-        {
-            GameTimerText.color = Color.red;
-        }
-        else if (gameTimeRemaining <= 60.0f)
-        {
-            GameTimerText.color = Color.yellow;
-        }
-
-        if (gameTimeRemaining <= 0.0f)
-        {
-            GameTimerText.text = "Time's Up!";
-        }
-        else
-        {
-       */
-            GameTimerText.text = timeFormat(gameTimeRemaining);
-       // }
+        GameTimerText.text = timeFormat(gameTimeRemaining);
     }
 
     private static string timeFormat(float time)
