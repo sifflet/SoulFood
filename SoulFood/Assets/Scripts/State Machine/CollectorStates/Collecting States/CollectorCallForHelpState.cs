@@ -114,7 +114,9 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 					this.collectorsAskedForHelp.Add (closestCollector);
 				}
 				else {	// If the closest Collector is a player
-					// TODO: Handle asking player for help via sounds and UI
+					Debug.Log (this.targetTree.transform.GetChild(2).name);
+					this.targetTree.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().enabled = true;
+					// TODO: Needs a sound effect
 				}
 
 				// Remove collector that was just called for help from availableCollectors list
@@ -133,6 +135,7 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 		}
 		collectorsAskedForHelp.Clear();
 		CancelTargettingOfTreeButtons(); 
+		this.targetTree.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().enabled = false;
 		this.hasCancelledHelpCalls = true;
 	}
 
