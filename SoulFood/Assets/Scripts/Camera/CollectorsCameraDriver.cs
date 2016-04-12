@@ -5,8 +5,8 @@ public class CollectorsCameraDriver : CameraDriver
 {
     private GameObject target;
 
-    private const float yOffset = 5.0f;
-    private const float zOffset = -5.0f;
+    private const float yOffset = 8.0f;
+    private const float zOffset = -8.0f;
 
     public override void Setup(GameObject cameraInstance, GameObject target)
     {

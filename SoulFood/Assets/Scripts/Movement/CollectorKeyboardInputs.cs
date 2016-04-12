@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class CollectorKeyboardInputs : KeyboardInputs
 {
     private KeyCode ejectSoulKey = KeyCode.LeftShift;
-    private KeyCode consumeSoulKey = KeyCode.LeftControl;
+    private KeyCode consumeSoulKey = KeyCode.Space;
 
     protected override void HandleMovementInputs()
     {
