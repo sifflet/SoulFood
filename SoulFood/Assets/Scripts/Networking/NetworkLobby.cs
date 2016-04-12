@@ -9,6 +9,7 @@ public class NetworkLobby : NetworkLobbyManager {
     public GameObject Guards;
     public GameObject cameraRigPrefab;
 	public GameObject soulPrefab;
+	public bool DemoAsNPCs = false;
     private int numOfCollectors;
     int counter = 0;
     int guardCounter = 0;
@@ -38,7 +39,8 @@ public class NetworkLobby : NetworkLobbyManager {
 
                 if (i == 0) (driver as GuardDriver).IsLeader = true;
 
-                driver.SetControlledByAI(false);
+				if (!DemoAsNPCs)
+                	driver.SetControlledByAI(false);
             }
         }
             
@@ -52,7 +54,9 @@ public class NetworkLobby : NetworkLobbyManager {
 			playerPrefab.transform.position = spawns.transform.Find("Collect" + counter).position;
             playerPrefab.name = "Collector " + collectorCounter;
             collectorCounter++;
-            driver.SetControlledByAI(false);
+
+			if (!DemoAsNPCs)
+            	driver.SetControlledByAI(false);
         }
         counter++;
         return playerPrefab;
