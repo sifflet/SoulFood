@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GuardDriver : NPCDriver
 {
     private bool isLeader;
-    private const float MAX_SPEED = 12f;
+    private const float MAX_SPEED = 11f;
 
     public bool IsLeader {
         get { return this.isLeader; } 

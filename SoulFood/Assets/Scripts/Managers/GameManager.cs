@@ -31,6 +31,9 @@ public class GameManager : NetworkBehaviour
     private int collectorNum = 4;
     private const int GUARDS_NUM = 2;
 
+	private static Button[] allButtons;
+
+	public static Button[] AllButtons { get; set; }
     public static List<Node> AllNodes { get { return nodes; } }
     public static List<NPCDriver> Collectors { get; set; }
     public static List<NPCDriver> Guards { get; set; }
@@ -93,6 +96,8 @@ public class GameManager : NetworkBehaviour
         }
 
         HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
+
+		AllButtons = FindObjectsOfType(typeof(Button)) as Button[];
     }
 
     void Update()

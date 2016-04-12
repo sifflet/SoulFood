@@ -33,12 +33,19 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 		{
 			return stateFromBase;
 		}
+
+		// In the case that this help call was initiated by a player, check if the player is still triggering the tree
+		// If not, cancel the help calls
+		if (!(this.stateMachine as CollectorStateMachine).CheckIfPlayerIsTriggeringTheTree(this.targetTree)) 
+		{
+			(this.stateMachine as CollectorStateMachine).CancelHelpCallsAfterPlayerCall();
+		}
 		
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		
 		// Check if help call has been cancelled
 		// If so, returned to soul search state
-		if (!(this.stateMachine as CollectorStateMachine).HasReceivedHelpCall) {
+		if (!(this.stateMachine as CollectorStateMachine).HasReceivedHelpCall && !(this.stateMachine as CollectorStateMachine).hasReceivedPlayerHelpCall) {
 			return this.GetPreviousStateInStack(); 
 		}
 
@@ -69,7 +76,7 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 
 		foreach (GameObject buttonObj in treeButtons) {
 			Button buttonScript = buttonObj.GetComponent<Button>();
-			if (!buttonScript.IsTargettedForTriggering)
+			if (!buttonScript.IsTargettedForTriggering && !buttonScript.IsTriggered)
 			{
 				buttonScript.IsTargettedForTriggering = true;
 				targetButton = buttonObj;

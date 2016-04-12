@@ -51,6 +51,25 @@ public class SoulTree : NetworkBehaviour {
 		return false;
 	}
 
+	public bool CheckIfTreeIsCompletelyTargettedOrTriggered()
+	{
+		foreach (GameObject buttonObj in this.treeButtons) {
+			Button buttonScript = buttonObj.GetComponent<Button>();
+			if (!buttonScript.IsTargettedForTriggering && !buttonScript.IsTriggered)
+				return false;
+		}
+		
+		return true;
+	}
+
+	public bool CheckIfTreeHasMultipleButtons()
+	{
+		if (this.treeButtons.Count == 2 || this.treeButtons.Count == 3)
+			return true;
+
+		return false;
+	}
+
 	void DropItems(){
 		if (isFull) {
             GameObject soul1, soul2, soul3, soul4, soul5, soul6, soul7, soul8, soul9;

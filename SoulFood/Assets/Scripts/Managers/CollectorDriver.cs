@@ -54,7 +54,6 @@ public class CollectorDriver : NPCDriver
 
     public void DropSoul(int soulsDropped)
     {
-		Debug.Log (this.name + ": Dropped a soul!");
         if (this.soulsStored > 0)
         {
             this.soulsStored -= soulsDropped;
@@ -64,7 +63,6 @@ public class CollectorDriver : NPCDriver
 
     private void InstantiateSouls(int numberOfSouls)
     {
-		Debug.Log (this.name + ": Instantiated a soul!");
         Vector3 explosionVector = new Vector3(transform.position.x, transform.position.y + 2.5f, transform.position.z + 2f);
         float explosionMagnitude = 200f;
         float explosionRadius = 2f;

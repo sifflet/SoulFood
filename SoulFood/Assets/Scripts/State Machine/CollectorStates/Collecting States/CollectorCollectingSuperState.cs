@@ -32,13 +32,44 @@ public abstract class CollectorCollectingSuperState : NPCState
 		if (CollectorStateHelper.SoulsInCollectibleRange(this.stateMachine) && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState)) 
 			return new CollectorCollectSoulsState(this.stateMachine); // return soul collecting state
 
+		// If there is help needed by a player while not collecting souls, go help!
+		SoulTree targetTree = (this.stateMachine as CollectorStateMachine).GetTreeWithPlayersOnThem();
+		if (targetTree
+		    && stateMachine.CurrentState.GetType() != typeof(CollectorAnswerHelpCallState)
+		    && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState))
+		{
+			(this.stateMachine as CollectorStateMachine).hasReceivedPlayerHelpCall = true;
+			// Notify the player that this collector is coming to help
+			(this.stateMachine as CollectorStateMachine).NotifyPlayerOfHelp(this.stateMachine.NPC as CollectorDriver);
+
+			return new CollectorAnswerHelpCallState(this.stateMachine, 
+			                                        targetTree, 
+			                                        (this.stateMachine as CollectorStateMachine).CallerStateMachine);
+		}
+
+		// If there is help needed by a player while collecting souls, insert the answer help call state as the previous state in the stack
+		// This is done so that you can finish collecting souls and then transition to your previous state which is now answering the help call
+		if (targetTree && stateMachine.CurrentState.GetType() == typeof(CollectorCollectSoulsState)) 
+		{
+			(this.stateMachine as CollectorStateMachine).hasReceivedPlayerHelpCall = true;
+
+			this.InsertStateAsPreviousStateInStack(new CollectorAnswerHelpCallState(this.stateMachine, 
+			                                        								targetTree, 
+			                                        								(this.stateMachine as CollectorStateMachine).CallerStateMachine));
+		}
+
 		// If you receive a help call while not collecting souls, answer it!
 		if ((this.stateMachine as CollectorStateMachine).HasReceivedHelpCall 
 		    && stateMachine.CurrentState.GetType() != typeof(CollectorAnswerHelpCallState)
-		    && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState)) 
+		    && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState))
+		{
+			// Notify the player that this collector is coming to help
+			(this.stateMachine as CollectorStateMachine).NotifyPlayerOfHelp(this.stateMachine.NPC as CollectorDriver);
+
 			return new CollectorAnswerHelpCallState(this.stateMachine, 
 			                                        (this.stateMachine as CollectorStateMachine).TargetTree, 
 			                                        (this.stateMachine as CollectorStateMachine).CallerStateMachine);
+		}
 
 		// If you receive a help call while collecting souls, insert the answer help call state as the previous state in the stack
 		// This is done so that you can finish collecting souls and then transition to your previous state which is now answering the help call

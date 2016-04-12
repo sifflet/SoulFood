@@ -26,6 +26,11 @@ public class CollectorStateMachine : NPCStateMachine
 	private CollectorStateMachine callerStateMachine;
 	private bool hasReceivedHelpCall = false;
 	private SoulTree targetTree;
+
+	// Variables for handling player help calls as the player
+	public List<CollectorDriver> collectorNPCsComingToHelp = new List<CollectorDriver>();
+	public bool hasCancelledHelpCallsAsPlayer = false;
+	public bool hasReceivedPlayerHelpCall = false;
 	
 	public bool HasReceivedHelpCall { get { return this.hasReceivedHelpCall; } }
 	public SoulTree TargetTree { get { return this.targetTree; } }
@@ -79,7 +84,72 @@ public class CollectorStateMachine : NPCStateMachine
 	{
 		Debug.Log (this.NPC.name + " Callee: Cancel my help call!");
 		this.hasReceivedHelpCall = false;
+		this.hasReceivedPlayerHelpCall = false;
 		this.targetTree = null;
 		this.callerStateMachine = null;
+	}
+
+	// Methods for helping players with trees
+	public SoulTree  GetTreeWithPlayersOnThem() {
+		Button[] allButtons = GameManager.AllButtons;
+		SoulTree treeWithPlayer = null;
+		
+		foreach (Button button in allButtons) {
+			SoulTree treeForButton = button.GetSoulTreeForCurrentButton();
+			if (button.IsTriggered 															// Button is currently triggered
+			    && !button.CollectorCurrentlyOnTheButton.ControlledByAI						// A player is stepping on the button
+			    && treeForButton.CheckIfTreeHasMultipleButtons() 							// The tree has multiple buttons
+			    && treeForButton.IsFull 													// The tree is full
+			    && !treeForButton.CheckIfTreeIsCompletelyTargettedOrTriggered())			// The tree has untriggered/targetted buttons
+			{
+				treeWithPlayer = treeForButton;
+				this.callerStateMachine = button.CollectorCurrentlyOnTheButton.StateMachine as CollectorStateMachine;
+			}
+		}
+
+		return treeWithPlayer;
+	}
+
+	public void NotifyPlayerOfHelp(CollectorDriver collector) {
+		this.collectorNPCsComingToHelp.Add (collector);
+		this.hasCancelledHelpCallsAsPlayer = false;
+
+		Debug.Log (collector.name + ": Player, I'm coming to help!");
+	}
+
+	// If I'm a player, the moment I step off my button, cancel the help calls of everyone that came to help me
+	public bool CheckIfPlayerIsTriggeringTheTree(SoulTree targetTree) {
+		if (callerStateMachine) 
+		{
+			CollectorDriver playerDriver = this.callerStateMachine.NPC as CollectorDriver;
+			foreach (GameObject buttonObj in targetTree.TreeButtons) {
+				Button buttonScript = buttonObj.GetComponent<Button>();
+				if (buttonScript.IsTriggered && buttonScript.CollectorCurrentlyOnTheButton == playerDriver)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	public void CancelHelpCallsAfterPlayerCall() 
+	{
+		foreach (CollectorDriver collectorDriver in collectorNPCsComingToHelp) {
+			(collectorDriver.StateMachine as CollectorStateMachine).CancelTreeHelpCall();
+		}
+		CancelTargettingOfTreeButtons();
+		collectorNPCsComingToHelp.Clear();
+		this.hasCancelledHelpCallsAsPlayer = true;
+	}
+
+	private void CancelTargettingOfTreeButtons() 
+	{
+		Button[] allButtons = GameManager.AllButtons;
+
+		foreach (CollectorDriver collectorDriver in this.collectorNPCsComingToHelp) {
+			foreach (Button button in allButtons) {
+				if (button.CollectorCurrentlyOnTheButton == collectorDriver)
+					button.IsTargettedForTriggering = false;
+			}
+		}
 	}
 }
