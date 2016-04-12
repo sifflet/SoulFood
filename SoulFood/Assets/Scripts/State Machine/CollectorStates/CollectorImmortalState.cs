@@ -6,6 +6,9 @@ public class CollectorImmortalState : NPCState
 {
     private List<NPCDriver> guardsInSight;
     private float immortalTimer = 0f;
+	private Material transparentMaterial = Resources.Load("Transparent", typeof(Material)) as Material;
+	private Material[] knightMaterials = new Material[2];
+	private Material swordMaterial;
 
     public CollectorImmortalState(NPCStateMachine stateMachine)
         : base(stateMachine)
@@ -23,9 +26,9 @@ public class CollectorImmortalState : NPCState
         this.stateMachine.NPC.MovementDriver.ChangePathToFlee(CollectorStateMachine.FLEE_RANGE, guardsInSight);
 
 		// Upon entry, give collector a speed boost
-		this.stateMachine.NPC.MovementDriver.NPCMovement.MaxSpeed += 5f;
-		// Set collector opacity to half
-		SetCollectorOpacity(0.5f);
+		this.stateMachine.NPC.MovementDriver.NPCMovement.MaxSpeed += 8f;
+		// Set collector opacity to transparent
+		SetCollectorOpacity();
     }
 
     public override NPCState Update()
@@ -36,7 +39,7 @@ public class CollectorImmortalState : NPCState
 			// Upon exit of state, remove collector speed boost
 			this.stateMachine.NPC.MovementDriver.NPCMovement.MaxSpeed = (this.stateMachine.NPC as CollectorDriver).MaxSpeed;
 			// Set collector opacity to full
-			SetCollectorOpacity(1f);
+			RemoveCollectorOpacity();
 
 			return this.ResetStackToDefaultState(new CollectorSearchSoulsState(this.stateMachine));
 		}
@@ -49,14 +52,26 @@ public class CollectorImmortalState : NPCState
         return this;
     }
 
-	private void SetCollectorOpacity(float alpha)
+	private void SetCollectorOpacity()
 	{
-		Transform knightTransform = this.stateMachine.NPC.Instance.transform.Find ("Knight");
-		Material knightMaterial = knightTransform.gameObject.GetComponent<SkinnedMeshRenderer>().material;
-		//foreach (Material material in knightMaterials) {
-		Color color = knightMaterial.color;
-		color.a = alpha;
-		knightMaterial.color = color;
-		//}
+		Transform knightTransform = this.stateMachine.NPC.Instance.transform.GetChild(0).GetChild(0);
+		knightMaterials = knightTransform.gameObject.GetComponent<Renderer>().materials;
+		Material[] transparentMaterials = new Material[2];
+		transparentMaterials[0] = transparentMaterial;
+		transparentMaterials[1] = transparentMaterial;
+		knightTransform.gameObject.GetComponent<Renderer>().materials = transparentMaterials;
+
+		Transform swordTransform = this.stateMachine.NPC.Instance.transform.GetChild(0).GetChild(4);
+		swordMaterial = swordTransform.gameObject.GetComponent<Renderer>().material;
+		swordTransform.gameObject.GetComponent<Renderer>().material = transparentMaterial;
+	}
+
+	private void RemoveCollectorOpacity()
+	{
+		Transform knightTransform = this.stateMachine.NPC.Instance.transform.GetChild(0).GetChild(0);
+		knightTransform.gameObject.GetComponent<Renderer>().materials = knightMaterials;
+
+		Transform swordTransform = this.stateMachine.NPC.Instance.transform.GetChild(0).GetChild(4);
+		swordTransform.gameObject.GetComponent<Renderer>().material = swordMaterial;
 	}
 }
