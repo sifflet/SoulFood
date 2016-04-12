@@ -85,8 +85,8 @@ public class GameManager : NetworkBehaviour
     {
         if (GameState())
             UpdateNPCs();
-        else
-            HandleGameConclusion();
+//        else
+//            HandleGameConclusion();
 
         gameTimer -= Time.deltaTime;
         HeadsUpDisplay.UpdateHUDGameTimer(gameTimer);
