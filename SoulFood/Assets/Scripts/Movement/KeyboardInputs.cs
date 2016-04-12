@@ -20,11 +20,12 @@ public class KeyboardInputs : NetworkBehaviour
 
 	void Update ()
     {
+        /*
         if (!isLocalPlayer)
         {
             return;
         }
-
+        */
         HandleInputs();
 	}
 

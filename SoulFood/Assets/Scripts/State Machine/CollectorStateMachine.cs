@@ -93,7 +93,7 @@ public class CollectorStateMachine : NPCStateMachine
 	public SoulTree  GetTreeWithPlayersOnThem() {
 		Button[] allButtons = GameManager.AllButtons;
 		SoulTree treeWithPlayer = null;
-		
+
 		foreach (Button button in allButtons) {
 			SoulTree treeForButton = button.GetSoulTreeForCurrentButton();
 			if (button.IsTriggered 															// Button is currently triggered
@@ -119,14 +119,11 @@ public class CollectorStateMachine : NPCStateMachine
 
 	// If I'm a player, the moment I step off my button, cancel the help calls of everyone that came to help me
 	public bool CheckIfPlayerIsTriggeringTheTree(SoulTree targetTree) {
-		if (callerStateMachine) 
-		{
-			CollectorDriver playerDriver = this.callerStateMachine.NPC as CollectorDriver;
-			foreach (GameObject buttonObj in targetTree.TreeButtons) {
-				Button buttonScript = buttonObj.GetComponent<Button>();
-				if (buttonScript.IsTriggered && buttonScript.CollectorCurrentlyOnTheButton == playerDriver)
-					return true;
-			}
+		CollectorDriver playerDriver = this.callerStateMachine.NPC as CollectorDriver;
+		foreach (GameObject buttonObj in targetTree.TreeButtons) {
+			Button buttonScript = buttonObj.GetComponent<Button>();
+			if (buttonScript.IsTriggered && buttonScript.CollectorCurrentlyOnTheButton == playerDriver)
+				return true;
 		}
 		return false;
 	}

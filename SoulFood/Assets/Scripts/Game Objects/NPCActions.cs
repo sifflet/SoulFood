@@ -49,6 +49,14 @@ public static class NPCActions
 	[Command]
 	public static void CmdLunge(NPCDriver guard, Vector3 direction)
 	{
-		guard.Instance.GetComponent<Rigidbody>().AddForce(direction * 100f * Time.deltaTime, ForceMode.Impulse);
+        if (guard.ControlledByAI)
+        {
+            guard.Instance.GetComponent<Rigidbody>().AddForce(direction * 100f * Time.deltaTime, ForceMode.Impulse);
+        }
+        else
+        {
+            // dont know why we need to increase the force here
+            guard.Instance.GetComponent<Rigidbody>().AddForce(direction * 1000f * Time.deltaTime, ForceMode.Impulse);
+        }
     }
 }

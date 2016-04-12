@@ -25,6 +25,7 @@ public abstract class NPCDriver : NetworkBehaviour
 	public CameraDriver CameraDriver { get { return this.cameraDriver; } }
     public NPCStateMachine StateMachine { get { return this.stateMachine; } }
 	public bool ControlledByAI { get { return this.controlledByAI; } }
+    public KeyboardInputs KeyBoardInputs { get { return this.keyboardInputs; } }
     
     public Collider[] CollisionArray
     {
@@ -38,7 +39,7 @@ public abstract class NPCDriver : NetworkBehaviour
     
     public virtual void Update()
     {
-        FindVisibleNPCs();
+        if(controlledByAI) FindVisibleNPCs();
     }
 
     public virtual void Setup(GameObject instance, GameObject cameraInstance, Transform spawnPoint, GameObject soulPrefab)

@@ -5,7 +5,8 @@ using UnityEngine.Networking;
 public class NetworkLobby : NetworkLobbyManager {
 
     public GameObject Collector;
-    public GameObject Guard;
+    public GameObject guardPrefab;
+    public GameObject Guards;
     public GameObject cameraRigPrefab;
 	public GameObject soulPrefab;
     private int numOfCollectors;
@@ -21,16 +22,24 @@ public class NetworkLobby : NetworkLobbyManager {
 
         if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Guard")
         {
-            playerPrefab = (GameObject)Instantiate(Guard);
-            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
-            playerPrefab.AddComponent<GuardDriver>();
-            driver = playerPrefab.GetComponent<GuardDriver>();
-			driver.Setup(playerPrefab, cameraInstance, playerPrefab.transform, soulPrefab);
-			playerPrefab.transform.position = spawns.transform.Find("Guard0").position;
-            playerPrefab.name = "Guard " + guardCounter;
-            guardCounter++;
-            (driver as GuardDriver).IsLeader = true;
-            //driver.SetControlledByAI(false);
+            playerPrefab = (GameObject)Instantiate(Guards);
+
+            int childrenCount = playerPrefab.transform.childCount;
+            for (int i = 0; i < childrenCount; ++i)
+            {
+                GameObject npcInstance = playerPrefab.transform.GetChild(i).gameObject;
+                GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
+
+                npcInstance.AddComponent<GuardDriver>();
+                driver = npcInstance.GetComponent<GuardDriver>();
+				driver.Setup(npcInstance, cameraInstance, npcInstance.transform, soulPrefab);
+                npcInstance.transform.position = spawns.transform.Find("Guard" + i).position;
+                npcInstance.name = "Guard " + i;
+
+                if (i == 0) (driver as GuardDriver).IsLeader = true;
+
+                driver.SetControlledByAI(false);
+            }
         }
             
         if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Collector")

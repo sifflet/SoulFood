@@ -8,9 +8,10 @@ using UnityEngine.Networking;
 public class GameManager : NetworkBehaviour
 {
     public GameObject deathyPrefab;
-    public GameObject guardPrefab;
+    //public GameObject guardPrefab;
     public GameObject cameraRigPrefab;
     public GameObject soulPrefab;
+    public GameObject guardsPrefab;
 
     public GameObject treeOneButton;
     public GameObject treeTwoButton;
@@ -46,13 +47,17 @@ public class GameManager : NetworkBehaviour
             return allNPCs;
         }
     }
-
+    /*
     [Command]
     void CmdGetOtherGuardAuthority()
     {
-        //Guards[1].Instance.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+        if (isServer)
+        {
+            NetworkConnection conn = Guards[0].Instance.GetComponent<NetworkIdentity>().connectionToClient;
+            Guards[1].GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+        }
     }
-
+    */
     void Start()
     {
         if (isServer)
@@ -86,14 +91,6 @@ public class GameManager : NetworkBehaviour
         (Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
-
-        if (isLocalPlayer)
-        {
-            if (Guards[0].hasAuthority)
-            {
-                CmdGetOtherGuardAuthority();
-            }
-        }
 
         HeadsUpDisplay.Initialize(soulsConsumed, soulLimit, livesRemaining, gameTimer);
 
@@ -135,8 +132,6 @@ public class GameManager : NetworkBehaviour
 
     private void SpawnAllNpcs()
     {
-        bool networkedGuardExists = Guards.Count > 0;
-
         for (int i = Collectors.Count; i < collectorNum; i++)
         {
             Transform spawnPoint = GameObject.Find("Collect" + (i)).transform;
@@ -154,25 +149,27 @@ public class GameManager : NetworkBehaviour
             NetworkServer.Spawn(npcInstance);
         }
 
-        for (int i = Guards.Count; i < GUARDS_NUM; i++)
+        if (Guards.Count == 0)
         {
-            Transform spawnPoint = GameObject.Find("Guard" + (i)).transform;
-            Vector3 spawnPosition = spawnPoint.position;
-            spawnPosition.y = guardPrefab.transform.position.y;
-            GameObject npcInstance = Instantiate(guardPrefab, spawnPosition, spawnPoint.rotation) as GameObject;
-            npcInstance.name = "Guard " + i;
-            GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
+            GameObject combinedGuards = Instantiate(guardsPrefab, Vector3.zero, Quaternion.identity) as GameObject;
 
-            npcInstance.AddComponent<GuardDriver>();
-            GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
-			driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
-			Guards.Add(driver);
-            NetworkServer.Spawn(npcInstance);
-        }
+            int childrenCount = combinedGuards.transform.childCount;
+            for (int i = Guards.Count; i < GUARDS_NUM; ++i)
+            {
+                Transform spawnPoint = GameObject.Find("Guard" + i).transform;
 
-        if (networkedGuardExists)
-        {
-            Guards[1].SetControlledByAI(false);
+                GameObject npcInstance = combinedGuards.transform.GetChild(i).gameObject;
+                npcInstance.transform.position = spawnPoint.position;
+
+                npcInstance.name = "Guard " + i;
+                GameObject cameraInstance = Instantiate(cameraRigPrefab, Vector3.zero, cameraRigPrefab.transform.rotation) as GameObject;
+
+                npcInstance.AddComponent<GuardDriver>();
+                GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
+				driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
+				Guards.Add(driver);
+                NetworkServer.Spawn(npcInstance);
+            }
         }
     }
     
@@ -187,12 +184,17 @@ public class GameManager : NetworkBehaviour
                 AllNPCs.Add(driver);
                 driver.Sacrebleu();
             }
-            else
+            else if (obj.name.Contains("CombinedGuards"))
             {
-                NPCDriver driver = obj.GetComponent<GuardDriver>();
-                Guards.Add(driver);
-                AllNPCs.Add(driver);
-                driver.Sacrebleu();
+                foreach (Transform child in obj.transform)
+                {
+                    if(!child.name.Contains("Guard")) continue;
+
+                    NPCDriver driver = child.GetComponent<GuardDriver>();
+                    Guards.Add(driver);
+                    AllNPCs.Add(driver);
+                    driver.Sacrebleu();
+                }
             }
         }
     }
