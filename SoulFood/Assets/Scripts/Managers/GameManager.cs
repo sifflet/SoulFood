@@ -22,6 +22,8 @@ public class GameManager : NetworkBehaviour
     public const float COLLISION_RANGE = 1.25f;
 
     private static float gameTimer = 1f; // [minutes] * 60 seconds/minute. Only modify minutes.
+    private static bool endGame = false;
+    private static float endGameAnimationDuration = 3.0f;
     [SyncVar (hook = "updateLifeHUD")] private int livesRemaining;
     [SyncVar(hook = "updateSoulHUD")] private int soulsConsumed;
     private int soulLimit;
@@ -115,6 +117,15 @@ public class GameManager : NetworkBehaviour
             soulsConsumed = 18;
             SoulConsumed();
             soulLimit = 20;
+        }
+
+        if(endGame)
+        {
+            endGameAnimationDuration -= Time.deltaTime;
+            if(endGameAnimationDuration <= 0)
+            {
+                Application.LoadLevel("GameOver");
+            }
         }
     }
 
@@ -308,7 +319,7 @@ public class GameManager : NetworkBehaviour
 
     private bool GameState()
     {
-        if (soulsConsumed >= soulLimit || livesRemaining <= 0 || gameTimerEnded())
+        if (soulsConsumed >= soulLimit || livesRemaining <= 0)
             return false;
         else
             return true;
@@ -316,8 +327,8 @@ public class GameManager : NetworkBehaviour
 
     private static void HandleGameConclusion()
     {
-        //Fancy display here
-        Application.LoadLevel("GameOver");
+        endGame = true;
+        endGameAnimationDuration = HeadsUpDisplay.PlayGameOverAnimation();
     }
 
     public void SoulConsumed()
@@ -333,7 +344,6 @@ public class GameManager : NetworkBehaviour
     public void loseLife()
     {
         --livesRemaining;
-        
     }
 
     private void updateSoulHUD(int souls)
@@ -344,10 +354,5 @@ public class GameManager : NetworkBehaviour
     private void updateLifeHUD(int lives)
     {
         HeadsUpDisplay.UpdateHUDCollectorRemainingLives(lives);
-    }
-
-    public bool gameTimerEnded()
-    {
-        return gameTimer <= 0.0f;
     }
 }

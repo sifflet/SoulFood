@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class HeadsUpDisplay : MonoBehaviour
 {
-
     private Text[] headsUpDisplay;
     private static Text SoulsCollectedText;
     private static Text CollectorRemainingLivesText;
@@ -77,5 +76,26 @@ public class HeadsUpDisplay : MonoBehaviour
     public static void CreateIndicator(Vector2 targetLocation)
     {
         indicatorInstance.SetActive(true);
+    }
+
+    public static float PlayGameOverAnimation()
+    {
+        float endGameAnimationDuration = 3.0f;
+        string gameOverAnimation = "GameOverAnimation";
+
+        Animator animator = GameObject.Find("HeadsUpDisplay").GetComponent<Animator>();
+        RuntimeAnimatorController runtimeAnimationController = animator.runtimeAnimatorController;
+
+        for (int i = 0; i < runtimeAnimationController.animationClips.Length; ++i)
+        {
+            if (runtimeAnimationController.animationClips[i].name == gameOverAnimation)
+            {
+                endGameAnimationDuration = runtimeAnimationController.animationClips[i].length;
+                break;
+            }
+        }
+
+        animator.Play(gameOverAnimation);
+        return endGameAnimationDuration;
     }
 }
