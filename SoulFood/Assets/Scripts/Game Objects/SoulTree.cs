@@ -11,6 +11,8 @@ public class SoulTree : NetworkBehaviour {
 	private Transform buttons;
 	private List<GameObject> treeButtons = new List<GameObject>();
 	private bool isCurrentlyAskingPlayerForHelp = false;		// Used to trigger indicator sound
+	private const SOUND_PLAY_DELAY = 2f;
+	private float delayForPlayingIndicatorSound = SOUND_PLAY_DELAY;
 
 	public int TreeType { get { return this.treeType; } }
 	public bool IsFull { get { return this.isFull; } }
@@ -43,10 +45,13 @@ public class SoulTree : NetworkBehaviour {
 		}
 
 		// Play audio for player indicator
-		if (IsCurrentlyAskingPlayerForHelp)
-			this.soulTreeAudioSource.Play();
-		else
-			this.soulTreeAudioSource.Stop();
+		while (IsCurrentlyAskingPlayerForHelp)
+		{
+			if (delayForPlayingIndicatorSound <= 0) {
+				this.soulTreeAudioSource.Play();
+				delayForPlayingIndicatorSound = SOUND_PLAY_DELAY;
+			}
+		}
 	}
 
 	public bool CheckIfTreeIsTargetted()
