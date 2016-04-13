@@ -34,6 +34,7 @@ public static class NPCActions
 		soul.GetComponent<Soul>().IsConsumed(collectorPos);
 		collector.AddSoul();
 		collector.MovementDriver.RecalculateSpeedBasedOnSoulConsumption();
+		collector.isCollectingSoul = true;	//Triggers sound effect
 		GameObject.FindGameObjectWithTag("GameController").SendMessage("SoulConsumed");
     }
 
@@ -42,6 +43,7 @@ public static class NPCActions
     {
         collector.DropSoul(numberOfSoulsEjected);
 		collector.MovementDriver.RecalculateSpeedBasedOnSoulConsumption();
+		collector.isDroppingSoul = true;	//Triggers sound effect
         GameObject.FindGameObjectWithTag("GameController").SendMessage("SoulEjected",numberOfSoulsEjected);
     }
 

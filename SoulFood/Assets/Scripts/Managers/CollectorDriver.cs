@@ -14,6 +14,9 @@ public class CollectorDriver : NPCDriver
     private Material[] knightMaterials = new Material[2];
     private Material swordMaterial;
 
+	public bool isDroppingSoul = false;			// Used to trigger indicator sound
+	public bool isCollectingSoul = false;		// Used to trigger indicator sound
+
     public int SoulsStored { get { return this.soulsStored; } }
     public float MaxSpeed { get { return MAX_SPEED; } }
 
@@ -72,6 +75,22 @@ public class CollectorDriver : NPCDriver
                 this.KeyBoardInputs.speed -= 3f;
             }
         }
+
+		// Sound effects
+		if (this.isDroppingSoul)
+		{
+			AudioClip popClip = Resources.Load("pop_sound", typeof(AudioClip)) as AudioClip;
+			this.audioSource.clip = popClip;
+			this.audioSource.Play();
+			this.isDroppingSoul = false;
+		}
+		if (this.isCollectingSoul)
+		{
+			AudioClip pickupClip = Resources.Load("pickup_sound", typeof(AudioClip)) as AudioClip;
+			this.audioSource.clip = pickupClip;
+			this.audioSource.Play();
+			this.isCollectingSoul = false;
+		}
     }
 
     public void AddSoul()
