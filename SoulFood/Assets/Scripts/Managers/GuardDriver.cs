@@ -7,6 +7,8 @@ public class GuardDriver : NPCDriver
     private bool isLeader;
     private const float MAX_SPEED = 12f;
 
+	public bool guardHasCaughtSomeone = false;		// Used to trigger indicator sound
+	
     public bool IsLeader {
         get { return this.isLeader; } 
         set { this.isLeader = value; (this.keyboardInputs as GuardKeyboardInputs).IsLeader = true; }
@@ -44,11 +46,25 @@ public class GuardDriver : NPCDriver
         this.movementDriver.enabled = controlledByAI;
     }
 
-    protected override void FindVisibleNPCs()
-    {
-        this.visibleNPCs.Clear();
+	public override void Update()
+	{
+		base.Update();
 
-        List<NPCDriver> allNPCs = new List<NPCDriver>(GameManager.Collectors);
+		// Sound effects
+		if (this.guardHasCaughtSomeone) {
+			// Load evil laugh sound effect from resources
+			AudioClip evilLaughClip = Resources.Load("Laugh_Evil_02", typeof(AudioClip)) as AudioClip;
+			this.audioSource.clip = evilLaughClip;
+			this.audioSource.Play();
+			this.guardHasCaughtSomeone = false;
+		}
+	}
+	
+	protected override void FindVisibleNPCs()
+	{
+		this.visibleNPCs.Clear();
+		
+		List<NPCDriver> allNPCs = new List<NPCDriver>(GameManager.Collectors);
         allNPCs.AddRange(GameManager.Guards);
 
         foreach (NPCDriver npc in allNPCs)

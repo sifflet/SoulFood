@@ -32,6 +32,7 @@ public class GuardLungeState : NPCState
             NPCDriver caughtCollector = GetCollectorInLungeRange();
             if (caughtCollector != null)
             {
+
                 if (caughtCollector.ControlledByAI)
                 {
                     NPCState caughtCollectorTransition = new CollectorImmortalState(caughtCollector.StateMachine);
@@ -45,9 +46,13 @@ public class GuardLungeState : NPCState
                     CollectorStateHelper.DropSouls((caughtCollector as CollectorDriver), (caughtCollector as CollectorDriver).SoulsStored);
                 }
 
-                // Force collector to drop all souls
+				// Play sound effect of evil laugh
+				(this.stateMachine.NPC as GuardDriver).guardHasCaughtSomeone = true;
+				
+				// Force collector to drop all souls
                 CollectorStateHelper.DropSouls((caughtCollector as CollectorDriver), (caughtCollector as CollectorDriver).SoulsStored);
                 Debug.Log(caughtCollector.name + ": Caught! Souls -> " + (caughtCollector as CollectorDriver).SoulsStored);
+
 
                 GameObject.FindGameObjectWithTag("GameController").SendMessage("loseLife");
             }

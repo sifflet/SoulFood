@@ -29,8 +29,8 @@ public class GameManager : NetworkBehaviour
 
     private static List<Node> nodes;
 
-    private int collectorNum = 2;
-    private const int GUARDS_NUM = 0;
+    private int collectorNum = 4;
+    private const int GUARDS_NUM = 2;
 
 	private static Button[] allButtons;
 
@@ -88,7 +88,7 @@ public class GameManager : NetworkBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        //(Guards[0] as GuardDriver).IsLeader = true;
+        (Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
 

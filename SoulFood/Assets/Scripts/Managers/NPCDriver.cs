@@ -18,6 +18,9 @@ public abstract class NPCDriver : NetworkBehaviour
     protected List<NPCDriver> visibleNPCs;
 
     protected NPCStateMachine stateMachine;
+
+	// Vars for sound effects
+	protected AudioSource audioSource;
 	
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }
@@ -54,6 +57,8 @@ public abstract class NPCDriver : NetworkBehaviour
         this.instance.AddComponent<NPCMovementDriver>();
         this.movementDriver = this.instance.GetComponent<NPCMovementDriver>();
         this.movementDriver.Setup(this.GetComponent<NPCMovement>());
+
+		this.audioSource = this.instance.GetComponent<AudioSource>();
     }
 
     public virtual void SetControlledByAI(bool controlledByAI)
