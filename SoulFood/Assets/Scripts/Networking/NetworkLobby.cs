@@ -21,9 +21,6 @@ public class NetworkLobby : NetworkLobbyManager {
         GameObject playerPrefab = null;
         NPCDriver driver = null;
 
-		// Reset demo as NPCs 
-		this.DemoAsNPCs = false;
-
         if (this.lobbySlots[counter].GetComponent<LobbyPlayer>().PlayerType == "Guard")
         {
             playerPrefab = (GameObject)Instantiate(Guards);
