@@ -322,8 +322,16 @@ public class GameManager : NetworkBehaviour
 
     private static void HandleGameConclusion()
     {
-        //Fancy display here
-        Application.LoadLevel("GameOver");
+        // Fade screen to black
+		GameObject fadeScreenObj = GameObject.Find("FadeScreen");
+		Image fadeScreen = fadeScreenObj.GetComponent<Image>();
+		// Lerp the colour of the texture between itself and black.
+		fadeScreen.color = Color.Lerp(fadeScreen.color, Color.black, 1.0f * Time.deltaTime);
+
+		// If the screen is almost black...
+		if(fadeScreen.color.a >= 0.95f)
+			// ... load the end scene.
+			Application.LoadLevel("GameOver");
     }
 
     public void SoulConsumed()
