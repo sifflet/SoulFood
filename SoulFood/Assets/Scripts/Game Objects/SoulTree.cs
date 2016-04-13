@@ -10,11 +10,14 @@ public class SoulTree : NetworkBehaviour {
 	private int treeType;
 	private Transform buttons;
 	private List<GameObject> treeButtons = new List<GameObject>();
+	private bool isCurrentlyAskingPlayerForHelp = false;		// Used to trigger indicator sound
 
 	public int TreeType { get { return this.treeType; } }
 	public bool IsFull { get { return this.isFull; } }
+	public bool IsCurrentlyAskingPlayerForHelp { get; set; }
 	public List<GameObject> TreeButtons { get { return this.treeButtons; } }
 	public GameObject soulObject;
+	public AudioSource soulTreeAudioSource;
 
 	void Awake () {
 		buttons = transform.Find("Buttons");
@@ -38,6 +41,12 @@ public class SoulTree : NetworkBehaviour {
 		if (triggeredCount++ == buttons.childCount) {
 			DropItems();
 		}
+
+		// Play audio for player indicator
+		if (IsCurrentlyAskingPlayerForHelp)
+			this.soulTreeAudioSource.Play();
+		else
+			this.soulTreeAudioSource.Stop();
 	}
 
 	public bool CheckIfTreeIsTargetted()
