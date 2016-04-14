@@ -30,9 +30,10 @@ public class GameManager : NetworkBehaviour
     private static List<Node> nodes;
 
     private int collectorNum = 4;
-    private const int GUARDS_NUM = 0;
+    private const int GUARDS_NUM = 2;
 
 	private static Button[] allButtons;
+	private Color[] playerColors = new Color[6] {Color.red, Color.blue, Color.green, Color.cyan, Color.magenta, Color.yellow};
 
 	public static Button[] AllButtons { get; set; }
     public static List<Node> AllNodes { get { return nodes; } }
@@ -88,7 +89,7 @@ public class GameManager : NetworkBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        //(Guards[0] as GuardDriver).IsLeader = true;
+        (Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
 
@@ -173,7 +174,8 @@ public class GameManager : NetworkBehaviour
     }
     
     private void GetNetworkNPCs()
-    {
+    {		
+		int playerColorIndex = 0;
         foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
         {
             if (obj.name.Contains("Collector"))
@@ -182,6 +184,17 @@ public class GameManager : NetworkBehaviour
                 Collectors.Add(driver);
                 AllNPCs.Add(driver);
                 driver.Sacrebleu();
+
+				// If nonAI Player, display UI player identifier
+				if (driver.ControlledByAI == false)
+				{
+					// Get UI player identifier
+					Image playerIDImg = obj.transform.GetChild(2).GetChild(0).GetComponent<Image>();
+					this.playerColors[playerColorIndex].a = 0.5f;
+					playerIDImg.color = this.playerColors[playerColorIndex];
+					playerColorIndex++;
+					playerIDImg.enabled = true;
+				}
             }
             else if (obj.name.Contains("CombinedGuards"))
             {
@@ -193,6 +206,16 @@ public class GameManager : NetworkBehaviour
                     Guards.Add(driver);
                     AllNPCs.Add(driver);
                     driver.Sacrebleu();
+
+					// If nonAI Player, display UI player identifier
+					if (driver.ControlledByAI == false)
+					{
+						// Get UI player identifier
+						Image playerIDImg = child.transform.GetChild(2).GetChild(0).GetComponent<Image>();
+						this.playerColors[playerColorIndex].a = 0.5f;
+						playerIDImg.color = this.playerColors[playerColorIndex];
+						playerIDImg.enabled = true;
+					}
                 }
             }
         }
