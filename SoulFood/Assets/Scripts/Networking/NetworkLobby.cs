@@ -59,6 +59,10 @@ public class NetworkLobby : NetworkLobbyManager {
             	driver.SetControlledByAI(false);
         }
         counter++;
+
+		// Add audio listener
+		playerPrefab.AddComponent<AudioListener>();
+
         return playerPrefab;
     }
 
