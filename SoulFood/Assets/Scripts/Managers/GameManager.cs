@@ -30,7 +30,7 @@ public class GameManager : NetworkBehaviour
     private static List<Node> nodes;
 
     private int collectorNum = 4;
-    private const int GUARDS_NUM = 0;
+    private const int GUARDS_NUM = 2;
 
 	private static Button[] allButtons;
 
@@ -88,7 +88,6 @@ public class GameManager : NetworkBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        //(Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
 
@@ -167,6 +166,9 @@ public class GameManager : NetworkBehaviour
                 GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
 				driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
 				Guards.Add(driver);
+
+                if (i == 0) (Guards[i] as GuardDriver).IsLeader = true;
+
                 NetworkServer.Spawn(npcInstance);
             }
         }
