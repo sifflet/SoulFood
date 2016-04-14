@@ -118,6 +118,8 @@ public class CollectorCallForHelpState : CollectorCollectingSuperState {
 					this.targetTree.transform.GetChild(2).gameObject.GetComponent<SpriteRenderer>().enabled = true;
 					// Trigger sound
 					this.targetTree.IsCurrentlyAskingPlayerForHelp = true;
+					// Add wait time for the timer so player has enough time to show up
+					waitForHelpTimer += 4f;
 				}
 
 				// Remove collector that was just called for help from availableCollectors list

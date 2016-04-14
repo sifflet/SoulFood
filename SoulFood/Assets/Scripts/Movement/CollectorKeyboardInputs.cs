@@ -37,21 +37,21 @@ public class CollectorKeyboardInputs : KeyboardInputs
 	{
 		CollectorDriver collectorDriver = this.gameObject.GetComponent<NPCDriver>() as CollectorDriver;
 		float speedDeboost = 0; // Variable is brought out of the if for printing purposes
-		CollectorKeyboardInputs.maximumSpeed = CollectorKeyboardInputs.MAX_SPEED;	// Reset to max speed
-		float startSpeed = CollectorKeyboardInputs.maximumSpeed; // For printing purposes
+		this.speed = CollectorKeyboardInputs.maximumSpeed;	// Reset to max speed
+		float startSpeed = this.speed; // For printing purposes
 		if (collectorDriver) {
-			float speedDecreaseFactor = (CollectorKeyboardInputs.maximumSpeed - CollectorKeyboardInputs.minimumSpeed) / this.hypotheticalMaximumSoulCapacity;
+			float speedDecreaseFactor = (this.speed- CollectorKeyboardInputs.minimumSpeed) / this.hypotheticalMaximumSoulCapacity;
 			speedDeboost = speedDecreaseFactor * collectorDriver.SoulsStored;
-			if (CollectorKeyboardInputs.maximumSpeed - speedDeboost >= CollectorKeyboardInputs.minimumSpeed)
-				CollectorKeyboardInputs.maximumSpeed -= speedDeboost;
+			if (this.speed - speedDeboost >= CollectorKeyboardInputs.minimumSpeed)
+				this.speed -= speedDeboost;
 			else
-				CollectorKeyboardInputs.maximumSpeed = CollectorKeyboardInputs.minimumSpeed;
+				this.speed = CollectorKeyboardInputs.minimumSpeed;
 		}
 
 		Debug.Log (collectorDriver.name + ": Souls -> " + collectorDriver.SoulsStored 
 		           + ". Deboost -> " + speedDeboost
 		           + ". Start Speed -> " + startSpeed
-		           + ". Current Speed -> " + CollectorKeyboardInputs.maximumSpeed);
+		           + ". Current Speed -> " + this.speed);
 
 	}
 }

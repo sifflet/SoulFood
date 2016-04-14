@@ -4,8 +4,7 @@ using UnityEngine.Networking;
 
 public class KeyboardInputs : NetworkBehaviour
 {
-	public const float MAX_SPEED = 5f;
-	public static float maximumSpeed = MAX_SPEED;
+	public static float maximumSpeed = 5.0f;
 	public static float minimumSpeed = 3.0f;
 
     protected Vector3 movement;

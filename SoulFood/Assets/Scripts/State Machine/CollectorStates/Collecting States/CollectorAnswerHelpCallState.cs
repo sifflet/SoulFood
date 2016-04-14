@@ -8,6 +8,7 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 	private SoulTree targetTree;
 	private CollectorStateMachine callerStateMachine;	// State machine of the caller
 	private bool hasNotifiedCallerOfArrival = false;
+	private bool hasNotifiedPlayerOfHelpAnswer = false;
 	private GameObject buttonTarget;	
 	
 	public CollectorAnswerHelpCallState(NPCStateMachine stateMachine, SoulTree targetTree, CollectorStateMachine callerStateMachine)
@@ -41,15 +42,11 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 			(this.stateMachine as CollectorStateMachine).CancelHelpCallsAfterPlayerCall();
 		}
 
-		if ((this.stateMachine as CollectorStateMachine).hasReceivedPlayerHelpCall)
+		if ((this.stateMachine as CollectorStateMachine).hasReceivedPlayerHelpCall && !hasNotifiedPlayerOfHelpAnswer)
 		{
 			// Notify the player that this collector is coming to help
 			(this.stateMachine as CollectorStateMachine).NotifyPlayerOfHelp(this.stateMachine.NPC as CollectorDriver);
-
-			// Sound effect
-			AudioClip onMyWayClip = Resources.Load("On_My_Way", typeof(AudioClip)) as AudioClip;
-			this.stateMachine.NPC.audioSource.clip = onMyWayClip;
-			this.stateMachine.NPC.audioSource.Play();
+			hasNotifiedPlayerOfHelpAnswer = true;
 		}
 
 		movementDriver = this.stateMachine.NPC.MovementDriver;

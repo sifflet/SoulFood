@@ -115,6 +115,10 @@ public class CollectorStateMachine : NPCStateMachine
 		this.hasCancelledHelpCallsAsPlayer = false;
 
 		Debug.Log (collector.name + ": Player, I'm coming to help!");
+		// Sound effect
+		AudioClip onMyWayClip = Resources.Load("On_My_Way", typeof(AudioClip)) as AudioClip;
+		this.NPC.audioSource.clip = onMyWayClip;
+		this.NPC.audioSource.Play();
 	}
 
 	// If I'm a player, the moment I step off my button, cancel the help calls of everyone that came to help me
@@ -133,6 +137,7 @@ public class CollectorStateMachine : NPCStateMachine
 
 	public void CancelHelpCallsAfterPlayerCall() 
 	{
+		Debug.Log (this.NPC.name + ": Player has left the tree, cancel everything.");
 		foreach (CollectorDriver collectorDriver in collectorNPCsComingToHelp) {
 			(collectorDriver.StateMachine as CollectorStateMachine).CancelTreeHelpCall();
 		}
