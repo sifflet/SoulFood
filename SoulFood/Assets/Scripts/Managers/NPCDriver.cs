@@ -20,7 +20,7 @@ public abstract class NPCDriver : NetworkBehaviour
     protected NPCStateMachine stateMachine;
 
 	// Vars for sound effects
-	protected AudioSource audioSource;
+	public AudioSource audioSource;
 	
     public GameObject Instance { get { return this.instance; } }
     public List<NPCDriver> VisibleNPCs { get { return this.visibleNPCs; } }

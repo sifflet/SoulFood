@@ -150,7 +150,7 @@ public class NPCMovementDriver : MonoBehaviour
 	public void RecalculateSpeedBasedOnSoulConsumption() 
 	{
 		CollectorDriver collectorDriver = this.currentNPC.gameObject.GetComponent<CollectorDriver>();
-		float speedDeboost = 0; // Variable is broguht of the if for printing purposes
+		float speedDeboost = 0; // Variable is brought out of the if for printing purposes
 		currentNPC.MaxSpeed = collectorDriver.MaxSpeed;	// Reset to max speed
 		//float startSpeed = currentNPC.MaxSpeed; // For printing purposes
 		if (collectorDriver) {

@@ -40,7 +40,18 @@ public class CollectorAnswerHelpCallState : CollectorCollectingSuperState {
 		{
 			(this.stateMachine as CollectorStateMachine).CancelHelpCallsAfterPlayerCall();
 		}
-		
+
+		if ((this.stateMachine as CollectorStateMachine).hasReceivedPlayerHelpCall)
+		{
+			// Notify the player that this collector is coming to help
+			(this.stateMachine as CollectorStateMachine).NotifyPlayerOfHelp(this.stateMachine.NPC as CollectorDriver);
+
+			// Sound effect
+			AudioClip onMyWayClip = Resources.Load("On_My_Way", typeof(AudioClip)) as AudioClip;
+			this.stateMachine.NPC.audioSource.clip = onMyWayClip;
+			this.stateMachine.NPC.audioSource.Play();
+		}
+
 		movementDriver = this.stateMachine.NPC.MovementDriver;
 		
 		// Check if help call has been cancelled

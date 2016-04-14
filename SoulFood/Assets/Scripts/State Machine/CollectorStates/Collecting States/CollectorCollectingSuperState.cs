@@ -39,8 +39,6 @@ public abstract class CollectorCollectingSuperState : NPCState
 		    && stateMachine.CurrentState.GetType() != typeof(CollectorCollectSoulsState))
 		{
 			(this.stateMachine as CollectorStateMachine).hasReceivedPlayerHelpCall = true;
-			// Notify the player that this collector is coming to help
-			(this.stateMachine as CollectorStateMachine).NotifyPlayerOfHelp(this.stateMachine.NPC as CollectorDriver);
 
 			return new CollectorAnswerHelpCallState(this.stateMachine, 
 			                                        targetTree, 
