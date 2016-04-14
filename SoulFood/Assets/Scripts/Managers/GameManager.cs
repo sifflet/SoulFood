@@ -29,8 +29,8 @@ public class GameManager : NetworkBehaviour
 
     private static List<Node> nodes;
 
-    private int collectorNum = 2;
-    private const int GUARDS_NUM = 0;
+    private int collectorNum = 4;
+    private const int GUARDS_NUM = 2;
 
 	private static Button[] allButtons;
 	private Color[] playerColors = new Color[6] {Color.red, Color.blue, Color.green, Color.cyan, Color.magenta, Color.yellow};
@@ -319,8 +319,8 @@ public class GameManager : NetworkBehaviour
         switch (collectorNum)
         {
             case 4:
-                livesRemaining = 13;
-                soulLimit = 50;
+                livesRemaining = 10;
+                soulLimit = 30;
                 break;
             case 3:
                 livesRemaining = 3;

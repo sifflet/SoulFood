@@ -46,10 +46,12 @@ public class CollectorImmortalState : NPCState
 
         if (this.stateMachine.NPC.MovementDriver.AttainedFinalNode)
         {
-			if (guardsInSight.Count > 0)
-            	this.stateMachine.NPC.MovementDriver.ChangePathToFlee(CollectorStateMachine.FLEE_RANGE, guardsInSight);
-			else
-				CollectorStateHelper.GetNewPath(this.stateMachine.NPC.MovementDriver, GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)]); 
+            if (guardsInSight.Count > 0)
+                this.stateMachine.NPC.MovementDriver.ChangePathToFlee(CollectorStateMachine.FLEE_RANGE, guardsInSight);
+            else if (stateMachine.TreesFound.Count > 0)
+                CollectorStateHelper.GetNewPath(this.stateMachine.NPC.MovementDriver, CollectorStateHelper.FindNodeForRememberedTreePosition(stateMachine));
+            else
+                CollectorStateHelper.GetNewPath(this.stateMachine.NPC.MovementDriver, GameManager.AllNodes[UnityEngine.Random.Range(0, GameManager.AllNodes.Count - 1)]);
         }
 
         return this;
