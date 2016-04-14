@@ -89,7 +89,6 @@ public class GameManager : NetworkBehaviour
         #region with networking
         GetNetworkNPCs();
         SpawnAllNpcs();
-        (Guards[0] as GuardDriver).IsLeader = true;
         SetupNPCStateMachines();
         #endregion
 
@@ -168,6 +167,9 @@ public class GameManager : NetworkBehaviour
                 GuardDriver driver = npcInstance.GetComponent<GuardDriver>();
 				driver.Setup(npcInstance, cameraInstance, spawnPoint, soulPrefab);
 				Guards.Add(driver);
+
+                if (i == 0) (Guards[i] as GuardDriver).IsLeader = true;
+
                 NetworkServer.Spawn(npcInstance);
             }
         }

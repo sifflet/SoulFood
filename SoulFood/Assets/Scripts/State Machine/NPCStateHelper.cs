@@ -34,6 +34,7 @@ public static class NPCStateHelper
     public static void MoveTo(NPCDriver npc, GameObject target, float directMoveDistance)
     {
         float distanceToTarget = GetShortestPathDistance(npc.Instance, target);
+        Node startNode = FindClosestNode(npc.Instance);
 		Node endNode = FindClosestNode(target);
 
         /*
@@ -45,7 +46,7 @@ public static class NPCStateHelper
         {
 			npc.MovementDriver.ChangePath(endNode);
         }
-        else
+        else if(distanceToTarget <= directMoveDistance || startNode == endNode)
         {
 			float npcYPosition = npc.gameObject.transform.position.y;
 			Vector3 targetPosition = new Vector3(target.transform.position.x, npcYPosition, target.transform.position.z);

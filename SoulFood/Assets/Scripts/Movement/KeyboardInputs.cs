@@ -52,7 +52,7 @@ public class KeyboardInputs : NetworkBehaviour
 
     protected void Move()
     {
-        GetComponent<Rigidbody>().velocity = movement * speed;
+        GetComponent<Rigidbody>().velocity = movement.normalized * speed;
     }
 
     protected void Turn()
