@@ -14,6 +14,8 @@ public class CollectorDriver : NPCDriver
     private Material[] knightMaterials = new Material[2];
     private Material swordMaterial;
 
+	private RigidbodyConstraints otherColliderConstriants;
+
 	public bool isDroppingSoul = false;			// Used to trigger indicator sound
 	public bool isCollectingSoul = false;		// Used to trigger indicator sound
 
@@ -92,6 +94,22 @@ public class CollectorDriver : NPCDriver
 			this.isCollectingSoul = false;
 		}
     }
+
+	// Stop pushing things around with physics forces
+	private void OnCollisionEnter(Collision collision) {
+		Rigidbody collisionRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+		if (collisionRigidbody) {
+			this.otherColliderConstriants = collisionRigidbody.constraints;
+			collisionRigidbody.constraints = RigidbodyConstraints.FreezeAll;
+		}
+	}
+
+	private void OnCollisionExit(Collision collision) {
+		Rigidbody collisionRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+		if (collisionRigidbody) {
+			collisionRigidbody.constraints = this.otherColliderConstriants;
+		}
+	}
 
     public void AddSoul()
     {
