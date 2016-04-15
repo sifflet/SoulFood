@@ -98,7 +98,7 @@ public class CollectorDriver : NPCDriver
 	// Stop pushing things around with physics forces
 	private void OnCollisionEnter(Collision collision) {
 		Rigidbody collisionRigidbody = collision.gameObject.GetComponent<Rigidbody>();
-		if (collisionRigidbody) {
+		if (collisionRigidbody && !this.ControlledByAI) {
 			this.otherColliderConstriants = collisionRigidbody.constraints;
 			collisionRigidbody.constraints = RigidbodyConstraints.FreezeAll;
 		}
