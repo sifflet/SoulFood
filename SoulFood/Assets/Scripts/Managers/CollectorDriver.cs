@@ -106,7 +106,7 @@ public class CollectorDriver : NPCDriver
 
 	private void OnCollisionExit(Collision collision) {
 		Rigidbody collisionRigidbody = collision.gameObject.GetComponent<Rigidbody>();
-		if (collisionRigidbody) {
+		if (collisionRigidbody && !this.ControlledByAI) {
 			collisionRigidbody.constraints = this.otherColliderConstriants;
 		}
 	}
