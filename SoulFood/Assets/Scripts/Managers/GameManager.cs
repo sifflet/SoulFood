@@ -39,6 +39,7 @@ public class GameManager : NetworkBehaviour
     public static List<Node> AllNodes { get { return nodes; } }
     public static List<NPCDriver> Collectors { get; set; }
     public static List<NPCDriver> Guards { get; set; }
+	public static bool HasGuardsWon { get; set;} // For the game over screen
     public static List<NPCDriver> AllNPCs
     {
         get
@@ -102,7 +103,7 @@ public class GameManager : NetworkBehaviour
         if (GameState())
             UpdateNPCs();
         else
-            HandleGameConclusion();
+            HandleGameConclusion(this);
 
         gameTimer += Time.deltaTime;
         HeadsUpDisplay.UpdateHUDGameTimer(gameTimer);
@@ -320,7 +321,7 @@ public class GameManager : NetworkBehaviour
         {
             case 4:
                 livesRemaining = 10;
-                soulLimit = 30;
+                soulLimit = 35;
                 break;
             case 3:
                 livesRemaining = 3;
@@ -345,8 +346,14 @@ public class GameManager : NetworkBehaviour
             return true;
     }
 
-    private static void HandleGameConclusion()
+    private static void HandleGameConclusion(GameManager gameManager)
     {
+		// Update winners of the game
+		if (gameManager.livesRemaining <= 0)
+			HasGuardsWon = true;
+		if (gameManager.soulsConsumed >= gameManager.soulLimit)
+			HasGuardsWon = false;
+
         // Fade screen to black
 		GameObject fadeScreenObj = GameObject.Find("FadeScreen");
 		Image fadeScreen = fadeScreenObj.GetComponent<Image>();
