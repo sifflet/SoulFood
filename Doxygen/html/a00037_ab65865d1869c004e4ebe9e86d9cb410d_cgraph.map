@@ -1,0 +1,8 @@
+<map id="Chase" name="Chase">
+<area shape="rect" id="node2" href="$a00037.html#a5fe3b36633b2c048dce6671a0ea364fa" title="Kinematic_Seek" alt="" coords="117,5,235,32"/>
+<area shape="rect" id="node3" href="$a00037.html#ae44389358a0489c46cf9dee33f544bed" title="Kinematic_Pursuit" alt="" coords="112,56,240,83"/>
+<area shape="rect" id="node4" href="$a00037.html#ad5e3efff2268658b45716d94ef998128" title="Steering_Seek" alt="" coords="123,107,229,133"/>
+<area shape="rect" id="node5" href="$a00037.html#ae0c1322d39270f590459a4bc5050208a" title="Steering_Pursuit" alt="" coords="117,157,235,184"/>
+<area shape="rect" id="node6" href="$a00037.html#a61dd711a73d6a642febf9fc5f3d1505c" title="rotateTowards" alt="" coords="125,208,227,235"/>
+<area shape="rect" id="node7" href="$a00037.html#acb88d63859e8561c01d13bea63b0abf7" title="Steering_Stop" alt="" coords="124,259,228,285"/>
+</map>

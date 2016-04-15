@@ -1,0 +1,4 @@
+<map id="GuardDirectPursueState" name="GuardDirectPursueState">
+<area shape="rect" id="node2" href="$a00025.html" title="{GuardPursueState\n|# pursueNewTargetTimer\l|+ GuardPursueState()\l+ Entry()\l+ Update()\l# GetClosestVisibleCollector()\l# FindOtherGuard()\l# TargetInLungeCone()\l# GetCollectorInChangeTarget\lRange()\l}" alt="" coords="5,219,201,399"/>
+<area shape="rect" id="node3" href="$a00039.html" title="{NPCState\n|# stateMachine\l|+ NPCState()\l+ Entry()\l+ Update()\l+ GetPreviousStateInStack()\l+ ResetStackToDefaultState()\l+ InsertStateAsPreviousState\lInStack()\l}" alt="" coords="6,5,201,171"/>
+</map>

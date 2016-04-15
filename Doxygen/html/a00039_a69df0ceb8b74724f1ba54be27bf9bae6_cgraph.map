@@ -1,0 +1,4 @@
+<map id="ResetStackToDefaultState" name="ResetStackToDefaultState">
+<area shape="rect" id="node2" href="$a00040.html#a381dba852820b2ee72f5b1ba43493157" title="NPCStateMachine.ResetStack\lToDefaultState" alt="" coords="228,5,429,47"/>
+<area shape="rect" id="node3" href="$a00040.html#a5e849422db3182f33772a05b4bf3f2dd" title="NPCStateMachine.PeekAtTop\lStateInStack" alt="" coords="230,71,427,112"/>
+</map>

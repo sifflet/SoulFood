@@ -1,0 +1,8 @@
+<map id="Avoid" name="Avoid">
+<area shape="rect" id="node2" href="$a00037.html#a9af9dacd1ac71ad566196c8d3dea4d53" title="Kinematic_Flee" alt="" coords="112,5,224,32"/>
+<area shape="rect" id="node3" href="$a00037.html#a57e733e0e8ab505593a731edbaa00566" title="Kinematic_Evade" alt="" coords="107,56,229,83"/>
+<area shape="rect" id="node4" href="$a00037.html#aa8925068e00de017d9f943bbdf525068" title="Steering_Flee" alt="" coords="117,107,219,133"/>
+<area shape="rect" id="node5" href="$a00037.html#a9b797964f4c8c55c2d5b61831aaf7b3d" title="Steering_Evade" alt="" coords="112,157,224,184"/>
+<area shape="rect" id="node6" href="$a00037.html#a61dd711a73d6a642febf9fc5f3d1505c" title="rotateTowards" alt="" coords="117,208,219,235"/>
+<area shape="rect" id="node7" href="$a00037.html#acb88d63859e8561c01d13bea63b0abf7" title="Steering_Stop" alt="" coords="116,259,220,285"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="CameraDriver" name="CameraDriver">
+<area shape="rect" id="node3" href="$a00014.html" title="{CollectorsCameraDriver\n||+ Setup()\l+ Update()\l}" alt="" coords="5,329,163,421"/>
+<area shape="rect" id="node4" href="$a00026.html" title="{GuardsCameraDriver\n||+ Update()\l+ SetStartPositionAndSize()\l}" alt="" coords="187,329,373,421"/>
+</map>

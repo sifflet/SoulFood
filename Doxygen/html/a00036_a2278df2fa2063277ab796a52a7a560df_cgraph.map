@@ -1,0 +1,4 @@
+<map id="StartStateMachine" name="StartStateMachine">
+<area shape="rect" id="node2" href="$a00040.html#a8ce4af14ad14ed737624237bf5e38f87" title="NPCStateMachine.EnterFirst\lState" alt="" coords="184,5,375,47"/>
+<area shape="rect" id="node3" href="$a00039.html#a80877c6020a128cb9f5f766aa496bc15" title="NPCState.Entry" alt="" coords="423,13,537,39"/>
+</map>

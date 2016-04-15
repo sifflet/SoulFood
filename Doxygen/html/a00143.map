@@ -1,0 +1,3 @@
+<map id="CollectorKeyboardInputs" name="CollectorKeyboardInputs">
+<area shape="rect" id="node2" href="$a00031.html" title="{KeyboardInputs\n|+ speed\l+ maximumSpeed\l+ minimumSpeed\l# movement\l# rotationSpeed\l# npc\l|+ Setup()\l# HandleInputs()\l# HandleMovementInputs()\l# HandleActionInputs()\l# Move()\l# Turn()\l}" alt="" coords="5,131,180,355"/>
+</map>
