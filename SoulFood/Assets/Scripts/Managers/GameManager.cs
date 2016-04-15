@@ -320,15 +320,15 @@ public class GameManager : NetworkBehaviour
         switch (collectorNum)
         {
             case 4:
-                livesRemaining = 10;
-                soulLimit = 35;
+                livesRemaining = 15;
+                soulLimit = 30;
                 break;
             case 3:
-                livesRemaining = 3;
+                livesRemaining = 10;
                 soulLimit = 25;
                 break;
             case 2:
-                livesRemaining = 4;
+                livesRemaining = 6;
                 soulLimit = 20;
                 break;
             default:
