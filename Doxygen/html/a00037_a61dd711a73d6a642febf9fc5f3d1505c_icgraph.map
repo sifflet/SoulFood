@@ -1,0 +1,5 @@
+<map id="rotateTowards" name="rotateTowards">
+<area shape="rect" id="node2" href="$a00037.html#ab65865d1869c004e4ebe9e86d9cb410d" title="Chase" alt="" coords="219,5,278,32"/>
+<area shape="rect" id="node3" href="$a00037.html#a00af55e3b5f573ce80a0c97520dc6e63" title="Avoid" alt="" coords="222,56,275,83"/>
+<area shape="rect" id="node4" href="$a00038.html#aec0783b5a136e042adcc47bae4fe5291" title="NPCMovementDriver.Update" alt="" coords="156,107,341,133"/>
+</map>

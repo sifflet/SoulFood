@@ -1,0 +1,3 @@
+<map id="GuardDriver" name="GuardDriver">
+<area shape="rect" id="node2" href="$a00036.html" title="{NPCDriver\n|+ audioSource\l+ Instance\l+ VisibleNPCs\l+ MovementDriver\l+ CameraDriver\l+ StateMachine\l+ ControlledByAI\l+ KeyBoardInputs\l+ CollisionArray\l# instance\l# controlledByAI\l# spawnPoint\l# movementDriver\l# keyboardInputs\l# soulPrefab\l# cameraDriver\l# visibleNPCs\l# stateMachine\l|+ Update()\l+ Setup()\l+ SetControlledByAI()\l+ StartStateMachine()\l+ Sacrebleu()\l# FindVisibleNPCs()\l}" alt="" coords="23,131,173,531"/>
+</map>

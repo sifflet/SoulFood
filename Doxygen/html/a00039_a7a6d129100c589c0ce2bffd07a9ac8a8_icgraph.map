@@ -1,0 +1,6 @@
+<map id="GetPreviousStateInStack" name="GetPreviousStateInStack">
+<area shape="rect" id="node2" href="$a00003.html#a56211d25edf809a5ba03657a77c474db" title="CollectorAnswerHelpCallState.\lUpdate" alt="" coords="220,5,419,47"/>
+<area shape="rect" id="node3" href="$a00006.html#a56211d25edf809a5ba03657a77c474db" title="CollectorCollectSoulsState.\lUpdate" alt="" coords="229,71,410,112"/>
+<area shape="rect" id="node4" href="$a00008.html#a56211d25edf809a5ba03657a77c474db" title="CollectorEmergencyFleeState.\lUpdate" alt="" coords="220,136,419,177"/>
+<area shape="rect" id="node5" href="$a00011.html#a56211d25edf809a5ba03657a77c474db" title="CollectorFleeState.Update" alt="" coords="232,202,407,229"/>
+</map>

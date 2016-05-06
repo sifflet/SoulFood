@@ -1,14 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Networking;
 
-public class KeyboardInputs : MonoBehaviour
+public class KeyboardInputs : NetworkBehaviour
 {
-    public static float maximumSpeed = 5f;
-    public static float minimumSpeed = 3.0f;
+	public static float maximumSpeed = 5.0f;
+	public static float minimumSpeed = 3.0f;
 
     protected Vector3 movement;
     protected float rotationSpeed = 3.0f;
-    protected float speed = maximumSpeed;
+    public float speed = maximumSpeed;
+
+    protected NPCDriver npc;
 
 	void Start ()
     {
@@ -17,6 +20,12 @@ public class KeyboardInputs : MonoBehaviour
 
 	void Update ()
     {
+        /*
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        */
         HandleInputs();
 	}
 
@@ -24,6 +33,11 @@ public class KeyboardInputs : MonoBehaviour
     {
         Move();
         Turn();
+    }
+
+    public void Setup(NPCDriver npc)
+    {
+        this.npc = npc;
     }
 
     protected virtual void HandleInputs()
@@ -38,7 +52,7 @@ public class KeyboardInputs : MonoBehaviour
 
     protected void Move()
     {
-        GetComponent<Rigidbody>().velocity = movement * speed;
+        GetComponent<Rigidbody>().velocity = movement.normalized * speed;
     }
 
     protected void Turn()

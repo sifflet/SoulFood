@@ -1,0 +1,4 @@
+<map id="CollectorAnswerHelpCallState" name="CollectorAnswerHelpCallState">
+<area shape="rect" id="node2" href="$a00005.html" title="{CollectorCollectingSuper\lState\n|# guardsInSight\l|+ CollectorCollectingSuper\lState()\l+ Entry()\l+ Update()\l}" alt="" coords="25,219,201,355"/>
+<area shape="rect" id="node3" href="$a00039.html" title="{NPCState\n|# stateMachine\l|+ NPCState()\l+ Entry()\l+ Update()\l+ GetPreviousStateInStack()\l+ ResetStackToDefaultState()\l+ InsertStateAsPreviousState\lInStack()\l}" alt="" coords="15,5,210,171"/>
+</map>

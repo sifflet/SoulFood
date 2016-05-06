@@ -3,49 +3,45 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class NPCMovementDriver
+public class NPCMovementDriver : MonoBehaviour
 {
 	private NPCMovement currentNPC;
+
+	// Used for calculation of soul speed adjustment
+	private float minimumSpeed = 3f; 	
+	private int hypotheticalMaximumSoulCapacity = 40;
 
 	// Pathfinding variables
 	private Node startNode, endNode;
 	private List<Node> pathList;
-	private Graph graph;
-	private List<Node> nodes;
+    private List<Node> nodes;
 
-    public Node CurrentTargetNode { get { return this.pathList[pathCounter]; } }
-	
-	public NPCMovementDriver (NPCMovement movement)
+    public bool AttainedFinalNode { get; set; }
+
+    void Start()
     {
+    }
+
+    public Node CurrentTargetNode
+    { 
+        get
+        {
+            if (this.pathList.Count == 0) return null;
+
+            int index = pathCounter;
+            if (pathCounter > pathList.Count - 1) index = pathList.Count - 1;
+            return this.pathList[index];
+        }
+    }
+
+    public NPCMovement NPCMovement { get { return this.currentNPC; } }
+	
+	public void Setup (NPCMovement movement)
+    {
+        nodes = GameManager.AllNodes;
         this.currentNPC = movement;
-		/**
-		 * Setup pathfinding graph
-		 */
-		// Get all node GameObjects in the scene
-		GameObject[] nodeGameObjects = GameObject.FindGameObjectsWithTag("Node");
-
-		// Get all Node objects from node GameObjects
-		nodes = new List<Node>();
-		
-		foreach (var nodeGameObject in nodeGameObjects)
-        {
-			nodes.Add(nodeGameObject.GetComponent<Node>());
-		}
-		
-		// Initialize the pathfinding graph
-		graph = new Graph(); 
-		
-		// Add all nodes to the graph
-		foreach (var node in nodes)
-        {
-			graph.AddVertex(node, node.neighboringNodeDistances);
-		}
-
-		//Set up for NPC movement for testing purposes
-		FindStartNode();
-		endNode	= nodes[56]; // End node is hardcoded here for testing purposes
-		pathList = graph.ShortestPathEuclideanHeuristic(startNode, endNode);
-
+        this.pathList = new List<Node>();
+        this.AttainedFinalNode = false;
 	}
 	
 	private int pathCounter = 0;		// Used for keeping track where NPC is along a path
@@ -78,7 +74,7 @@ public class NPCMovementDriver
 			}
 
 			bool nodeAttained = false;
-			Collider[] collisionArray = Physics.OverlapSphere (currentNPC.transform.position, 2.0f);
+			Collider[] collisionArray = Physics.OverlapSphere (currentNPC.transform.position, 2f);
 			for (int i = 0; i < collisionArray.Length; i++)
             {
 				if (collisionArray[i].GetComponent (typeof(Node)) == pathList[pathCounter])
@@ -89,6 +85,7 @@ public class NPCMovementDriver
 			
 			if (nodeAttained)
             {
+                if (this.CurrentTargetNode == this.endNode) this.AttainedFinalNode = true;
 				pathCounter++;
 			}
 		}
@@ -96,10 +93,81 @@ public class NPCMovementDriver
 
     public void ChangePath(Node endNode)
     {
-        FindStartNode();
-        this.endNode = endNode; // End node is hardcoded here for testing purposes
-        this.pathList = graph.ShortestPathEuclideanHeuristic(startNode, endNode);
+        this.startNode = FindClosestNode();
+        this.endNode = endNode;
+        this.pathList = Graph.ShortestPathEuclideanHeuristic(startNode, endNode);
+        this.AttainedFinalNode = false;
+        this.pathCounter = 0;
     }
+
+    public void ChangePathToFlee(float terminateDistance, List<NPCDriver> threats)
+    {
+        this.startNode = FindClosestNode();
+        this.pathList = Graph.InverseAStar(startNode, terminateDistance, threats);
+        if (pathList.Count > 0)
+        {
+            this.endNode = pathList[pathList.Count - 1];
+        }
+        else
+        {
+            this.endNode = startNode;
+        }
+        this.AttainedFinalNode = false;
+        this.pathCounter = 0;
+    }
+
+    public void ChangePathToFlank(Node endNode, NPCDriver otherGuard)
+    {
+        this.startNode = FindClosestNode();
+        this.endNode = endNode;
+        this.pathList = Graph.AStarFlank(startNode, endNode, otherGuard);
+        this.AttainedFinalNode = false;
+        this.pathCounter = 0;
+    }
+
+    public Node FindClosestNode()
+    {
+        Node result = null;
+
+        for (int i = 0; i < nodes.Count; i++)
+        {
+            if (i == 0)
+            {
+                result = nodes[i];
+            }
+            if (Vector3.Distance(currentNPC.transform.position, nodes[i].transform.position) < Vector3.Distance(currentNPC.transform.position, result.transform.position))
+            {
+                result = nodes[i];
+            }
+        }
+
+        return result;
+    }
+
+	/**
+	 * Methods for speed adjustment based on number of consumed souls
+	 */	
+	public void RecalculateSpeedBasedOnSoulConsumption() 
+	{
+		CollectorDriver collectorDriver = this.currentNPC.gameObject.GetComponent<CollectorDriver>();
+		float speedDeboost = 0; // Variable is brought out of the if for printing purposes
+		currentNPC.MaxSpeed = collectorDriver.MaxSpeed;	// Reset to max speed
+		//float startSpeed = currentNPC.MaxSpeed; // For printing purposes
+		if (collectorDriver) {
+			float speedDecreaseFactor = (currentNPC.MaxSpeed - this.minimumSpeed) / this.hypotheticalMaximumSoulCapacity;
+			speedDeboost = speedDecreaseFactor * collectorDriver.SoulsStored;
+			if (currentNPC.MaxSpeed - speedDeboost >= this.minimumSpeed)
+				currentNPC.MaxSpeed -= speedDeboost;
+			else
+				currentNPC.MaxSpeed = this.minimumSpeed;
+		}
+		/*
+		Debug.Log (collectorDriver.name + ": Souls -> " + collectorDriver.SoulsStored 
+		           + ". Deboost -> " + speedDeboost
+		           + ". Start Speed -> " + startSpeed
+		           + ". Current Speed -> " + currentNPC.MaxSpeed);
+		*/
+	}
 
 	/**
 	 * Methods for pathfinding graph
@@ -127,20 +195,5 @@ public class NPCMovementDriver
 			}
 		}
 		return distance;
-	}
-
-	/**
-	 * Methods for NPC movement along path
-	 */
-	//Find the start node according to the position of the NPC
-	private void FindStartNode() {
-		for (int i = 0; i < nodes.Count; i++) {
-			if (i == 0) {
-				startNode = nodes[i];
-			}
-			if (Vector3.Distance(currentNPC.transform.position, nodes[i].transform.position) < Vector3.Distance(currentNPC.transform.position, startNode.transform.position)) {
-				startNode = nodes[i];
-			}
-		}
 	}
 }

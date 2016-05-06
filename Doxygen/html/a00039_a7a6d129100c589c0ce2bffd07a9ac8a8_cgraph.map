@@ -1,0 +1,4 @@
+<map id="GetPreviousStateInStack" name="GetPreviousStateInStack">
+<area shape="rect" id="node2" href="$a00040.html#a49c6a82202fde2a737d374f065fb9a11" title="NPCStateMachine.PopState\lOffStack" alt="" coords="225,5,412,47"/>
+<area shape="rect" id="node3" href="$a00040.html#a5e849422db3182f33772a05b4bf3f2dd" title="NPCStateMachine.PeekAtTop\lStateInStack" alt="" coords="220,71,417,112"/>
+</map>

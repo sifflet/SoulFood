@@ -1,0 +1,3 @@
+<map id="CollectorImmortalState" name="CollectorImmortalState">
+<area shape="rect" id="node2" href="$a00039.html" title="{NPCState\n|# stateMachine\l|+ NPCState()\l+ Entry()\l+ Update()\l+ GetPreviousStateInStack()\l+ ResetStackToDefaultState()\l+ InsertStateAsPreviousState\lInStack()\l}" alt="" coords="5,5,200,171"/>
+</map>

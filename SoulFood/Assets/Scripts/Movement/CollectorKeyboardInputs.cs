@@ -1,15 +1,13 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
 public class CollectorKeyboardInputs : KeyboardInputs
 {
-    public static int maximumCandyCapacity = 20;
-    private Stack<GameObject> candyContainer = new Stack<GameObject>(maximumCandyCapacity);
-    private GameObject candyCollidedWith;
+    private KeyCode ejectSoulKey = KeyCode.LeftShift;
+    private KeyCode consumeSoulKey = KeyCode.Space;
 
-    // Degrees per second
-    float angularSpeed = 180.0f;
+	private int hypotheticalMaximumSoulCapacity = 10;
 
     protected override void HandleMovementInputs()
     {
@@ -17,109 +15,43 @@ public class CollectorKeyboardInputs : KeyboardInputs
         movement.z = Input.GetAxis("Vertical2");
     }
 
-    /*  
-     *  Handle button input events
-     *  @return: void
-     */
-    private void HandleActionInputs()
+    protected override void HandleActionInputs()
     {
-        //TODO: holding button loses candies at fixed rate
-        if (Input.GetButtonDown("DropCandy") && this.candyContainer.Count > 0)
+        if (Input.GetKeyDown(ejectSoulKey))
         {
-            this.DropCandy();
+            NPCActions.CmdEjectSoul(this.npc as CollectorDriver, 1);
+			RecalculateSpeedBasedOnSoulConsumption();
         }
-
-        if (Input.GetButtonDown("PickUpCandy") && this.candyCollidedWith != null && this.candyContainer.Count < maximumCandyCapacity)
+        
+        if (Input.GetKeyDown(consumeSoulKey))
         {
-            this.PickUpCandy(this.candyCollidedWith);
+            NPCActions.CmdConsumeSoul(this.npc as CollectorDriver);
+			RecalculateSpeedBasedOnSoulConsumption();
         }
     }
 
-    /*  
-     *  Determine player speed based on amount of candy currently held
-     *  @return: void
-     */
-    private void CalculateSpeed()
-    {
-        this.speed = maximumSpeed - (((maximumSpeed - minimumSpeed) / maximumCandyCapacity) * this.candyContainer.Count);
-    }
+	/**
+	 * Method for speed adjustment based on number of consumed souls
+	 */	
+	private void RecalculateSpeedBasedOnSoulConsumption() 
+	{
+		CollectorDriver collectorDriver = this.gameObject.GetComponent<NPCDriver>() as CollectorDriver;
+		float speedDeboost = 0; // Variable is brought out of the if for printing purposes
+		this.speed = CollectorKeyboardInputs.maximumSpeed;	// Reset to max speed
+		float startSpeed = this.speed; // For printing purposes
+		if (collectorDriver) {
+			float speedDecreaseFactor = (this.speed- CollectorKeyboardInputs.minimumSpeed) / this.hypotheticalMaximumSoulCapacity;
+			speedDeboost = speedDecreaseFactor * collectorDriver.SoulsStored;
+			if (this.speed - speedDeboost >= CollectorKeyboardInputs.minimumSpeed)
+				this.speed -= speedDeboost;
+			else
+				this.speed = CollectorKeyboardInputs.minimumSpeed;
+		}
 
-    /*  
-     *  Player picks up candy, updates player speed, removes candy from playing field
-     *  @param: candy being collided with
-     *  @return: void
-     */
-    private void PickUpCandy(GameObject candy)
-    {
-        this.candyContainer.Push(candy);
-        candy.SetActive(false);
+		Debug.Log (collectorDriver.name + ": Souls -> " + collectorDriver.SoulsStored 
+		           + ". Deboost -> " + speedDeboost
+		           + ". Start Speed -> " + startSpeed
+		           + ". Current Speed -> " + this.speed);
 
-        this.CalculateSpeed();
-    }
-
-    /*  
-     *  Player drops candy, updates player speed, returns candy to playing field
-     *  @return: void
-     */
-    private void DropCandy()
-    {
-        GameObject droppedCandy = this.candyContainer.Pop();
-        droppedCandy.SetActive(true);
-        droppedCandy.transform.position = this.transform.position - this.transform.forward;
-
-        this.CalculateSpeed();
-    }
-
-    /*  
-     *  Player drops all candy, updates player speed, returns all candy to playing field
-     *  @return: void
-     */
-    private void DropAllCandy()
-    {
-        foreach (GameObject candy in this.candyContainer)
-        {
-            candy.SetActive(true);
-            candy.transform.position = this.transform.position - this.transform.forward;
-        }
-        this.candyContainer.Clear();
-
-        this.CalculateSpeed();
-    }
-
-    /*  
-     *  Handle player being hit by enemy
-     *  @return: void
-     */
-    private void HitByEnemy()
-    {
-        if (this.candyContainer.Count > 0)
-        {
-            this.DropAllCandy();
-            // TODO:
-            // reduce team lives
-            // check who wins game: enemies or players
-        }
-    }
-
-    void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == "Guard")
-        {
-            print("Player hit!");
-            this.HitByEnemy();
-        }
-
-        if (collision.gameObject.tag == "Soul")
-        {
-            this.candyCollidedWith = collision.gameObject;
-        }
-    }
-
-    void OnCollisionExit(Collision collision)
-    {
-        if (collision.gameObject.tag == "Soul")
-        {
-            this.candyCollidedWith = null;
-        }
-    }
+	}
 }

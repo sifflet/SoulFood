@@ -2,15 +2,14 @@
 using System.Collections;
 
 public class Soul : MonoBehaviour {
+	
+    public void IsConsumed(Vector3 playerPosition)//to be used for the animation of the soul getting consumed
+    {
+		DisableSoul();
+    }
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	void OnTriggerEnter(Collider col)
-	{
-		if (col.gameObject.tag == "Player")//Change to whatever we name their tag
-			col.SendMessage ("CanEat"); //need player to intergrate this
-	}
+    void DisableSoul()
+    {
+        Destroy(this.gameObject);
+    }
 }

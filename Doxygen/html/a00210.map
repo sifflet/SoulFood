@@ -1,0 +1,7 @@
+<map id="NPCDriver" name="NPCDriver">
+<area shape="rect" id="node3" href="$a00040.html" title="{NPCStateMachine\n|+ TreesFound\l+ StrategicSoulTreeTarget\l+ NPC\l+ CurrentState\l# stateStack\l|+ Setup()\l+ EnterFirstState()\l+ Reset()\l+ Update()\l+ ChangeCurrentState()\l+ PushStateOnStack()\l+ PopStateOffStack()\l+ PeekAtTopStateInStack()\l+ InsertStateAsPreviousState\lInStack()\l+ ResetStackToDefaultState()\l+ PrintStackContents()\l+ AddVisibleTrees()\l}" alt="" coords="50,808,244,1120"/>
+<area shape="rect" id="node8" href="$a00031.html" title="{KeyboardInputs\n|+ speed\l+ maximumSpeed\l+ minimumSpeed\l# movement\l# rotationSpeed\l|+ Setup()\l# HandleInputs()\l# HandleMovementInputs()\l# HandleActionInputs()\l# Move()\l# Turn()\l}" alt="" coords="308,859,482,1069"/>
+<area shape="rect" id="node5" href="$a00039.html" title="{NPCState\n||+ NPCState()\l+ Entry()\l+ Update()\l+ GetPreviousStateInStack()\l+ ResetStackToDefaultState()\l+ InsertStateAsPreviousState\lInStack()\l}" alt="" coords="50,1183,244,1348"/>
+<area shape="rect" id="node6" href="$a00038.html" title="{NPCMovementDriver\n|+ AttainedFinalNode\l+ CurrentTargetNode\l+ NPCMovement\l|+ Setup()\l+ Update()\l+ ChangePath()\l+ ChangePathToFlee()\l+ ChangePathToFlank()\l+ FindClosestNode()\l+ RecalculateSpeedBasedOnSoul\lConsumption()\l}" alt="" coords="76,132,295,341"/>
+<area shape="rect" id="node7" href="$a00002.html" title="{CameraDriver\n|+ Camera\l# instance\l# camera\l|+ Setup()\l+ Setup()\l+ SetEnabled()\l+ Update()\l}" alt="" coords="319,161,428,312"/>
+</map>

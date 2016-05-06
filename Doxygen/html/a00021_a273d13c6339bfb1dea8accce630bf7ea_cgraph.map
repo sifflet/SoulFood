@@ -1,0 +1,6 @@
+<map id="Setup" name="Setup">
+<area shape="rect" id="node2" href="$a00031.html#aa945f61b08b7168ee6b1b8a45ef58d4e" title="KeyboardInputs.Setup" alt="" coords="121,5,272,32"/>
+<area shape="rect" id="node3" href="$a00002.html#a79a99caec0153bf90035d5a9d6616920" title="CameraDriver.Setup" alt="" coords="128,56,265,83"/>
+<area shape="rect" id="node4" href="$a00002.html#aac893222adeffdefc04d749648cce354" title="CameraDriver.SetEnabled" alt="" coords="111,107,282,133"/>
+<area shape="rect" id="node5" href="$a00028.html#a17e5ce820e619bec0ce194f7873c7984" title="GuardStateMachine.Setup" alt="" coords="109,157,284,184"/>
+</map>

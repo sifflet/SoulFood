@@ -1,0 +1,5 @@
+<map id="GetTreeWithPlayersOnThem" name="GetTreeWithPlayersOnThem">
+<area shape="rect" id="node2" href="$a00001.html#a6aa0cbe21e9edbbc4d7866fb4b055a74" title="Button.GetSoulTreeForCurrent\lButton" alt="" coords="253,5,450,47"/>
+<area shape="rect" id="node3" href="$a00045.html#adcd72f38f107438dada89861c4f6c27d" title="SoulTree.CheckIfTreeHasMultiple\lButtons" alt="" coords="245,71,458,112"/>
+<area shape="rect" id="node4" href="$a00045.html#aa90b7357dff55dbb31b74a0211141769" title="SoulTree.CheckIfTreeIsCompletely\lTargettedOrTriggered" alt="" coords="241,136,461,177"/>
+</map>

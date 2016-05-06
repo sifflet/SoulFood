@@ -4,9 +4,9 @@ using System.Collections;
 public class NPCMovement : MonoBehaviour {
 
 	//Fields
-	public static float maximumSeekVelocity = 15f, maximumRotationVelocity = 2f, 
-		maximumFleeVelocity = 10f, maximumAcceleration = 0.05f, maxinumRotationAcceleration = 0.01f;
-	protected float currentVelocity = 0, currentRotationVelocity = 0, currentAcceleration = 0.05f;
+	public float maximumSeekVelocity = 15f, maximumRotationVelocity = 15f, 
+		maximumFleeVelocity = 10f, maximumAcceleration = 0.05f, maxinumRotationAcceleration = 1f;
+	public float currentVelocity = 0, currentRotationVelocity = 0, currentAcceleration = 0.05f;
 	Vector3 directionVector = new Vector3 (0, 0, 0);
 	Vector3 playerDistance;
 	Vector2 worldSize = new Vector2(70, 32.5f);
@@ -23,6 +23,7 @@ public class NPCMovement : MonoBehaviour {
 	//New Fields
 	public Vector3 totalVelocity;
 
+    public float MaxSpeed { get { return this.maximumSeekVelocity; } set { this.maximumSeekVelocity = value; } }
 
 	// Use this for initialization
 	void Start () {
@@ -212,7 +213,7 @@ public class NPCMovement : MonoBehaviour {
 	//Pursuit the target with the kinematic pursuit formula
 	public void Kinematic_Pursuit (NPCMovement target) {
 		float estimatedArrivalTime = (target.transform.position - transform.position).magnitude / maximumSeekVelocity;
-		Vector3 nextTargetPosition = target.transform.position + (NPCMovement.maximumFleeVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
+		Vector3 nextTargetPosition = target.transform.position + (this.maximumFleeVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
 		directionVector = (nextTargetPosition - transform.position);
 		directionVector.Normalize ();
 		//Interpolate the orientation of the NPC object
@@ -236,7 +237,7 @@ public class NPCMovement : MonoBehaviour {
 	//Evade the target with the kinematic evade formula
 	public void Kinematic_Evade (NPCMovement target) {
 		float estimatedArrivalTime = (target.transform.position - transform.position).magnitude / maximumSeekVelocity;
-		Vector3 nextTargetPosition = target.transform.position + (NPCMovement.maximumSeekVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
+		Vector3 nextTargetPosition = target.transform.position + (this.maximumSeekVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
 		directionVector = (transform.position - nextTargetPosition);
 		directionVector.Normalize ();
 		//Interpolate the orientation of the NPC object
@@ -265,20 +266,25 @@ public class NPCMovement : MonoBehaviour {
 	}
 
 	//Chase the target with the steering arrive formula
-	public void Steering_Arrive (NPCMovement target) {
+	public void Steering_Arrive (Vector3 target) {
 		//Find the direction vector based on the target's position
-		directionVector = (target.transform.position - transform.position);
+		directionVector = (target - transform.position);
 		directionVector.Normalize ();
+
 		//Find the current rotation velocity
 		currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
+
 		//Create a goal velocity that is proportional to the distance to the target (interpolated from 0 to max)
-		float goalVelocity = maximumSeekVelocity * ((target.transform.position - transform.position).magnitude / 15f);
-		currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumFleeVelocity);
+        float goalVelocity = maximumSeekVelocity * ((target - transform.position).magnitude / maximumSeekVelocity);
+		currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumSeekVelocity);
+
 		//Calculate the current acceleration based on the goal velocity and the current velocity
 		currentAcceleration = Mathf.Min ((goalVelocity - currentVelocity) / 2, maximumAcceleration);
+
 		//Interpolate the orientation of the NPC object
 		Quaternion targetRotation = Quaternion.LookRotation (directionVector);
 		transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, currentRotationVelocity * Time.deltaTime);
+
 		//Update the position
 		Vector3 newPosition = transform.position + (currentVelocity * Time.deltaTime) * transform.forward.normalized;
 		transform.position = newPosition;
@@ -287,7 +293,7 @@ public class NPCMovement : MonoBehaviour {
 	//Pursuit the target with the steering pursuit formula
 	public void Steering_Pursuit (NPCMovement target) {
 		float estimatedArrivalTime = (target.transform.position - transform.position).magnitude / maximumSeekVelocity;
-		Vector3 nextTargetPosition = target.transform.position + (NPCMovement.maximumFleeVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
+		Vector3 nextTargetPosition = target.transform.position + (this.maximumFleeVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
 		//Find the direction vector based on the target's future position
 		directionVector = (nextTargetPosition - transform.position);
 		directionVector.Normalize ();
@@ -321,7 +327,7 @@ public class NPCMovement : MonoBehaviour {
 	//Evade from the target with the steering evade formula
 	public void Steering_Evade (NPCMovement target) {
 		float estimatedArrivalTime = (target.transform.position - transform.position).magnitude / maximumSeekVelocity / 2f; //reduced estimated time for better gameplay
-		Vector3 nextTargetPosition = target.transform.position + (NPCMovement.maximumSeekVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
+		Vector3 nextTargetPosition = target.transform.position + (this.maximumSeekVelocity * estimatedArrivalTime) * target.transform.forward.normalized;
 		//Find the direction vector based on the target's future position
 		directionVector = (transform.position - nextTargetPosition);
 		directionVector.Normalize ();
@@ -395,16 +401,21 @@ public class NPCMovement : MonoBehaviour {
 			//Find the direction vector based on the target's position
 			directionVector = (targetPosition - transform.position);
 			directionVector.Normalize ();
+
 			//Find the current rotation velocity
 			currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
+
 			//Create a goal velocity that is proportional to the distance to the target (interpolated from 0 to max)
 			float goalVelocity = maximumSeekVelocity * ((targetPosition - transform.position).magnitude / 15f);
-			currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumFleeVelocity);
+			currentVelocity = Mathf.Min (currentVelocity + currentAcceleration, maximumSeekVelocity);
+
 			//Calculate the current acceleration based on the goal velocity and the current velocity
 			currentAcceleration = Mathf.Min ((goalVelocity - currentVelocity) / 2, maximumAcceleration);
+
 			//Interpolate the orientation of the NPC object
 			Quaternion targetRotation = Quaternion.LookRotation (directionVector);
 			transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, currentRotationVelocity * Time.deltaTime);
+
 			//Update the position
 			Vector3 newPosition = transform.position + (currentVelocity * Time.deltaTime) * transform.forward.normalized;
 			transform.position = newPosition;
@@ -413,16 +424,26 @@ public class NPCMovement : MonoBehaviour {
 			//Find the direction vector based on the target's position
 			directionVector = (targetPosition - transform.position);
 			directionVector.Normalize ();
+
 			//Find the current velocity
 			currentRotationVelocity = Mathf.Min (currentRotationVelocity + maxinumRotationAcceleration, maximumRotationVelocity);
 			currentVelocity = Mathf.Min (currentVelocity + maximumAcceleration, maximumSeekVelocity - 10);
+            //currentVelocity = currentVelocity * Vector3.Distance(targetPosition, transform.position)/3f;
+
 			//Interpolate the orientation of the NPC object
 			Quaternion targetRotation = Quaternion.LookRotation (directionVector);
 			transform.rotation = Quaternion.Lerp (transform.rotation, targetRotation, currentRotationVelocity * Time.deltaTime);
+
 			//Update the position
 			Vector3 newPosition = transform.position + (currentVelocity * Time.deltaTime) * transform.forward.normalized;
 			transform.position = newPosition;
 		}
 	}
 
+    public void Reset()
+    {
+        this.currentAcceleration = 0.05f;
+        this.currentRotationVelocity = 0.0f;
+        this.currentVelocity = 0.0f;
+    }
 }

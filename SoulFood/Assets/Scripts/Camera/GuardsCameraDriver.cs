@@ -6,27 +6,21 @@ using System.Collections.Generic;
 public class GuardsCameraDriver : CameraDriver
 {
     private const float yOffset = 10.0f;
-    private const float zOffset = -5.0f;
+    private const float xOffset = 5.0f;
 
     private const float DAMP_TIME = 0.2f;
     private const float SCREEN_EDGE_BUFFER = 4f;
     private const float MIN_SIZE = 6.5f;
 
-    private Camera camera;
     private float zoomSpeed;
     private Vector3 moveVelocity; 
     private Vector3 desiredPosition;
 
-    public GuardsCameraDriver(GameObject cameraInstance)
-        : base(cameraInstance)
-    {
-        this.camera = cameraInstance.GetComponent<Camera>();
-    }
-
     public override void Update()
     {
         Move();
-        //Zoom();
+        //Rotate();
+        Zoom();
     }
 
     private void Move()
@@ -35,7 +29,14 @@ public class GuardsCameraDriver : CameraDriver
         FindAveragePosition();
 
         // Smoothly transition to that position.
-        this.instance.transform.position = Vector3.SmoothDamp(this.instance.transform.position, desiredPosition, ref moveVelocity, DAMP_TIME);
+        Vector3 newPosition = desiredPosition + Vector3.up * yOffset - Vector3.forward * xOffset;
+        this.instance.transform.position = Vector3.SmoothDamp(this.instance.transform.position, newPosition, ref moveVelocity, DAMP_TIME);
+    }
+
+    private void Rotate()
+    {
+        Vector3 direction = desiredPosition - this.instance.transform.position;
+        this.instance.transform.rotation = Quaternion.Slerp(this.instance.transform.rotation, Quaternion.LookRotation(direction), Time.time * 0.1f);
     }
 
     private void FindAveragePosition()
@@ -52,10 +53,6 @@ public class GuardsCameraDriver : CameraDriver
         // If there are targets divide the sum of the positions by the number of them to find the average.
         averagePos /= GameManager.Guards.Count;
 
-        // Keep the same y value.
-        averagePos.y = yOffset;
-        averagePos.z += zOffset;
-
         // The desired position is the average position;
         desiredPosition = averagePos;
     }
@@ -70,7 +67,7 @@ public class GuardsCameraDriver : CameraDriver
     private float FindRequiredSize()
     {
         // Find the position the camera rig is moving towards in its local space.
-        Vector3 desiredLocalPos = this.instance.transform.InverseTransformPoint(desiredPosition);
+        Vector3 desiredLocalPos = this.instance.transform.InverseTransformPoint(desiredPosition + new Vector3(-xOffset, yOffset, 0.0f));
 
         // Start the camera's size calculation at zero.
         float size = 0f;
@@ -79,7 +76,7 @@ public class GuardsCameraDriver : CameraDriver
         foreach(NPCDriver target in GameManager.Guards)
         {
             // Otherwise, find the position of the target in the camera's local space.
-            Vector3 targetLocalPos = target.Instance.transform.InverseTransformPoint(target.Instance.transform.position);
+            Vector3 targetLocalPos = this.instance.transform.InverseTransformPoint(target.Instance.transform.position);
 
             // Find the position of the target from the desired position of the camera's local space.
             Vector3 desiredPosToTarget = targetLocalPos - desiredLocalPos;
@@ -106,9 +103,10 @@ public class GuardsCameraDriver : CameraDriver
         FindAveragePosition();
 
         // Set the camera's position to the desired position without damping.
-        this.instance.transform.position = desiredPosition + new Vector3(0.0f, yOffset, zOffset);
+        this.instance.transform.position = desiredPosition + new Vector3(0.0f, yOffset, -xOffset);
 
         // Find and set the required size of the camera.
         camera.orthographicSize = FindRequiredSize();
+        Rotate();
     }
 }
